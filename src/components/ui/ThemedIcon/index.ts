@@ -1,0 +1,1 @@
+export { ThemedIcon } from './ThemedIcon';
