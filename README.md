@@ -43,3 +43,7 @@ Configure your API key in the Settings screen (click the gear icon).
 ## Tech Stack
 
 React 19 · TypeScript · Vite · Tailwind CSS · Zustand · Radix UI
+
+## License
+
+Licensed under the [GNU General Public License v3](./LICENSE).
