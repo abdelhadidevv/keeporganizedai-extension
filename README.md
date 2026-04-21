@@ -2,7 +2,13 @@
 
 # KeepOrganizedAI
 
-AI-powered Chrome extension that automatically organizes your bookmarks through in 3 simple step wizard.
+[![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ejcmcpeohpjbipdfhpmfohpdefgbdfpl)](https://chromewebstore.google.com/detail/keeporganizedai/ejcmcpeohpjbipdfhpmfohpdefgbdfpl)
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/ejcmcpeohpjbipdfhpmfohpdefgbdfpl)](https://chromewebstore.google.com/detail/keeporganizedai/ejcmcpeohpjbipdfhpmfohpdefgbdfpl)
+[![TypeScript](https://img.shields.io/badge/TypeScript-97%25-3178c6)](https://github.com/abdelhadidevv/keeporganizedai-extension)
+[![React](https://img.shields.io/badge/React-19-61dafb)](https://github.com/abdelhadidevv/keeporganizedai-extension)
+
+AI-powered Chrome extension that automatically organizes your bookmarks through a 3 simple step wizard.
 
 ## Features
 
@@ -12,6 +18,8 @@ AI-powered Chrome extension that automatically organizes your bookmarks through 
 - **Automatic Backup** - Creates backup before any changes; download anytime
 - **Global Search** - Find any bookmark instantly
 - **Dark/Light Theme** - Follows your system preference
+
+![How it works](icons/how-it-works.svg)
 
 ## Quick Start
 
@@ -43,6 +51,10 @@ Configure your API key in the Settings screen (click the gear icon).
 ## Tech Stack
 
 React 19 · TypeScript · Vite · Tailwind CSS · Zustand · Radix UI
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for all notable changes.
 
 ## License
 
