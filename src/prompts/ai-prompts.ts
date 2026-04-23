@@ -53,5 +53,12 @@ RULES:
 5. Prefer the most specific relevant category over broader ones
 6. Return ONLY valid JSON, no other text
 7. Skip locked categories for unlocked bookmarks
+8. CRITICAL: Use the EXACT categoryId shown in brackets, e.g., use "ai-gemini-1" NOT "1" or "Category Name"
 
-Return the bookmark to category assignments`;
+Return the bookmark to category assignments as JSON:
+{
+  "assignments": [
+    { "bookmarkId": "xxx", "categoryId": "ai-gemini-1" },
+    ...
+  ]
+}`;

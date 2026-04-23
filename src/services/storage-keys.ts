@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
   ASSIGNMENTS: 'assignments',
   AI_PROVIDER: 'aiProvider',
   API_KEYS: 'apiKeys',
+  MODEL_SELECTIONS: 'modelSelections',
 } as const;
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];

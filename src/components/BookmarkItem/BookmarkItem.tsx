@@ -15,6 +15,7 @@ export interface BookmarkItemProps {
   folderColor?: string;
   isLastBookmark?: boolean;
   isDragging?: boolean;
+  hideBorder?: boolean;
 }
 
 export function BookmarkItem({
@@ -25,6 +26,7 @@ export function BookmarkItem({
   folderColor,
   isLastBookmark,
   isDragging = false,
+  hideBorder,
 }: BookmarkItemProps) {
   const [showActions, setShowActions] = useState(false);
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
@@ -103,7 +105,7 @@ export function BookmarkItem({
       className={cn(
         'group flex items-center gap-2.5 px-3 py-2.5 cursor-pointer transition-all duration-200',
         'hover:bg-[var(--folder-color)]/10',
-        'border-l-2 border-[var(--folder-color)]',
+        !hideBorder && 'border-l-2 border-[var(--folder-color)]',
         isLastBookmark && 'rounded-b-lg'
       )}
       style={

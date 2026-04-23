@@ -45,7 +45,7 @@ export interface WizardState {
   lockStates: Record<string, LockType>;
 }
 
-export type AIProvider = 'gemini' | 'claude' | 'openai';
+export type AIProvider = 'gemini' | 'claude' | 'openai' | 'ollama';
 
 export interface BackupData {
   version: string;
