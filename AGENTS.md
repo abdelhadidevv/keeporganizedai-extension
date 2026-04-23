@@ -2,19 +2,20 @@
 
 ## Project Overview
 
-Chrome/Edge extension that uses AI (Gemini/Claude) to auto-organize browser bookmarks via a 5-step wizard. Users can lock folders, review AI suggestions, and undo changes.
+Chrome/Edge extension that uses AI (Gemini/Claude/OpenAI) to auto-organize browser bookmarks via a 5-step wizard. Users can lock folders, review AI suggestions, and undo changes.
 
 ---
 
 ## Tech Stack
 
 - **Language**: TypeScript (strict mode)
-- **UI Framework**: React 18+
+- **UI Framework**: React 19
 - **Build Tool**: Vite
 - **Styling**: CSS Modules or Tailwind CSS
 - **Testing**: Vitest + React Testing Library
 - **Linting**: ESLint (Airbnb config) + Prettier
 - **Extension API**: Chrome Extensions Manifest V3
+- **License**: GNU General Public License v3
 
 ---
 
@@ -55,7 +56,7 @@ npx vitest src/components/Button.test.tsx
 npx vitest run --grep "Folder"
 
 # Coverage report
-npm run test:coverage
+npm run test -- --coverage
 
 # Build and package for Chrome Web Store (if available)
 npm run package
@@ -259,3 +260,9 @@ docs: update PRD with new error states
 - Memoize expensive computations with `useMemo`/`useCallback`
 - Debounce search input (300ms)
 - Batch Chrome API calls when possible
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for all notable changes.

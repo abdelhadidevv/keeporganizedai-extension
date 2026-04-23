@@ -38,6 +38,16 @@ Load the extension in Chrome:
 
 Configure your API key in the Settings screen (click the gear icon).
 
+### Ollama (Local)
+
+If using Ollama with this extension, start it with CORS enabled:
+
+```bash
+OLLAMA_ORIGINS=chrome-extension://* ollama serve
+```
+
+This allows the extension to communicate with your local Ollama instance.
+
 ## Scripts
 
 | Command             | Description                      |

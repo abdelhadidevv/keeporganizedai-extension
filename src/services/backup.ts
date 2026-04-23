@@ -371,7 +371,7 @@ function nodeToHtml(node: BookmarkNode, indent: string = '    '): string {
     if (node.children && node.children.length > 0) {
       parts.push(`${indent}<DL><p>\n`);
       node.children.forEach((child) => {
-        parts.push(nodeToHtml(child, indent + '    '));
+        parts.push(nodeToHtml(child, `${indent}    `));
       });
       parts.push(`${indent}</DL><p>\n`);
     }
