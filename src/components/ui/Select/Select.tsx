@@ -38,8 +38,8 @@ export function Select({
           disabled={disabled}
           className={cn(
             'inline-flex items-center justify-between gap-2 rounded-lg border',
-            'border-[var(--color-secondary)]/30 bg-background px-3 py-2 text-sm',
-            'transition-colors hover:border-[var(--color-secondary)]/50',
+            'border-muted/30 bg-background px-3 py-2 text-sm',
+            'transition-colors hover:border-muted/50',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]',
             'disabled:pointer-events-none disabled:opacity-50',
             fullWidth && 'w-full',
@@ -48,11 +48,11 @@ export function Select({
         >
           <span className="flex items-center gap-2">
             {selectedOption?.icon}
-            <span className={cn(!selectedOption && 'text-[var(--color-secondary)]')}>
+            <span className={cn(!selectedOption && 'text-muted')}>
               {selectedOption?.label || placeholder}
             </span>
           </span>
-          <ChevronDown className="h-4 w-4 text-[var(--color-secondary)]" />
+          <ChevronDown className="h-4 w-4 text-muted" />
         </button>
       </DropdownMenuPrimitive.Trigger>
 
@@ -63,11 +63,11 @@ export function Select({
           style={{ minWidth: fullWidth ? 'var(--radix-dropdown-menu-trigger-width)' : undefined }}
           className={cn(
             'z-50 min-w-[180px] overflow-hidden rounded-lg border',
-            'border-[var(--color-secondary)]/20 bg-white p-1 shadow-lg',
+            'border-muted/20 bg-white p-1 shadow-lg',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-            'dark:border-[var(--color-secondary)]/30 dark:bg-gray-900',
+            'dark:border-muted/30 dark:bg-gray-900',
             fullWidth && 'w-full'
           )}
         >
@@ -78,13 +78,13 @@ export function Select({
               className={cn(
                 'relative flex cursor-pointer select-none items-center gap-2 rounded-md',
                 'px-2 py-2 text-sm outline-none transition-colors',
-                'focus:bg-[var(--color-secondary)]/10',
+                'focus:bg-muted/10',
                 'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
                 option.value === value && 'bg-[var(--color-primary)]/10'
               )}
             >
               {option.icon && (
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-[var(--color-secondary)]">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted">
                   {option.icon}
                 </span>
               )}

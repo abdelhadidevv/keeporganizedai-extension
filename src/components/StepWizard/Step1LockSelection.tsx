@@ -171,7 +171,7 @@ export function Step1LockSelection() {
           <h3 className="text-lg font-semibold tracking-tight text-stone-900 dark:text-white mb-1">
             Lock folders to protect
           </h3>
-          <p className="text-[13px] leading-relaxed text-[var(--color-secondary)] max-w-[280px]">
+          <p className="text-[13px] leading-relaxed text-muted max-w-[280px]">
             Lock folders to protect them from AI reorganization. All other folders will be
             organized.
           </p>
@@ -189,7 +189,7 @@ export function Step1LockSelection() {
         </div>
       </div>
 
-      <div className="flex-1 mt-4 border border-[var(--color-secondary)]/20 rounded-xl bg-[var(--color-secondary)]/5 overflow-y-auto">
+      <div className="flex-1 mt-4 border border-muted/20 rounded-xl bg-muted/5 overflow-y-auto">
         {visibleFolders.map((folder, idx) => {
           const isLocked = lockStates[folder.id] && lockStates[folder.id] !== 'none';
           const isHardLocked = lockStates[folder.id] === 'hard';
@@ -201,10 +201,10 @@ export function Step1LockSelection() {
               key={folder.id}
               className={[
                 'flex items-center gap-3 py-3 pr-4 transition-colors duration-100',
-                !isLast && 'border-b border-[var(--color-secondary)]/10',
+                !isLast && 'border-b border-muted/10',
                 isHardLocked && 'bg-[var(--color-warning)]/10',
                 !isHardLocked && isLocked && 'bg-[var(--color-warning)]/5',
-                !isHardLocked && !isLocked && 'hover:bg-[var(--color-secondary)]/10',
+                !isHardLocked && !isLocked && 'hover:bg-muted/10',
               ].join(' ')}
               style={{ paddingLeft: 16 + folder.depth * 20 }}
             >
@@ -212,7 +212,7 @@ export function Step1LockSelection() {
                 <button
                   type="button"
                   onClick={() => toggleExpand(folder.id)}
-                  className="w-[18px] h-[18px] flex items-center justify-center shrink-0 p-0 border-none bg-transparent cursor-pointer text-[var(--color-secondary)] hover:text-foreground"
+                  className="w-[18px] h-[18px] flex items-center justify-center shrink-0 p-0 border-none bg-transparent cursor-pointer text-muted hover:text-foreground"
                 >
                   {expandedIds.has(folder.id) ? (
                     <ChevronDown className="w-3 h-3" />
@@ -229,18 +229,18 @@ export function Step1LockSelection() {
                   'w-8 h-8 flex items-center justify-center rounded-lg border shrink-0 transition-all duration-150',
                   isLocked
                     ? 'bg-[var(--color-warning)]/20 border-[var(--color-warning)]/30'
-                    : 'bg-[var(--color-secondary)]/10 border-[var(--color-secondary)]/20',
+                    : 'bg-muted/10 border-muted/20',
                 ].join(' ')}
               >
                 <Folder
-                  className={`w-[15px] h-[15px] ${isLocked ? 'text-[var(--color-warning)]' : 'text-[var(--color-secondary)]'}`}
+                  className={`w-[15px] h-[15px] ${isLocked ? 'text-[var(--color-warning)]' : 'text-muted'}`}
                 />
               </div>
               <div className="flex flex-col flex-1 min-w-0">
                 <span className="text-sm font-medium text-foreground truncate mb-0.5">
                   {folder.title}
                 </span>
-                <span className="text-[12px] text-[var(--color-secondary)] font-mono">
+                <span className="text-[12px] text-muted font-mono">
                   {folder.bookmarkCount} bookmark
                   {folder.bookmarkCount !== 1 ? 's' : ''}
                   {folder.childCount > 0 &&

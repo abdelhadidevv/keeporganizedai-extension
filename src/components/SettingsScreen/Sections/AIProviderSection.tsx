@@ -150,10 +150,8 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-[var(--color-secondary)] uppercase tracking-wider">
-        AI Provider
-      </h2>
-      <div className="rounded-lg border border-[var(--color-secondary)]/20 bg-card p-4">
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wider">AI Provider</h2>
+      <div className="rounded-lg border border-muted/20 bg-card p-4">
         {isLoading ? (
           <div className="flex items-center justify-center py-4">
             <Spinner />
@@ -161,7 +159,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
         ) : (
           <div className="space-y-4">
             <div>
-              <span className="block text-xs text-[var(--color-secondary)] mb-2">Provider</span>
+              <span className="block text-xs text-muted mb-2">Provider</span>
               <Select
                 fullWidth
                 value={aiProvider}
@@ -172,7 +170,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
             {models.length > 0 && (
               <div>
-                <span className="block text-xs text-[var(--color-secondary)] mb-2">Model</span>
+                <span className="block text-xs text-muted mb-2">Model</span>
                 <Select
                   fullWidth
                   value={currentModel}
@@ -186,8 +184,8 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
               <>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Server className="w-3 h-3 text-[var(--color-secondary)]" />
-                    <span className="text-xs text-[var(--color-secondary)]">Ollama Endpoint</span>
+                    <Server className="w-3 h-3 text-muted" />
+                    <span className="text-xs text-muted">Ollama Endpoint</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -198,8 +196,8 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       placeholder="http://localhost:11434"
                       className={cn(
                         'flex-1 px-3 py-1.5 text-sm rounded-md',
-                        'bg-background border border-[var(--color-secondary)]/30',
-                        'placeholder:text-[var(--color-secondary)]/50',
+                        'bg-background border border-muted/30',
+                        'placeholder:text-muted/50',
                         'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
                       )}
                     />
@@ -208,7 +206,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-[var(--color-secondary)]">Model</span>
+                    <span className="text-xs text-muted">Model</span>
                     <button
                       type="button"
                       onClick={() => fetchOllamaModels(false)}
@@ -248,8 +246,8 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
             ) : (
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Key className="w-3 h-3 text-[var(--color-secondary)]" />
-                  <span className="text-xs text-[var(--color-secondary)]">API Key</span>
+                  <Key className="w-3 h-3 text-muted" />
+                  <span className="text-xs text-muted">API Key</span>
                   {apiKeys[aiProvider] && <Check className="w-3 h-3 text-green-500" />}
                 </div>
                 <div className="flex items-center gap-2">
@@ -261,20 +259,20 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                     placeholder={selectedProvider.placeholder}
                     className={cn(
                       'flex-1 px-3 py-1.5 text-sm rounded-md',
-                      'bg-background border border-[var(--color-secondary)]/30',
-                      'placeholder:text-[var(--color-secondary)]/50',
+                      'bg-background border border-muted/30',
+                      'placeholder:text-muted/50',
                       'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
                     )}
                   />
                   <button
                     type="button"
                     onClick={() => setShowKey(!showKey)}
-                    className="p-1.5 rounded-md hover:bg-[var(--color-secondary)]/10"
+                    className="p-1.5 rounded-md hover:bg-muted/10"
                   >
                     {showKey ? (
-                      <EyeOff className="w-4 h-4 text-[var(--color-secondary)]" />
+                      <EyeOff className="w-4 h-4 text-muted" />
                     ) : (
-                      <Eye className="w-4 h-4 text-[var(--color-secondary)]" />
+                      <Eye className="w-4 h-4 text-muted" />
                     )}
                   </button>
                 </div>

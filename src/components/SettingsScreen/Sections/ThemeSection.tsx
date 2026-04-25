@@ -40,10 +40,8 @@ export function ThemeSection() {
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-[var(--color-secondary)] uppercase tracking-wider">
-        Appearance
-      </h2>
-      <div className="rounded-lg border border-[var(--color-secondary)]/20 bg-card p-4">
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wider">Appearance</h2>
+      <div className="rounded-lg border border-muted/20 bg-card p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {getThemeIcon()}
@@ -59,7 +57,7 @@ export function ThemeSection() {
             {getThemeIcon()}
           </Toggle>
         </div>
-        <p className="text-xs text-[var(--color-secondary)] mt-2">
+        <p className="text-xs text-muted mt-2">
           {'Current: '}
           {getThemeLabel()}
         </p>

@@ -7,9 +7,9 @@ function Toaster() {
       toastOptions={{
         classNames: {
           toast:
-            'group flex items-center gap-3 rounded-lg border border-[var(--color-secondary)]/20 bg-background p-4 shadow-lg',
+            'group flex items-center gap-3 rounded-lg border border-muted/20 bg-background p-4 shadow-lg',
           title: 'text-sm font-semibold',
-          description: 'text-sm text-[var(--color-secondary)]',
+          description: 'text-sm text-muted',
           success:
             'border-[var(--color-success)]/20 bg-[var(--color-success)]/10 text-[var(--color-success)]',
           error:

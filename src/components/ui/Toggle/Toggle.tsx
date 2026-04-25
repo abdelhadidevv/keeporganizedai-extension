@@ -10,13 +10,12 @@ const toggleVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-transparent hover:bg-[var(--color-secondary)]/10 data-[state=on]:bg-[var(--color-primary)] data-[state=on]:text-white',
+          'bg-transparent hover:bg-muted/10 data-[state=on]:bg-[var(--color-primary)] data-[state=on]:text-white',
         outline:
-          'border border-[var(--color-secondary)]/30 hover:bg-[var(--color-secondary)]/10 data-[state=on]:border-[var(--color-primary)] data-[state=on]:bg-[var(--color-primary-light)] data-[state=on]:text-[var(--color-primary)]',
-        ghost:
-          'bg-transparent hover:bg-[var(--color-secondary)]/10 data-[state=on]:bg-[var(--color-secondary)]/20',
+          'border border-muted/30 hover:bg-muted/10 data-[state=on]:border-[var(--color-primary)] data-[state=on]:bg-[var(--color-primary-light)] data-[state=on]:text-[var(--color-primary)]',
+        ghost: 'bg-transparent hover:bg-muted/10 data-[state=on]:bg-muted/20',
         filled:
-          'bg-[var(--color-secondary)]/10 hover:bg-[var(--color-secondary)]/20 data-[state=on]:bg-[var(--color-primary)] data-[state=on]:text-white',
+          'bg-muted/10 hover:bg-muted/20 data-[state=on]:bg-[var(--color-primary)] data-[state=on]:text-white',
       },
       size: {
         default: 'h-10 min-w-10 px-3 py-2',

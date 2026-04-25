@@ -18,16 +18,13 @@ export function Header({
   return (
     <header
       className={cn(
-        'flex items-center justify-between px-4 py-3 border-b border-[var(--color-secondary)]/20 select-none',
+        'flex items-center justify-between px-4 py-3 border-b border-muted/20 select-none',
         'bg-background',
         className
       )}
     >
       <div className="flex items-center gap-3">
-        <h1
-          className="text-[22px] font-semibold text-purple-600 "
-          style={{ fontFamily: 'var(--font-logo)' }}
-        >
+        <h1 className="text-[22px] font-bold tracking-tight text-primary font-logo">
           KeepOrganizedAI
         </h1>
       </div>

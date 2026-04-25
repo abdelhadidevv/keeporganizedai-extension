@@ -14,11 +14,10 @@ const buttonVariants = cva(
           'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] focus-visible:ring-[var(--color-primary)]',
         destructive:
           'bg-[var(--color-error)] text-white hover:bg-red-600 focus-visible:ring-red-500',
-        outline:
-          'border border-[var(--color-secondary)] bg-transparent hover:bg-[var(--color-secondary)]/10 focus-visible:ring-[var(--color-secondary)]',
+        outline: 'border border-muted bg-transparent hover:bg-muted/10 focus-visible:ring-muted',
         secondary:
           'bg-[var(--color-secondary)] text-white hover:bg-[var(--color-secondary-hover)] focus-visible:ring-[var(--color-secondary)]',
-        ghost: 'hover:bg-[var(--color-secondary)]/10 focus-visible:ring-[var(--color-secondary)]',
+        ghost: 'hover:bg-muted/10 focus-visible:ring-muted',
         link: 'text-[var(--color-primary)] underline-offset-4 hover:underline focus-visible:ring-[var(--color-primary)]',
         success:
           'bg-[var(--color-success)] text-white hover:bg-emerald-600 focus-visible:ring-emerald-500',

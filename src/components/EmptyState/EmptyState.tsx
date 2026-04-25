@@ -64,8 +64,8 @@ export function EmptyState({ icon, title, description, action, className }: Empt
       )}
     >
       {icon && (
-        <div className="rounded-full bg-[var(--color-secondary)]/10 p-3 mb-3">
-          <div className="text-[var(--color-secondary)] w-6 h-6">{icon}</div>
+        <div className="rounded-full bg-muted/10 p-3 mb-3">
+          <div className="text-muted w-6 h-6">{icon}</div>
         </div>
       )}
       <h3 className="text-base font-semibold text-foreground mb-1">{title}</h3>

@@ -118,14 +118,14 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
     >
       <div className="shrink-0 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-[11px] font-medium text-[var(--color-secondary)] uppercase tracking-widest font-mono">
+          <span className="text-[11px] font-medium text-muted uppercase tracking-widest font-mono">
             Step {currentStep} of {TOTAL_STEPS}
           </span>
           <span className="text-[12px] font-semibold tracking-tight text-foreground">
             {STEP_TITLES[currentStep]}
           </span>
         </div>
-        <div className="h-[3px] bg-[var(--color-secondary)]/20 rounded-full">
+        <div className="h-[3px] bg-muted/20 rounded-full">
           <div
             className="h-full bg-[var(--color-primary)] rounded-full transition-[width] duration-500 ease-out"
             style={{ width: `${progress}%` }}
@@ -153,12 +153,12 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-[var(--color-secondary)]/20 shrink-0">
+      <div className="flex items-center justify-between pt-4 border-t border-muted/20 shrink-0">
         <button
           type="button"
           onClick={handleCancelClick}
           disabled={applyPhase === 'success'}
-          className="text-sm font-medium px-5 py-2 rounded-[9px] border border-[var(--color-secondary)]/20 bg-transparent text-[var(--color-secondary)] hover:bg-[var(--color-secondary)]/10 hover:text-foreground hover:border-[var(--color-secondary)]/30 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-[var(--color-secondary)]/20"
+          className="text-sm font-medium px-5 py-2 rounded-[9px] border border-muted/20 bg-transparent text-muted hover:bg-muted/10 hover:text-foreground hover:border-muted/30 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-muted/20"
         >
           Cancel
         </button>
@@ -178,7 +178,7 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
                 'text-sm font-medium px-5 py-2 rounded-[9px] border transition-all duration-150',
                 canProceed
                   ? 'bg-[var(--color-primary)] border-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] hover:border-[var(--color-primary-hover)] cursor-pointer'
-                  : 'bg-[var(--color-secondary)]/20 border-[var(--color-secondary)]/20 text-[var(--color-secondary)]/50 cursor-not-allowed opacity-60',
+                  : 'bg-muted/20 border-muted/20 text-muted/50 cursor-not-allowed opacity-60',
               ].join(' ')}
             >
               Next

@@ -1,13 +1,10 @@
 {
   "manifest_version": 3,
   "name": "KeepOrganizedAI",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "AI-powered bookmark organizer. Categorize bookmarks in minutes with fast search and smart folders.",
   "permissions": ["bookmarks", "storage", "sidePanel", "commands"],
-  "host_permissions": [
-    "http://localhost/*",
-    "http://127.0.0.1/*"
-  ],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
   "background": {
     "service_worker": "background.js",
     "type": "module"

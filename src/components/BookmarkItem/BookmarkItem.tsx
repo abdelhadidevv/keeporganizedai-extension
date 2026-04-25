@@ -116,7 +116,7 @@ export function BookmarkItem({
         } as React.CSSProperties
       }
     >
-      <GripVertical className="w-3.5 h-3.5 flex-shrink-0 text-[var(--color-secondary)]/40 cursor-grab active:cursor-grabbing" />
+      <GripVertical className="w-3.5 h-3.5 flex-shrink-0 text-muted/40 cursor-grab active:cursor-grabbing" />
 
       <div className="flex-shrink-0 w-5 h-5">
         {favicon ? (
@@ -127,22 +127,19 @@ export function BookmarkItem({
             onError={() => setFaviconUrl(null)}
           />
         ) : (
-          <Bookmark className="w-5 h-5 text-[var(--color-secondary)]" />
+          <Bookmark className="w-5 h-5 text-muted" />
         )}
       </div>
 
       <div className="flex-1 min-w-0">
-        <p
-          className="text-sm font-medium text-[var(--color-secondary)] truncate"
-          title={bookmark.title}
-        >
+        <p className="text-sm font-medium text-muted truncate" title={bookmark.title}>
           {highlightQuery
             ? highlightText(bookmark.title || 'Untitled', highlightQuery)
             : bookmark.title || 'Untitled'}
         </p>
         <p
           className={cn(
-            'text-xs text-[var(--color-secondary)]/60 truncate transition-opacity duration-200',
+            'text-xs text-muted/60 truncate transition-opacity duration-200',
             showActions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
           )}
           title={bookmark.url}

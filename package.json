@@ -1,6 +1,6 @@
 {
   "name": "keeporganizedai",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "AI-powered bookmark organizer. Categorize bookmarks in minutes with fast search and smart folders",
   "type": "module",
   "scripts": {

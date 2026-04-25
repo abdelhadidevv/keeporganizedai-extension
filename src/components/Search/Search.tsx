@@ -117,7 +117,7 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
 
     return (
       <div className={cn('w-full relative', wrapperClassName)}>
-        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[var(--color-secondary)]">
+        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
           <SearchIcon size={16} />
         </span>
         <input
@@ -125,10 +125,10 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
           role="searchbox"
           aria-label="Search"
           className={cn(
-            'flex h-10 w-full rounded-lg border border-[var(--color-secondary)]/30 bg-transparent px-3 py-2 pr-10 text-sm text-foreground placeholder:text-[var(--color-secondary)] transition-colors',
+            'flex h-10 w-full rounded-lg border border-muted/30 bg-transparent px-3 py-2 pr-10 text-sm text-foreground placeholder:text-muted transition-colors',
             'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-1',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            'dark:border-[var(--color-secondary)]/50',
+            'dark:border-muted/50',
             'pl-10',
             className
           )}
@@ -146,7 +146,7 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0 text-[var(--color-secondary)] hover:text-foreground"
+              className="h-6 w-6 p-0 text-muted hover:text-foreground"
               onClick={handleClear}
               aria-label="Clear search"
               title="Clear search"

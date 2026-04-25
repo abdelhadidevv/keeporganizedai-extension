@@ -70,22 +70,20 @@ export function BackupSection() {
 
   const renderBackupStatus = () => {
     if (isLoading) {
-      return <span className="text-xs text-[var(--color-secondary)]">Loading...</span>;
+      return <span className="text-xs text-muted">Loading...</span>;
     }
     if (hasBackup) {
       const formattedDate = formatDate(lastBackup!.createdAt);
       // eslint-disable-next-line react/jsx-one-expression-per-line
-      return <span className="text-xs text-[var(--color-secondary)]">Last: {formattedDate}</span>;
+      return <span className="text-xs text-muted">Last: {formattedDate}</span>;
     }
-    return <span className="text-xs text-[var(--color-secondary)]">No backups</span>;
+    return <span className="text-xs text-muted">No backups</span>;
   };
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-[var(--color-secondary)] uppercase tracking-wider">
-        Data
-      </h2>
-      <div className="rounded-lg border border-[var(--color-secondary)]/20 bg-card p-4 space-y-3">
+      <h2 className="text-sm font-medium text-muted uppercase tracking-wider">Data</h2>
+      <div className="rounded-lg border border-muted/20 bg-card p-4 space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Restore from Backup</span>
           {renderBackupStatus()}
@@ -101,7 +99,7 @@ export function BackupSection() {
             Restore
           </Button>
         ) : (
-          <div className="flex items-center gap-2 text-xs text-[var(--color-secondary)]">
+          <div className="flex items-center gap-2 text-xs text-muted">
             <AlertCircle className="w-4 h-4" />
             <span>No backup available. Create a backup before organizing.</span>
           </div>
@@ -114,7 +112,7 @@ export function BackupSection() {
             <ModalTitle>Restore from Backup</ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <p className="text-sm text-[var(--color-secondary)]">
+            <p className="text-sm text-muted">
               This will replace all your current bookmarks with the backup from{' '}
               <strong>{lastBackup ? formatDate(lastBackup.createdAt) : 'N/A'}</strong>. This action
               cannot be undone.

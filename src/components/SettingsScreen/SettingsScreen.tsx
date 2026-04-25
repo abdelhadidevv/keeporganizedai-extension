@@ -18,8 +18,8 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
       <header
         className={cn(
           'flex items-center gap-3 px-4 py-3',
-          'border-b border-[var(--color-secondary)]/20',
-          'bg-[var(--color-secondary)]/5'
+          'border-b border-muted/20',
+          'bg-muted/5'
         )}
       >
         <Button variant="ghost" size="icon-sm" onClick={onBack} aria-label="Back to main screen">
@@ -34,13 +34,8 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
         {/* <BackupSection /> */}
       </main>
 
-      <footer
-        className={cn(
-          'px-4 py-4 border-t border-[var(--color-secondary)]/20',
-          'bg-[var(--color-secondary)]/5'
-        )}
-      >
-        <span className="text-xs text-[var(--color-secondary)]">KeepOrganizedAI v1.0.0</span>
+      <footer className={cn('px-4 py-4 border-t border-muted/20', 'bg-muted/5')}>
+        <span className="text-xs text-muted">KeepOrganizedAI v1.0.0</span>
       </footer>
     </div>
   );

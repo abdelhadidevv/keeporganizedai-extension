@@ -78,7 +78,7 @@ describe('LockToggle', () => {
 
     it('applies gray color styling for none state', () => {
       render(<LockToggle {...defaultProps} currentLockState="none" />);
-      expect(screen.getByRole('button').className).toContain('bg-[var(--color-secondary)]');
+      expect(screen.getByRole('button').className).toContain('bg-muted');
     });
 
     it('applies warning (amber) color styling for smart state', () => {

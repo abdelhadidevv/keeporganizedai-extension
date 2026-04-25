@@ -54,7 +54,7 @@ export function LoadingState({
   return (
     <div
       className={cn(
-        'animate-in fade-in rounded-lg bg-[var(--color-secondary)]/5 p-6',
+        'animate-in fade-in rounded-lg bg-muted/5 p-6',
         variantStyles[variant],
         className
       )}
@@ -71,7 +71,7 @@ export function LoadingState({
 
       {variant === 'dots' && <DotsIndicator />}
 
-      {message && <p className="mt-3 text-sm text-[var(--color-secondary)]">{message}</p>}
+      {message && <p className="mt-3 text-sm text-muted">{message}</p>}
     </div>
   );
 }

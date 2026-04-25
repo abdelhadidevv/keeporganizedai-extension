@@ -58,7 +58,7 @@ const LOCK_OPTIONS: LockOption[] = [
 ];
 
 const stateStyles: Record<LockType, string> = {
-  none: 'bg-[var(--color-secondary)]/10 text-[var(--color-secondary)] border-[var(--color-secondary)]/20 hover:bg-[var(--color-secondary)]/20',
+  none: 'bg-muted/10 text-muted border-muted/20 hover:bg-muted/20',
   smart:
     'bg-[var(--color-warning)]/10 text-[var(--color-warning)] border-[var(--color-warning)]/20 hover:bg-[var(--color-warning)]/20',
   hard: 'bg-[var(--color-error)]/10 text-[var(--color-error)] border-[var(--color-error)]/20 hover:bg-[var(--color-error)]/20',
@@ -153,11 +153,11 @@ export function LockToggle({
             sideOffset={4}
             className={cn(
               'z-50 min-w-[200px] overflow-hidden rounded-lg border',
-              'border-[var(--color-secondary)]/20 bg-background p-1 shadow-lg',
+              'border-muted/20 bg-background p-1 shadow-lg',
               'data-[state=open]:animate-in data-[state=closed]:animate-out',
               'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
               'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-              'dark:border-[var(--color-secondary)]/30 bg-white dark:bg-gray-900'
+              'dark:border-muted/30 bg-white dark:bg-gray-900'
             )}
           >
             {LOCK_OPTIONS.map((option) => (
@@ -167,7 +167,7 @@ export function LockToggle({
                 className={cn(
                   'relative flex cursor-pointer select-none items-center gap-2 rounded-md',
                   'px-2 py-2 text-sm outline-none transition-colors',
-                  'focus:bg-[var(--color-secondary)]/10',
+                  'focus:bg-muted/10',
                   'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
                   option.value === currentLockState && 'bg-[var(--color-primary)]/10'
                 )}
@@ -179,8 +179,7 @@ export function LockToggle({
                       'bg-[var(--color-error)]/10 text-[var(--color-error)]',
                     option.variant === 'warning' &&
                       'bg-[var(--color-warning)]/10 text-[var(--color-warning)]',
-                    option.variant === 'default' &&
-                      'bg-[var(--color-secondary)]/10 text-[var(--color-secondary)]'
+                    option.variant === 'default' && 'bg-muted/10 text-muted'
                   )}
                 >
                   {option.icon}

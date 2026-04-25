@@ -39,7 +39,7 @@ function Loader({ className, label = 'Loading...', size = 'md', ...props }: Load
       {...props}
     >
       <Spinner size={size} />
-      <span className="text-sm text-[var(--color-secondary)]">{label}</span>
+      <span className="text-sm text-muted">{label}</span>
     </div>
   );
 }

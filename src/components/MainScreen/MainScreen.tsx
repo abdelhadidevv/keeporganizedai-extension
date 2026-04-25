@@ -80,7 +80,7 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
   return (
     <div className="flex flex-col h-screen bg-background text-foreground">
       <Header onAutoOrganize={onAutoOrganizeClick} isAutoOrganizeDisabled={!hasBookmarks} />
-      <div className="w-full px-4 py-3 border-b border-secondary/20 flex items-center gap-2">
+      <div className="w-full px-4 py-3 border-b border-muted/20 flex items-center gap-2">
         <Search
           ref={searchInputRef}
           placeholder="Search bookmarks... (/)"
@@ -119,11 +119,11 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
       <footer
         className={cn(
           'flex items-center justify-between px-4 py-3 select-none',
-          'border-t border-[var(--color-secondary)]/20',
-          'bg-[var(--color-secondary)]/5'
+          'border-t border-muted/20',
+          'bg-muted/5'
         )}
       >
-        <span className="text-xs text-[var(--color-secondary)]">KeepOrganizedAI v1.0.1</span>
+        <span className="text-xs text-muted">KeepOrganizedAI v1.1.0</span>
         <Button variant="ghost" size="sm" onClick={onSettingsClick}>
           <Settings className="w-4 h-4 mr-1" />
           Settings
