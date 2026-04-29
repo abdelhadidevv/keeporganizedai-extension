@@ -30,3 +30,6 @@ coverage/
 # Misc
 *.bak
 *.tmp
+
+# opencode
+.opencode

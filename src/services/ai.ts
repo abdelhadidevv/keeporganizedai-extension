@@ -1,28 +1,12 @@
-import { generateObject } from 'ai';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { createAnthropic } from '@ai-sdk/anthropic';
-import { createOpenAI } from '@ai-sdk/openai';
-import { z } from 'zod';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 
-import { AIError } from '@/types/ai';
-// import { DEFAULT_MAX_CATEGORIES } from '@/types/ai';
+import { DEFAULT_MODEL } from '@/types/ai';
 import { BookmarkNode, Category, AIProvider, BookmarkAssignment } from '@/types';
-import { get } from '@/services/storage';
+import { get, getSync } from '@/services/storage';
 import { STORAGE_KEYS } from '@/services/storage-keys';
 import { SYSTEM_PROMPT_CATEGORIES, SYSTEM_PROMPT_ASSIGNMENTS } from '@/prompts/ai-prompts';
-
-const categoriesResponseSchema = z.object({
-  categories: z.array(z.string()).describe('List of category names'),
-});
-
-const assignmentSchema = z.object({
-  bookmarkId: z.string().describe('The ID of the bookmark to assign'),
-  categoryId: z.string().describe('The ID of the target category'),
-});
-
-const assignmentsResponseSchema = z.object({
-  assignments: z.array(assignmentSchema).describe('List of bookmark to category assignments'),
-});
 
 interface AIService {
   generateCategories: (
@@ -38,26 +22,54 @@ interface AIService {
   hasApiKey: (provider: AIProvider) => Promise<boolean>;
 }
 
+interface ModelSelections {
+  gemini: string;
+  claude: string;
+  openai: string;
+  ollama: string;
+}
+
+interface OllamaConfig {
+  endpoint: string;
+  model: string;
+}
+
+const ERROR_CODES = {
+  MISSING_API_KEY: 'MISSING_API_KEY',
+  EMPTY_BOOKMARKS: 'EMPTY_BOOKMARKS',
+  EMPTY_CATEGORIES: 'EMPTY_CATEGORIES',
+  CATEGORY_GENERATION_FAILED: 'CATEGORY_GENERATION_FAILED',
+  ASSIGNMENT_FAILED: 'ASSIGNMENT_FAILED',
+  NO_OLLAMA_MODEL: 'NO_OLLAMA_MODEL',
+  UNKNOWN_PROVIDER: 'UNKNOWN_PROVIDER',
+} as const;
+
+const MAX_BOOKMARKS_PER_REQUEST = 130;
+const OLLAMA_DEFAULT_ENDPOINT = 'http://localhost:11434';
+
 async function getApiKey(provider: AIProvider): Promise<string | undefined> {
   const apiKeys = await get<Record<AIProvider, string>>(STORAGE_KEYS.API_KEYS);
   return apiKeys?.[provider];
 }
 
-function createModel(provider: AIProvider, apiKey: string) {
-  switch (provider) {
-    case 'gemini':
-      return createGoogleGenerativeAI({ apiKey })('gemini-2.5-flash');
-    case 'claude':
-      return createAnthropic({ apiKey })('claude-3-5-haiku-20240307');
-    case 'openai':
-      return createOpenAI({ apiKey })('gpt-4o-mini');
-    default:
-      return createGoogleGenerativeAI({ apiKey })('gemini-2.5-flash');
-  }
+async function getOllamaConfig(): Promise<OllamaConfig> {
+  const apiKeys = await get<Record<string, string>>(STORAGE_KEYS.API_KEYS);
+  const modelSelections = await getSync<ModelSelections>(STORAGE_KEYS.MODEL_SELECTIONS);
+  return {
+    endpoint: apiKeys?.ollamaEndpoint || OLLAMA_DEFAULT_ENDPOINT,
+    model: modelSelections?.ollama || '',
+  };
 }
 
-function formatBookmarks(bookmarks: Pick<BookmarkNode, 'id' | 'title' | 'url'>[]): string {
-  return bookmarks.map((b) => `${b.title} (${b.url || 'no URL'})`).join('\n');
+async function getModel(provider: AIProvider): Promise<string> {
+  const modelSelections = await getSync<ModelSelections>(STORAGE_KEYS.MODEL_SELECTIONS);
+  if (modelSelections?.[provider]) {
+    return modelSelections[provider];
+  }
+  if (provider === 'ollama') {
+    return '';
+  }
+  return DEFAULT_MODEL[provider] || '';
 }
 
 function createAiError(
@@ -66,20 +78,17 @@ function createAiError(
   provider: AIProvider,
   retryable: boolean
 ): never {
-  // eslint-disable-next-line no-throw-literal
-  throw {
-    code,
-    message,
-    provider,
-    retryable,
-  } as AIError;
+  throw new Error(JSON.stringify({ code, message, provider, retryable }));
 }
 
 async function getApiKeyOrThrow(provider: AIProvider): Promise<string> {
+  if (provider === 'ollama') {
+    return '';
+  }
   const apiKey = await getApiKey(provider);
   if (!apiKey) {
     createAiError(
-      'MISSING_API_KEY',
+      ERROR_CODES.MISSING_API_KEY,
       `No API key configured for ${provider}. Please add your API key in Settings.`,
       provider,
       false
@@ -98,22 +107,20 @@ function validateBookmarks(
       operation === 'categorization'
         ? 'No bookmarks provided for categorization'
         : 'No bookmarks provided for assignment';
-    createAiError('EMPTY_BOOKMARKS', message, provider, false);
+    createAiError(ERROR_CODES.EMPTY_BOOKMARKS, message, provider, false);
   }
 }
 
 function validateCategories(categories: Category[], provider: AIProvider): void {
   if (!categories || categories.length === 0) {
-    createAiError('EMPTY_CATEGORIES', 'No categories provided for assignment', provider, false);
+    createAiError(
+      ERROR_CODES.EMPTY_CATEGORIES,
+      'No categories provided for assignment',
+      provider,
+      false
+    );
   }
 }
-
-const MAX_BOOKMARKS_PER_REQUEST = 130;
-
-// function buildSmartLockedFoldersPrompt(folders: string[]): string {
-//   if (folders.length === 0) return '';
-//   return `\n\nSmartCategories:\n[${folders.join(', ')}]`;
-// }
 
 function transformToCategories(
   categoryNames: string[],
@@ -134,7 +141,11 @@ function transformToCategories(
     source: 'user' as const,
   }));
 
-  return [...smartLocked, ...unlocked]; //.slice(0, DEFAULT_MAX_CATEGORIES);
+  return [...smartLocked, ...unlocked];
+}
+
+function formatBookmarks(bookmarks: Pick<BookmarkNode, 'id' | 'title' | 'url'>[]): string {
+  return bookmarks.map((b) => `${b.title} (${b.url || 'no URL'})`).join('\n');
 }
 
 function formatBookmarksWithIds(bookmarks: Pick<BookmarkNode, 'id' | 'title' | 'url'>[]): string {
@@ -183,13 +194,109 @@ function processAssignments(
   return [...validAssignments, ...fallbackAssignments];
 }
 
+function parseJsonResponse<T>(text: string): T {
+  let jsonText = text.trim();
+  jsonText = jsonText.replace(/^```json\s*/i, '').replace(/```$/i, '');
+  jsonText = jsonText.replace(/^```\s*/, '').replace(/```$/i, '');
+  const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error('No valid JSON found in response');
+  }
+  return JSON.parse(jsonMatch[0]) as T;
+}
+
+async function callProvider(
+  provider: AIProvider,
+  prompt: string,
+  systemPrompt: string
+): Promise<string> {
+  const isOllama = provider === 'ollama';
+
+  if (isOllama) {
+    const config = await getOllamaConfig();
+    if (!config.model) {
+      createAiError(
+        ERROR_CODES.NO_OLLAMA_MODEL,
+        'No Ollama model selected. Please select a model in Settings.',
+        provider,
+        false
+      );
+    }
+    const response = await fetch(`${config.endpoint}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt },
+        ],
+        stream: false,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Ollama API error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    const content = data.message?.content;
+    if (!content) {
+      throw new Error('No response from Ollama');
+    }
+    return content;
+  }
+
+  const apiKey = await getApiKeyOrThrow(provider);
+  const model = await getModel(provider);
+
+  switch (provider) {
+    case 'gemini': {
+      const genAI = new GoogleGenerativeAI(apiKey);
+      const geminiModel = genAI.getGenerativeModel({ model });
+      const result = await geminiModel.generateContent([{ text: systemPrompt }, { text: prompt }]);
+      return result.response.text();
+    }
+    case 'claude': {
+      const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
+      const message = await client.messages.create({
+        model,
+        max_tokens: 4096,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: prompt }],
+      });
+      const content = message.content[0];
+      if (content.type !== 'text') {
+        throw new Error('Unexpected response type from Claude');
+      }
+      return content.text;
+    }
+    case 'openai': {
+      const client = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
+      const completion = await client.chat.completions.create({
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt },
+        ],
+      });
+      const choice = completion.choices[0];
+      if (!choice || !choice.message) {
+        throw new Error('No response from OpenAI');
+      }
+      return choice.message.content || '';
+    }
+    default:
+      createAiError(ERROR_CODES.UNKNOWN_PROVIDER, `Unknown provider: ${provider}`, provider, false);
+      return '';
+  }
+}
+
 const aiService: AIService = {
   async generateCategories(
     bookmarks: Pick<BookmarkNode, 'id' | 'title' | 'url'>[],
     smartLockedFolders: string[],
     provider: AIProvider = 'gemini'
   ): Promise<Category[]> {
-    const apiKey = await getApiKeyOrThrow(provider);
+    await getApiKeyOrThrow(provider);
     validateBookmarks(bookmarks, 'categorization', provider);
 
     try {
@@ -198,29 +305,21 @@ const aiService: AIService = {
           ? smartLockedFolders.map((c, i) => `${i + 1}. "${c}"`).join('\n')
           : 'None yet.';
 
-      const model = createModel(provider, apiKey);
       const systemPrompt = SYSTEM_PROMPT_CATEGORIES.replace(
         '{existingCategories}',
         existingCategories
       );
       const bookmarkList = formatBookmarks(bookmarks.slice(0, MAX_BOOKMARKS_PER_REQUEST));
+      const responseText = await callProvider(provider, bookmarkList, systemPrompt);
 
-      const { object } = await generateObject({
-        model,
-        schema: categoriesResponseSchema,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: bookmarkList },
-        ],
-      });
-
-      return transformToCategories(object.categories, provider, smartLockedFolders);
+      const parsed = parseJsonResponse<{ categories: string[] }>(responseText);
+      return transformToCategories(parsed.categories || [], provider, smartLockedFolders);
     } catch (error) {
       if (error && typeof error === 'object' && 'code' in error) {
         throw error;
       }
       createAiError(
-        'CATEGORY_GENERATION_FAILED',
+        ERROR_CODES.CATEGORY_GENERATION_FAILED,
         error instanceof Error ? error.message : 'Failed to generate categories',
         provider,
         true
@@ -233,30 +332,25 @@ const aiService: AIService = {
     categories: Category[],
     provider: AIProvider = 'gemini'
   ): Promise<BookmarkAssignment[]> {
-    const apiKey = await getApiKeyOrThrow(provider);
+    await getApiKeyOrThrow(provider);
     validateBookmarks(bookmarks, 'assignment', provider);
     validateCategories(categories, provider);
 
     try {
-      const model = createModel(provider, apiKey);
       const prompt = buildAssignmentPrompt(categories, bookmarks);
+      const responseText = await callProvider(provider, prompt, SYSTEM_PROMPT_ASSIGNMENTS);
 
-      const { object } = await generateObject({
-        model,
-        schema: assignmentsResponseSchema,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT_ASSIGNMENTS },
-          { role: 'user', content: prompt },
-        ],
-      });
-
-      return processAssignments(object.assignments, bookmarks, categories);
+      const parsed = parseJsonResponse<{
+        assignments: { bookmarkId: string; categoryId: string }[];
+      }>(responseText);
+      const rawAssignments = parsed.assignments || [];
+      return processAssignments(rawAssignments, bookmarks, categories);
     } catch (error) {
       if (error && typeof error === 'object' && 'code' in error) {
         throw error;
       }
       createAiError(
-        'ASSIGNMENT_FAILED',
+        ERROR_CODES.ASSIGNMENT_FAILED,
         error instanceof Error ? error.message : 'Failed to assign bookmarks',
         provider,
         true
@@ -265,6 +359,10 @@ const aiService: AIService = {
   },
 
   async hasApiKey(provider: AIProvider): Promise<boolean> {
+    if (provider === 'ollama') {
+      const config = await getOllamaConfig();
+      return !!config.model;
+    }
     const apiKey = await getApiKey(provider);
     return !!apiKey;
   },

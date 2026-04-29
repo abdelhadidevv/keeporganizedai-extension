@@ -4,6 +4,10 @@
   "version": "1.0.1",
   "description": "AI-powered bookmark organizer. Categorize bookmarks in minutes with fast search and smart folders.",
   "permissions": ["bookmarks", "storage", "sidePanel", "commands"],
+  "host_permissions": [
+    "http://localhost/*",
+    "http://127.0.0.1/*"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"

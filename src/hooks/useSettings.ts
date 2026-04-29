@@ -1,18 +1,22 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { AIProvider } from '@/types';
-import { AIApiKeys } from '@/types/ai';
+import { AIApiKeys, DEFAULT_MODEL } from '@/types/ai';
 import { get, getSync, set, setSync } from '@/services/storage';
 import { STORAGE_KEYS } from '@/services/storage-keys';
+
+type ModelSelection = Record<AIProvider, string>;
 
 interface UseSettingsReturn {
   aiProvider: AIProvider;
   theme: string;
   isLoading: boolean;
   apiKeys: AIApiKeys;
+  modelSelections: ModelSelection;
   setApiKey: (provider: AIProvider, key: string) => Promise<void>;
   clearApiKey: (provider: AIProvider) => Promise<void>;
   setAIProvider: (provider: AIProvider) => Promise<void>;
+  setModel: (provider: AIProvider, model: string) => Promise<void>;
   setTheme: (theme: string) => Promise<void>;
 }
 
@@ -20,16 +24,23 @@ export function useSettings(): UseSettingsReturn {
   const [aiProvider, setAIProviderState] = useState<AIProvider>('gemini');
   const [theme, setThemeState] = useState<string>('system');
   const [apiKeys, setApiKeysState] = useState<AIApiKeys>({});
+  const [modelSelections, setModelSelectionsState] = useState<ModelSelection>({
+    gemini: DEFAULT_MODEL.gemini,
+    claude: DEFAULT_MODEL.claude,
+    openai: DEFAULT_MODEL.openai,
+    ollama: '',
+  });
   const [isLoading, setIsLoading] = useState(true);
   const { setTheme: setNextTheme } = useTheme();
 
   const loadSettings = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [provider, themePref, apiKeysData] = await Promise.all([
+      const [provider, themePref, apiKeysData, modelSelectionsData] = await Promise.all([
         getSync<AIProvider>(STORAGE_KEYS.AI_PROVIDER),
         getSync<string>(STORAGE_KEYS.THEME),
         get<AIApiKeys>(STORAGE_KEYS.API_KEYS),
+        getSync<ModelSelection>(STORAGE_KEYS.MODEL_SELECTIONS),
       ]);
 
       if (provider) {
@@ -40,6 +51,17 @@ export function useSettings(): UseSettingsReturn {
       }
       if (apiKeysData) {
         setApiKeysState(apiKeysData);
+      }
+      if (modelSelectionsData) {
+        setModelSelectionsState({
+          ...{
+            gemini: DEFAULT_MODEL.gemini,
+            claude: DEFAULT_MODEL.claude,
+            openai: DEFAULT_MODEL.openai,
+            ollama: '',
+          },
+          ...modelSelectionsData,
+        });
       }
     } catch (error) {
       console.error('Failed to load settings:', error);
@@ -76,6 +98,20 @@ export function useSettings(): UseSettingsReturn {
     [setNextTheme]
   );
 
+  const setModel = useCallback(
+    async (provider: AIProvider, model: string) => {
+      try {
+        const newModelSelections = { ...modelSelections, [provider]: model };
+        await setSync(STORAGE_KEYS.MODEL_SELECTIONS, newModelSelections);
+        setModelSelectionsState(newModelSelections);
+      } catch (error) {
+        console.error('Failed to save model selection:', error);
+        throw error;
+      }
+    },
+    [modelSelections]
+  );
+
   const setApiKey = useCallback(
     async (provider: AIProvider, key: string) => {
       try {
@@ -93,10 +129,10 @@ export function useSettings(): UseSettingsReturn {
   const clearApiKey = useCallback(
     async (provider: AIProvider) => {
       try {
-        const newKeys = { ...apiKeys };
+        const newKeys = { ...apiKeys } as Record<string, string | undefined>;
         delete newKeys[provider];
         await set(STORAGE_KEYS.API_KEYS, newKeys);
-        setApiKeysState(newKeys);
+        setApiKeysState(newKeys as AIApiKeys);
       } catch (error) {
         console.error('Failed to clear API key:', error);
         throw error;
@@ -110,9 +146,11 @@ export function useSettings(): UseSettingsReturn {
     theme,
     isLoading,
     apiKeys,
+    modelSelections,
     setApiKey,
     clearApiKey,
     setAIProvider,
+    setModel,
     setTheme,
   };
 }

@@ -209,32 +209,50 @@ export function FolderTree({
 
   if (folders.length === 0) {
     return (
-      <div className={`p-4 text-sm text-muted-foreground ${className ?? ''}`}>No folders found</div>
+      <div className={cn('p-4 text-sm text-muted-foreground', className)}>No folders found</div>
     );
   }
 
   return (
-    <div className={cn('flex flex-col p-1 gap-1.5', className ?? '')} role="tree">
-      <SortableContext items={folders.map((f) => f.id)} strategy={verticalListSortingStrategy}>
-        {folders.map((folder, i) => (
-          <RenderFolder
-            key={folder.id}
-            folder={folder}
-            depth={0}
-            index={i}
-            expandedIds={expandedIds}
-            selectedId={selectedId}
-            onToggle={handleToggle}
-            onToggleOriginal={onToggle}
-            onSelect={onSelect}
-            onFolderClick={onFolderClick}
-            onBookmarkClick={onBookmarkClick}
-            onBookmarkDelete={onBookmarkDelete}
-            lockStates={lockStates}
-            maxDepth={maxDepth}
-            highlightQuery={highlightQuery}
-          />
-        ))}
+    <div className={cn('flex flex-col p-1 gap-1.5', className)} role="tree">
+      <SortableContext
+        items={folders.filter((f) => !f.url).map((f) => f.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        {folders.map((folder, i) => {
+          if (folder.url) {
+            return (
+              <BookmarkItem
+                key={folder.id}
+                bookmark={folder}
+                onClick={onBookmarkClick}
+                onDelete={onBookmarkDelete}
+                highlightQuery={highlightQuery}
+                hideBorder
+              />
+            );
+          }
+
+          return (
+            <RenderFolder
+              key={folder.id}
+              folder={folder}
+              depth={0}
+              index={i}
+              expandedIds={expandedIds}
+              selectedId={selectedId}
+              onToggle={handleToggle}
+              onToggleOriginal={onToggle}
+              onSelect={onSelect}
+              onFolderClick={onFolderClick}
+              onBookmarkClick={onBookmarkClick}
+              onBookmarkDelete={onBookmarkDelete}
+              lockStates={lockStates}
+              maxDepth={maxDepth}
+              highlightQuery={highlightQuery}
+            />
+          );
+        })}
       </SortableContext>
     </div>
   );
