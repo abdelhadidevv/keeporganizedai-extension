@@ -146,8 +146,8 @@ export function Step1LockSelection() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-12">
-        <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
-        <p className="text-sm text-stone-500">Loading folders…</p>
+        <Loader2 className="w-5 h-5 animate-spin text-[var(--color-primary)]" />
+        <p className="text-sm text-muted-foreground">Loading folders…</p>
       </div>
     );
   }
@@ -155,7 +155,7 @@ export function Step1LockSelection() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-12">
-        <p className="text-sm text-red-500">
+        <p className="text-sm text-[var(--color-error)]">
           Error:
           {error}
         </p>
@@ -166,12 +166,12 @@ export function Step1LockSelection() {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="flex items-start justify-between gap-4 pb-5 border-b border-stone-200">
+      <div className="flex items-start justify-between gap-4 pb-5 border-b border-muted/30">
         <div>
-          <h3 className="text-lg font-semibold tracking-tight text-stone-900 dark:text-white mb-1">
+          <h3 className="text-lg font-semibold tracking-tight text-foreground mb-1">
             Lock folders to protect
           </h3>
-          <p className="text-[13px] leading-relaxed text-muted max-w-[280px]">
+          <p className="text-[13px] leading-relaxed text-muted-foreground max-w-[280px]">
             Lock folders to protect them from AI reorganization. All other folders will be
             organized.
           </p>
@@ -259,7 +259,7 @@ export function Step1LockSelection() {
         })}
 
         {visibleFolders.length === 0 && (
-          <div className="flex flex-col items-center justify-center gap-3 p-12 text-stone-400">
+          <div className="flex flex-col items-center justify-center gap-3 p-12 text-muted-foreground">
             <Folder className="w-10 h-10 opacity-40" />
             <p className="text-sm">No folders found</p>
           </div>

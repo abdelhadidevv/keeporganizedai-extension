@@ -1,5 +1,5 @@
 import { Wand2 } from 'lucide-react';
-import { Button } from '@/components/ui';
+import { Button, ThemedIcon } from '@/components/ui';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
@@ -24,8 +24,15 @@ export function Header({
       )}
     >
       <div className="flex items-center gap-3">
-        <h1 className="text-[22px] font-bold tracking-tight text-primary font-logo">
-          KeepOrganizedAI
+        <ThemedIcon
+          light="/logo-light.svg"
+          dark="/logo-dark.svg"
+          alt="KeepOrganizedAI"
+          className="w-8 h-8"
+        />
+        <h1 className="text-[18px] font-medium">
+          KeepOrganized
+          <span className="text-primary">AI</span>
         </h1>
       </div>
 

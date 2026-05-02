@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Bookmark, ExternalLink, Trash2, GripVertical } from 'lucide-react';
+import { Bookmark, Copy, Check, Trash2, GripVertical } from 'lucide-react';
 import { useDraggable } from '@dnd-kit/core';
 import { BookmarkNode } from '@/types';
 import { cn } from '@/lib/utils';
@@ -29,6 +29,7 @@ export function BookmarkItem({
   hideBorder,
 }: BookmarkItemProps) {
   const [showActions, setShowActions] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -67,6 +68,19 @@ export function BookmarkItem({
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDelete?.(bookmark.id);
+  };
+
+  const handleCopyUrl = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!bookmark.url) return;
+
+    try {
+      await navigator.clipboard.writeText(bookmark.url);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 1500);
+    } catch {
+      console.error('[BookmarkItem] Failed to copy URL');
+    }
   };
 
   const handleClick = () => {
@@ -116,7 +130,7 @@ export function BookmarkItem({
         } as React.CSSProperties
       }
     >
-      <GripVertical className="w-3.5 h-3.5 flex-shrink-0 text-muted/40 cursor-grab active:cursor-grabbing" />
+      <GripVertical className="w-3.5 h-3.5 flex-shrink-0 text-muted-foreground/40 cursor-grab active:cursor-grabbing" />
 
       <div className="flex-shrink-0 w-5 h-5">
         {favicon ? (
@@ -132,14 +146,14 @@ export function BookmarkItem({
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-muted truncate" title={bookmark.title}>
+        <p className="text-sm font-medium text-foreground truncate" title={bookmark.title}>
           {highlightQuery
             ? highlightText(bookmark.title || 'Untitled', highlightQuery)
             : bookmark.title || 'Untitled'}
         </p>
         <p
           className={cn(
-            'text-xs text-muted/60 truncate transition-opacity duration-200',
+            'text-xs text-muted-foreground truncate transition-opacity duration-200',
             showActions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
           )}
           title={bookmark.url}
@@ -160,13 +174,14 @@ export function BookmarkItem({
           <Button
             variant="ghost"
             size="icon-sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(bookmark.url, '_blank');
-            }}
-            title="Open in new tab"
+            onClick={handleCopyUrl}
+            title={isCopied ? 'Copied!' : 'Copy URL'}
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            {isCopied ? (
+              <Check className="w-3.5 h-3.5 text-[var(--color-success)]" />
+            ) : (
+              <Copy className="w-3.5 h-3.5" />
+            )}
           </Button>
         )}
 

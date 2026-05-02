@@ -235,13 +235,13 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
         <div className="flex flex-col items-center justify-center gap-6 p-12 flex-shrink-0">
           <LoadingState variant="dots" message={statusMessage} />
           <div className="w-full max-w-[280px]">
-            <div className="h-[3px] bg-stone-200 rounded-full overflow-hidden">
+            <div className="h-[3px] bg-muted rounded-full overflow-hidden">
               <div
-                className="h-full bg-indigo-600 rounded-full transition-[width] duration-300 ease-out"
+                className="h-full bg-[var(--color-primary)] rounded-full transition-[width] duration-300 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-center text-[12px] text-stone-400 font-mono mt-2">{progress}%</p>
+            <p className="text-center text-[12px] text-muted font-mono mt-2">{progress}%</p>
           </div>
         </div>
       </div>
@@ -254,7 +254,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
         message={error}
         retryAction={handleRetry}
         title="Failed to organize bookmarks"
-        icon={<FileCheck className="w-6 h-6 text-red-500" />}
+        icon={<FileCheck className="w-6 h-6 text-[var(--color-error)]" />}
       />
     );
   }
@@ -265,15 +265,15 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
     return (
       <div className="flex flex-col h-full">
         <div className="flex flex-col items-center gap-4 pb-4 flex-shrink-0">
-          <div className="w-[72px] h-[72px] rounded-full bg-green-50 flex items-center justify-center">
-            <Check className="w-9 h-9 text-green-600" />
+          <div className="w-[72px] h-[72px] rounded-full bg-[var(--color-success)]/10 flex items-center justify-center">
+            <Check className="w-9 h-9 text-[var(--color-success)]" />
           </div>
 
           <div className="text-center">
-            <h3 className="text-xl font-semibold tracking-tight text-stone-900 dark:text-white mb-1.5">
+            <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1.5">
               Organization Complete!
             </h3>
-            <p className="text-sm text-stone-500">
+            <p className="text-sm text-muted-foreground">
               {totalAssignments} bookmark
               {totalAssignments !== 1 ? 's' : ''} organized into{' '}
               {Object.keys(assignmentSummary).length} categories
@@ -302,17 +302,17 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
                 return (
                   <div
                     key={categoryId}
-                    className="flex items-center gap-3 px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl"
+                    className="flex items-center gap-3 px-4 py-3 bg-muted/5 border border-muted/30 rounded-xl"
                   >
                     {isLocked ? (
-                      <Lock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                      <Lock className="w-3.5 h-3.5 text-[var(--color-warning)] shrink-0" />
                     ) : (
-                      <Tag className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                      <Tag className="w-3.5 h-3.5 text-muted shrink-0" />
                     )}
-                    <span className="flex-1 text-sm font-medium text-stone-900">
+                    <span className="flex-1 text-sm font-medium text-foreground">
                       {summary.categoryName}
                     </span>
-                    <span className="text-[12px] text-stone-400 font-mono">
+                    <span className="text-[12px] text-muted font-mono">
                       {summary.count} bookmark
                       {summary.count !== 1 ? 's' : ''}
                     </span>

@@ -130,10 +130,10 @@ export function FolderItem({
           !hasChildren && 'invisible'
         )}
       >
-        <ChevronRight className={cn('w-4 h-4 text-muted', isExpanded && 'rotate-90')} />
+        <ChevronRight className={cn('w-4 h-4 text-muted-foreground', isExpanded && 'rotate-90')} />
       </span>
 
-      <GripVertical className="w-3.5 h-3.5 flex-shrink-0 text-muted/40 cursor-grab active:cursor-grabbing" />
+      <GripVertical className="w-3.5 h-3.5 flex-shrink-0 text-muted-foreground/40 cursor-grab active:cursor-grabbing" />
 
       {isExpanded && hasChildren ? (
         <FolderOpen className="w-5 h-5 flex-shrink-0" style={{ color: folderColor }} />
@@ -141,11 +141,13 @@ export function FolderItem({
         <Folder className="w-5 h-5 flex-shrink-0" style={{ color: folderColor }} />
       )}
 
-      <span className="flex-1 truncate text-sm font-medium text-muted">
+      <span className="flex-1 truncate text-sm font-medium text-foreground">
         {highlightQuery ? highlightText(folder.title, highlightQuery) : folder.title}
       </span>
 
-      {bookmarkCount > 0 && <span className="text-xs text-muted/60">({bookmarkCount})</span>}
+      {bookmarkCount > 0 && (
+        <span className="text-xs text-muted-foreground">({bookmarkCount})</span>
+      )}
     </div>
   );
 }

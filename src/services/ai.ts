@@ -78,7 +78,14 @@ function createAiError(
   provider: AIProvider,
   retryable: boolean
 ): never {
-  throw new Error(JSON.stringify({ code, message, provider, retryable }));
+  throw new Error(
+    JSON.stringify({
+      code,
+      message,
+      provider,
+      retryable,
+    })
+  );
 }
 
 async function getApiKeyOrThrow(provider: AIProvider): Promise<string> {

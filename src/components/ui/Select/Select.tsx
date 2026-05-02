@@ -63,11 +63,11 @@ export function Select({
           style={{ minWidth: fullWidth ? 'var(--radix-dropdown-menu-trigger-width)' : undefined }}
           className={cn(
             'z-50 min-w-[180px] overflow-hidden rounded-lg border',
-            'border-muted/20 bg-white p-1 shadow-lg',
+            'border-muted/20 bg-background p-1 shadow-lg',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-            'dark:border-muted/30 dark:bg-gray-900',
+            'dark:border-muted/30',
             fullWidth && 'w-full'
           )}
         >

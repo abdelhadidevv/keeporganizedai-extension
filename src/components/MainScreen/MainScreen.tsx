@@ -4,6 +4,7 @@ import { useMainScreen } from '@/hooks/useMainScreen';
 import { Search } from '@/components/Search';
 import { Button } from '@/components/ui';
 import { cn } from '@/lib/utils';
+import { VERSION } from '@/utils/constants';
 import { Header } from './Header';
 import { FolderList } from './FolderList';
 
@@ -123,7 +124,7 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
           'bg-muted/5'
         )}
       >
-        <span className="text-xs text-muted">KeepOrganizedAI v1.1.0</span>
+        <span className="text-xs text-muted-foreground">KeepOrganizedAI v{VERSION}</span>
         <Button variant="ghost" size="sm" onClick={onSettingsClick}>
           <Settings className="w-4 h-4 mr-1" />
           Settings

@@ -2,20 +2,32 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
-  --color-primary-light: #e0e7ff;
+  --color-primary: #b188ea;
+  --color-primary-hover: #8f5ddb;
+  --color-primary-light: #dcc6f7;
   --color-secondary: #22c55e;
   --color-secondary-hover: #16a34a;
-  --color-muted: #6b7280;
-  --color-muted-foreground: #6b7280;
+  --color-muted: #cfc9da;
+  --color-muted-foreground: #6b5f7a;
   --color-accent: #f59e0b;
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   --color-info: #3b82f6;
-  --color-foreground: #111827;
-  --color-background: #f9fafb;
+  --color-foreground: #12111a;
+  --color-background: #f5f3fa;
+
+  --color-purple: #b188ea;
+  --color-purple-light: #c9a9f0;
+  --color-purple-soft: #dcc6f7;
+  --color-purple-deep: #8f5ddb;
+  --color-dark: #12111a;
+  --color-dark-soft: #1c1a28;
+  --color-dark-mid: #2a2738;
+  --color-dark-light: #3a3648;
+  --color-white: #ffffff;
+  --color-gray-light: #f5f3fa;
+  --color-gray-mid: #cfc9da;
 
   --font-logo: 'Inter', sans-serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -43,16 +55,16 @@
 }
 
 .dark {
-  --color-primary: #818cf8;
-  --color-primary-hover: #a5b4fc;
-  --color-primary-light: #312e81;
+  --color-primary: #c9a9f0;
+  --color-primary-hover: #b188ea;
+  --color-primary-light: #2a2738;
   --color-secondary: #4ade80;
   --color-secondary-hover: #22c55e;
-  --color-muted: #9ca3af;
-  --color-muted-foreground: #9ca3af;
+  --color-muted: #3a3648;
+  --color-muted-foreground: #cfc9da;
   --color-accent: #fbbf24;
-  --color-foreground: #f9fafb;
-  --color-background: #111827;
+  --color-foreground: #f5f3fa;
+  --color-background: #12111a;
 }
 
 @keyframes animate-in {

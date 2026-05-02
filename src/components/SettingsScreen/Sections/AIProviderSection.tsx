@@ -150,7 +150,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-muted uppercase tracking-wider">AI Provider</h2>
+      <h2 className="text-sm font-medium text-foreground uppercase tracking-wider">AI Provider</h2>
       <div className="rounded-lg border border-muted/20 bg-card p-4">
         {isLoading ? (
           <div className="flex items-center justify-center py-4">
@@ -159,7 +159,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
         ) : (
           <div className="space-y-4">
             <div>
-              <span className="block text-xs text-muted mb-2">Provider</span>
+              <span className="block text-xs text-muted-foreground mb-2">Provider</span>
               <Select
                 fullWidth
                 value={aiProvider}
@@ -170,7 +170,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
             {models.length > 0 && (
               <div>
-                <span className="block text-xs text-muted mb-2">Model</span>
+                <span className="block text-xs text-muted-foreground mb-2">Model</span>
                 <Select
                   fullWidth
                   value={currentModel}
@@ -183,9 +183,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
             {isOllama ? (
               <>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Server className="w-3 h-3 text-muted" />
-                    <span className="text-xs text-muted">Ollama Endpoint</span>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Server className="w-3 h-3" />
+                    <span className="text-xs">Ollama Endpoint</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -197,7 +197,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       className={cn(
                         'flex-1 px-3 py-1.5 text-sm rounded-md',
                         'bg-background border border-muted/30',
-                        'placeholder:text-muted/50',
+                        'placeholder:text-muted-foreground/50',
                         'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
                       )}
                     />
@@ -206,7 +206,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted">Model</span>
+                    <span className="text-xs text-muted-foreground">Model</span>
                     <button
                       type="button"
                       onClick={() => fetchOllamaModels(false)}
@@ -224,7 +224,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       <Spinner />
                     </div>
                   ) : ollamaError ? (
-                    <div className="flex items-center gap-1 text-xs text-red-500">
+                    <div className="flex items-center gap-1 text-xs text-[var(--color-error)]">
                       <AlertCircle className="w-3 h-3" />
                       <span>{ollamaError}</span>
                     </div>
@@ -236,7 +236,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       options={ollamaModels.map((m) => ({ value: m.name, label: m.name }))}
                     />
                   ) : (
-                    <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                    <div className="flex items-center gap-1 text-xs text-[var(--color-warning)]">
                       <AlertCircle className="w-3 h-3" />
                       <span>No models found. Make sure Ollama is running.</span>
                     </div>
@@ -246,9 +246,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
             ) : (
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Key className="w-3 h-3 text-muted" />
-                  <span className="text-xs text-muted">API Key</span>
-                  {apiKeys[aiProvider] && <Check className="w-3 h-3 text-green-500" />}
+                  <Key className="w-3 h-3 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">API Key</span>
+                  {apiKeys[aiProvider] && <Check className="w-3 h-3 text-[var(--color-success)]" />}
                 </div>
                 <div className="flex items-center gap-2">
                   <input
@@ -260,7 +260,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                     className={cn(
                       'flex-1 px-3 py-1.5 text-sm rounded-md',
                       'bg-background border border-muted/30',
-                      'placeholder:text-muted/50',
+                      'placeholder:text-muted-foreground/50',
                       'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
                     )}
                   />
@@ -270,14 +270,14 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                     className="p-1.5 rounded-md hover:bg-muted/10"
                   >
                     {showKey ? (
-                      <EyeOff className="w-4 h-4 text-muted" />
+                      <EyeOff className="w-4 h-4 text-muted-foreground" />
                     ) : (
-                      <Eye className="w-4 h-4 text-muted" />
+                      <Eye className="w-4 h-4 text-muted-foreground" />
                     )}
                   </button>
                 </div>
                 {!hasApiKey && (
-                  <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+                  <div className="flex items-center gap-1 text-xs text-[var(--color-warning)]">
                     <AlertCircle className="w-3 h-3" />
                     <span>API key required for AI features</span>
                   </div>

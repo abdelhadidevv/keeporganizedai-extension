@@ -2,6 +2,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { useSettings } from '@/hooks/useSettings';
 import { cn } from '@/lib/utils';
+import { VERSION } from '@/utils/constants';
 import { AIProviderSection } from './Sections/AIProviderSection';
 import { ThemeSection } from './Sections/ThemeSection';
 // import { BackupSection } from './Sections/BackupSection';
@@ -34,8 +35,14 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
         {/* <BackupSection /> */}
       </main>
 
-      <footer className={cn('px-4 py-4 border-t border-muted/20', 'bg-muted/5')}>
-        <span className="text-xs text-muted">KeepOrganizedAI v1.0.0</span>
+      <footer
+        className={cn(
+          'flex items-center justify-between px-4 py-3 select-none',
+          'border-t border-muted/20',
+          'bg-muted/5'
+        )}
+      >
+        <span className="text-xs text-muted-foreground">KeepOrganizedAI v{VERSION}</span>
       </footer>
     </div>
   );

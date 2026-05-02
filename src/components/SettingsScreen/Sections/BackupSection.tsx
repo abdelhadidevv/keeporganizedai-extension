@@ -82,7 +82,7 @@ export function BackupSection() {
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-muted uppercase tracking-wider">Data</h2>
+      <h2 className="text-sm font-medium text-foreground uppercase tracking-wider">Data</h2>
       <div className="rounded-lg border border-muted/20 bg-card p-4 space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Restore from Backup</span>
@@ -99,7 +99,7 @@ export function BackupSection() {
             Restore
           </Button>
         ) : (
-          <div className="flex items-center gap-2 text-xs text-muted">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <AlertCircle className="w-4 h-4" />
             <span>No backup available. Create a backup before organizing.</span>
           </div>
@@ -112,7 +112,7 @@ export function BackupSection() {
             <ModalTitle>Restore from Backup</ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <p className="text-sm text-muted">
+            <p className="text-sm text-muted-foreground">
               This will replace all your current bookmarks with the backup from{' '}
               <strong>{lastBackup ? formatDate(lastBackup.createdAt) : 'N/A'}</strong>. This action
               cannot be undone.

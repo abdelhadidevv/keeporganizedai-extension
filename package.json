@@ -14,8 +14,9 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md,json}\"",
     "test": "vitest run",
     "test:watch": "vitest",
-    "package": "npm run build && zip -r dist.zip dist",
-    "prepare": "husky install"
+    "release": "npm run build && zip -r dist.zip dist",
+    "prepare": "husky install",
+    "update-version": "bash bash-scripts/update-version.sh"
   },
   "keywords": [
     "chrome-extension",

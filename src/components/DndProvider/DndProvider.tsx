@@ -173,7 +173,7 @@ export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProv
       {children}
       <DragOverlay>
         {activeItem && (
-          <div className="opacity-80 bg-background border border-border rounded-lg shadow-lg p-2 px-3 text-sm font-medium">
+          <div className="opacity-80 bg-background border border-muted/30 rounded-lg shadow-lg p-2 px-3 text-sm font-medium">
             {activeItem.node.title || 'Untitled'}
           </div>
         )}

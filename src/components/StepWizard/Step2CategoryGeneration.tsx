@@ -134,7 +134,7 @@ export function Step2CategoryGeneration() {
         message={error}
         retryAction={handleRetry}
         title="Failed to generate categories"
-        icon={<Sparkles className="w-6 h-6 text-red-500" />}
+        icon={<Sparkles className="w-6 h-6 text-[var(--color-error)]" />}
       />
     );
   }
@@ -145,30 +145,32 @@ export function Step2CategoryGeneration() {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="flex items-start justify-between gap-4 pb-5 border-b border-stone-200">
+      <div className="flex items-start justify-between gap-4 pb-5 border-b border-muted/30">
         <div>
-          <h3 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-stone-900 dark:text-white mb-1">
-            <Sparkles className="w-4 h-4 text-indigo-600" />
+          <h3 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-foreground mb-1">
+            <Sparkles className="w-4 h-4 text-[var(--color-primary)]" />
             Categories Generated
           </h3>
-          <p className="text-[13px] leading-relaxed text-stone-500">
+          <p className="text-[13px] leading-relaxed text-muted">
             AI has analyzed your bookmarks and created categories. Click Next to apply the
             organization.
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 shrink-0 mt-0.5 bg-indigo-50 border border-indigo-200 rounded-full px-3 py-1">
-          <Tag className="w-3 h-3 text-indigo-600" />
-          <span className="font-mono text-[13px] font-medium text-indigo-600">{bookmarkCount}</span>
-          <span className="text-[12px] font-medium text-indigo-600">
+        <div className="flex items-center gap-1.5 shrink-0 mt-0.5 bg-[var(--color-primary-light)] border border-[var(--color-primary)]/30 rounded-full px-3 py-1">
+          <Tag className="w-3 h-3 text-[var(--color-primary)]" />
+          <span className="font-mono text-[13px] font-medium text-[var(--color-primary)]">
+            {bookmarkCount}
+          </span>
+          <span className="text-[12px] font-medium text-[var(--color-primary)]">
             bookmark
             {bookmarkCount !== 1 ? 's' : ''}
           </span>
-          <span className="text-stone-300 text-[11px] mx-0.5">·</span>
-          <span className="font-mono text-[13px] font-medium text-indigo-600">
+          <span className="text-muted text-[11px] mx-0.5">·</span>
+          <span className="font-mono text-[13px] font-medium text-[var(--color-primary)]">
             {displayCategories.length}
           </span>
-          <span className="text-[12px] font-medium text-indigo-600">
+          <span className="text-[12px] font-medium text-[var(--color-primary)]">
             categor
             {displayCategories.length !== 1 ? 'ies' : 'y'}
           </span>
@@ -176,7 +178,7 @@ export function Step2CategoryGeneration() {
       </div>
 
       {displayCategories.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 p-12 text-stone-400">
+        <div className="flex flex-col items-center justify-center gap-3 p-12 text-muted">
           <Tag className="w-10 h-10 opacity-40" />
           <p className="text-sm">No categories to display</p>
         </div>
@@ -185,8 +187,8 @@ export function Step2CategoryGeneration() {
           {lockedCategories.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Lock className="w-3.5 h-3.5 text-amber-500" />
-                <span className="text-[13px] font-semibold text-stone-800 dark:text-white">
+                <Lock className="w-3.5 h-3.5 text-[var(--color-warning)]" />
+                <span className="text-[13px] font-semibold text-foreground">
                   Protected ({lockedCategories.length})
                 </span>
               </div>
@@ -194,9 +196,9 @@ export function Step2CategoryGeneration() {
                 {lockedCategories.map((cat) => (
                   <div
                     key={cat.id}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-300 rounded-full text-[13px] font-medium text-amber-800"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-warning)]/10 border border-[var(--color-warning)]/30 rounded-full text-[13px] font-medium text-[var(--color-warning)]"
                   >
-                    <Lock className="w-[11px] h-[11px] text-amber-500" />
+                    <Lock className="w-[11px] h-[11px] text-[var(--color-warning)]" />
                     {cat.name}
                   </div>
                 ))}
@@ -207,8 +209,8 @@ export function Step2CategoryGeneration() {
           {aiCategories.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-                <span className="text-[13px] font-semibold text-stone-800 dark:text-white">
+                <Sparkles className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+                <span className="text-[13px] font-semibold text-foreground">
                   AI-Generated ({aiCategories.length})
                 </span>
               </div>
@@ -216,7 +218,7 @@ export function Step2CategoryGeneration() {
                 {aiCategories.map((cat) => (
                   <div
                     key={cat.id}
-                    className="px-3 py-1.5 bg-white border border-stone-200 rounded-full text-[13px] font-medium text-stone-800"
+                    className="px-3 py-1.5 bg-background border border-muted/30 rounded-full text-[13px] font-medium text-foreground"
                   >
                     {cat.name}
                   </div>
@@ -225,7 +227,7 @@ export function Step2CategoryGeneration() {
             </div>
           )}
 
-          <div className="flex items-center gap-2 pt-4 border-t border-stone-200 text-[12px] text-stone-400">
+          <div className="flex items-center gap-2 pt-4 border-t border-muted/30 text-[12px] text-muted">
             <Info className="w-3 h-3 shrink-0" />
             <span>Click Next to apply this organization to your bookmarks.</span>
           </div>

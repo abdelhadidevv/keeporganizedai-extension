@@ -118,10 +118,10 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
     >
       <div className="shrink-0 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-[11px] font-medium text-muted uppercase tracking-widest font-mono">
+          <span className="text-[11px] font-medium text-muted-foreground uppercase">
             Step {currentStep} of {TOTAL_STEPS}
           </span>
-          <span className="text-[12px] font-semibold tracking-tight text-foreground">
+          <span className="text-[12px] font-bold tracking-tight text-foreground">
             {STEP_TITLES[currentStep]}
           </span>
         </div>

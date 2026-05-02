@@ -156,8 +156,7 @@ export function LockToggle({
               'border-muted/20 bg-background p-1 shadow-lg',
               'data-[state=open]:animate-in data-[state=closed]:animate-out',
               'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-              'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-              'dark:border-muted/30 bg-white dark:bg-gray-900'
+              'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
             )}
           >
             {LOCK_OPTIONS.map((option) => (

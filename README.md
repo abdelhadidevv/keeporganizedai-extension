@@ -1,6 +1,4 @@
-![Logo](icons/icon.svg)
-
-# KeepOrganizedAI
+![Logo](icons/logo-readme.svg)
 
 [![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ejcmcpeohpjbipdfhpmfohpdefgbdfpl)](https://chromewebstore.google.com/detail/keeporganizedai/ejcmcpeohpjbipdfhpmfohpdefgbdfpl)
