@@ -153,7 +153,7 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
         </AnimatePresence>
       </div>
 
-      <div className="flex items-center justify-between pt-4 border-t border-muted/20 shrink-0">
+      <div className="flex items-center justify-between pt-4 shrink-0">
         <button
           type="button"
           onClick={handleCancelClick}

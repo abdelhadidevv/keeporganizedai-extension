@@ -145,40 +145,29 @@ export function Step2CategoryGeneration() {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="flex items-start justify-between gap-4 pb-5 border-b border-muted/30">
-        <div>
-          <h3 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-foreground mb-1">
-            <Sparkles className="w-4 h-4 text-[var(--color-primary)]" />
+      <div className="flex flex-col items-start justify-between gap-4 pb-5 border-b border-muted/30">
+        <div className="w-full flex justify-between items-center">
+          <h3 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-foreground">
             Categories Generated
           </h3>
-          <p className="text-[13px] leading-relaxed text-muted">
-            AI has analyzed your bookmarks and created categories. Click Next to apply the
-            organization.
-          </p>
+          <div className="flex items-center gap-1.5 font-medium text-primary bg-primary-light border border-primary/30 rounded-full p-1">
+            <Tag className="w-3 h-3" />
+            <span className="text-[13px]">{bookmarkCount}</span>
+            <span className="text-[12px">bookmarks</span>
+            <span className="text-muted-foreground text-[11px] mx-0.5">·</span>
+            <span className="text-[13px]">{displayCategories.length}</span>
+            <span className="text-[12px]">categories</span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-1.5 shrink-0 mt-0.5 bg-[var(--color-primary-light)] border border-[var(--color-primary)]/30 rounded-full px-3 py-1">
-          <Tag className="w-3 h-3 text-[var(--color-primary)]" />
-          <span className="font-mono text-[13px] font-medium text-[var(--color-primary)]">
-            {bookmarkCount}
-          </span>
-          <span className="text-[12px] font-medium text-[var(--color-primary)]">
-            bookmark
-            {bookmarkCount !== 1 ? 's' : ''}
-          </span>
-          <span className="text-muted text-[11px] mx-0.5">·</span>
-          <span className="font-mono text-[13px] font-medium text-[var(--color-primary)]">
-            {displayCategories.length}
-          </span>
-          <span className="text-[12px] font-medium text-[var(--color-primary)]">
-            categor
-            {displayCategories.length !== 1 ? 'ies' : 'y'}
-          </span>
-        </div>
+        <p className="text-[13px] leading-relaxed text-muted-foreground">
+          AI has analyzed your bookmarks and created categories. Click Next to apply the
+          organization.
+        </p>
       </div>
 
       {displayCategories.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 p-12 text-muted">
+        <div className="flex flex-col items-center justify-center gap-3 p-12 text-muted-foreground">
           <Tag className="w-10 h-10 opacity-40" />
           <p className="text-sm">No categories to display</p>
         </div>
@@ -209,7 +198,7 @@ export function Step2CategoryGeneration() {
           {aiCategories.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-3.5 h-3.5 text-[var(--color-primary)]" />
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
                 <span className="text-[13px] font-semibold text-foreground">
                   AI-Generated ({aiCategories.length})
                 </span>
@@ -227,7 +216,7 @@ export function Step2CategoryGeneration() {
             </div>
           )}
 
-          <div className="flex items-center gap-2 pt-4 border-t border-muted/30 text-[12px] text-muted">
+          <div className="flex items-center gap-2 pt-4 border-t border-muted/30 text-[12px] text-muted-foreground">
             <Info className="w-3 h-3 shrink-0" />
             <span>Click Next to apply this organization to your bookmarks.</span>
           </div>

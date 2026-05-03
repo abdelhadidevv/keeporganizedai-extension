@@ -95,6 +95,81 @@ function flattenVisibleFolders(nodes: FolderNode[], expandedIds: Set<string>): F
   return result;
 }
 
+interface LockableFolderItemProps {
+  folder: FlatFolder;
+  isLocked: boolean;
+  isHardLocked: boolean;
+  hasChildren: boolean;
+  isExpanded: boolean;
+  isLast: boolean;
+  onToggleExpand: (id: string) => void;
+  onLockChange: (folderId: string, newLock: LockType) => void;
+  currentLockState: LockType;
+}
+
+function LockableFolderItem({
+  folder,
+  isLocked,
+  isHardLocked,
+  hasChildren,
+  isExpanded,
+  isLast,
+  onToggleExpand,
+  onLockChange,
+  currentLockState,
+}: LockableFolderItemProps) {
+  return (
+    <div
+      className={[
+        'flex items-center gap-3 p-3 transition-colors duration-100',
+        !isLast && 'border-b border-muted/10',
+        isHardLocked && 'bg-[var(--color-warning)]/10',
+        !isHardLocked && isLocked && 'bg-[var(--color-warning)]/5',
+        !isHardLocked && !isLocked && 'hover:bg-muted/10',
+      ].join(' ')}
+    >
+      {hasChildren && (
+        <button
+          type="button"
+          onClick={() => onToggleExpand(folder.id)}
+          className="w-[18px] h-[18px] flex items-center justify-center shrink-0 p-0 border-none bg-transparent cursor-pointer text-muted hover:text-foreground"
+        >
+          {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+        </button>
+      )}
+
+      <div
+        className={[
+          'w-8 h-8 flex items-center justify-center rounded-lg border shrink-0 transition-all duration-150',
+          isLocked
+            ? 'bg-[var(--color-warning)]/20 border-[var(--color-warning)]/30'
+            : 'bg-muted/10 border-muted/20',
+        ].join(' ')}
+      >
+        <Folder
+          className={`w-[15px] h-[15px] ${isLocked ? 'text-[var(--color-warning)]' : 'text-muted-foreground'}`}
+        />
+      </div>
+      <div className="flex flex-col flex-1 min-w-0">
+        <span className="text-sm font-medium text-foreground truncate mb-0.5">{folder.title}</span>
+        <span className="text-[12px] text-muted-foreground">
+          {folder.bookmarkCount} bookmark
+          {folder.bookmarkCount !== 1 ? 's' : ''}
+          {folder.childCount > 0 &&
+            ` • ${folder.childCount} subfolder${folder.childCount !== 1 ? 's' : ''}`}
+        </span>
+      </div>
+      <div className="shrink-0">
+        <LockToggle
+          folderId={folder.id}
+          currentLockState={currentLockState}
+          onChange={(newLock) => onLockChange(folder.id, newLock)}
+        />
+      </div>
+    </div>
+  );
+}
+
 export function Step1LockSelection() {
   const lockStates = useWizardStore((s) => s.lockStates);
   const setLockStates = useWizardStore((s) => s.setLockStates);
@@ -166,7 +241,7 @@ export function Step1LockSelection() {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="flex items-start justify-between gap-4 pb-5 border-b border-muted/30">
+      <div className="flex items-start justify-between gap-4 pb-1">
         <div>
           <h3 className="text-lg font-semibold tracking-tight text-foreground mb-1">
             Lock folders to protect
@@ -197,64 +272,18 @@ export function Step1LockSelection() {
           const isLast = idx === visibleFolders.length - 1;
 
           return (
-            <div
+            <LockableFolderItem
               key={folder.id}
-              className={[
-                'flex items-center gap-3 py-3 pr-4 transition-colors duration-100',
-                !isLast && 'border-b border-muted/10',
-                isHardLocked && 'bg-[var(--color-warning)]/10',
-                !isHardLocked && isLocked && 'bg-[var(--color-warning)]/5',
-                !isHardLocked && !isLocked && 'hover:bg-muted/10',
-              ].join(' ')}
-              style={{ paddingLeft: 16 + folder.depth * 20 }}
-            >
-              {hasChildren ? (
-                <button
-                  type="button"
-                  onClick={() => toggleExpand(folder.id)}
-                  className="w-[18px] h-[18px] flex items-center justify-center shrink-0 p-0 border-none bg-transparent cursor-pointer text-muted hover:text-foreground"
-                >
-                  {expandedIds.has(folder.id) ? (
-                    <ChevronDown className="w-3 h-3" />
-                  ) : (
-                    <ChevronRight className="w-3 h-3" />
-                  )}
-                </button>
-              ) : (
-                <span className="w-[18px] shrink-0" />
-              )}
-
-              <div
-                className={[
-                  'w-8 h-8 flex items-center justify-center rounded-lg border shrink-0 transition-all duration-150',
-                  isLocked
-                    ? 'bg-[var(--color-warning)]/20 border-[var(--color-warning)]/30'
-                    : 'bg-muted/10 border-muted/20',
-                ].join(' ')}
-              >
-                <Folder
-                  className={`w-[15px] h-[15px] ${isLocked ? 'text-[var(--color-warning)]' : 'text-muted'}`}
-                />
-              </div>
-              <div className="flex flex-col flex-1 min-w-0">
-                <span className="text-sm font-medium text-foreground truncate mb-0.5">
-                  {folder.title}
-                </span>
-                <span className="text-[12px] text-muted font-mono">
-                  {folder.bookmarkCount} bookmark
-                  {folder.bookmarkCount !== 1 ? 's' : ''}
-                  {folder.childCount > 0 &&
-                    ` • ${folder.childCount} subfolder${folder.childCount !== 1 ? 's' : ''}`}
-                </span>
-              </div>
-              <div className="shrink-0">
-                <LockToggle
-                  folderId={folder.id}
-                  currentLockState={lockStates[folder.id] || 'none'}
-                  onChange={(newLock) => handleLockChange(folder.id, newLock)}
-                />
-              </div>
-            </div>
+              folder={folder}
+              isLocked={isLocked}
+              isHardLocked={isHardLocked}
+              hasChildren={hasChildren}
+              isExpanded={expandedIds.has(folder.id)}
+              isLast={isLast}
+              onToggleExpand={toggleExpand}
+              onLockChange={handleLockChange}
+              currentLockState={lockStates[folder.id] || 'none'}
+            />
           );
         })}
 

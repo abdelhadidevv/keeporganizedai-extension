@@ -71,7 +71,7 @@ export function LoadingState({
 
       {variant === 'dots' && <DotsIndicator />}
 
-      {message && <p className="mt-3 text-sm text-muted">{message}</p>}
+      {message && <p className="mt-3 text-sm text-muted-foreground">{message}</p>}
     </div>
   );
 }

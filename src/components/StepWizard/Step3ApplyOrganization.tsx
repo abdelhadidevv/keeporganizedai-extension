@@ -241,7 +241,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="text-center text-[12px] text-muted font-mono mt-2">{progress}%</p>
+            <p className="text-center text-[12px] text-muted-foreground mt-2">{progress}%</p>
           </div>
         </div>
       </div>
@@ -307,12 +307,12 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
                     {isLocked ? (
                       <Lock className="w-3.5 h-3.5 text-[var(--color-warning)] shrink-0" />
                     ) : (
-                      <Tag className="w-3.5 h-3.5 text-muted shrink-0" />
+                      <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                     )}
                     <span className="flex-1 text-sm font-medium text-foreground">
                       {summary.categoryName}
                     </span>
-                    <span className="text-[12px] text-muted font-mono">
+                    <span className="text-[12px] text-muted-foreground">
                       {summary.count} bookmark
                       {summary.count !== 1 ? 's' : ''}
                     </span>
