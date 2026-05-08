@@ -24,7 +24,6 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
     setSelectedFolderId,
     expandedFolderIds,
     toggleExpanded,
-    lockStates,
     expandAll,
     collapseAll,
     refreshBookmarks,
@@ -60,7 +59,6 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
 
   useEffect(() => {
     const handleMessage = (message: { type: string }) => {
-      console.log('Received message in MainScreen:', message);
       if (message.type === 'FOCUS_SEARCH') {
         searchInputRef.current?.focus();
       }
@@ -108,7 +106,6 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
         folders={filteredFolders}
         expandedFolderIds={expandedFolderIds}
         selectedFolderId={selectedFolderId}
-        lockStates={lockStates}
         isLoading={isLoading}
         error={error}
         highlightQuery={searchQuery}
@@ -119,7 +116,7 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
 
       <footer
         className={cn(
-          'flex items-center justify-between px-4 py-3 select-none',
+          'flex items-center justify-between px-4 py-3 select-none h-14.25',
           'border-t border-muted/20',
           'bg-muted/5'
         )}

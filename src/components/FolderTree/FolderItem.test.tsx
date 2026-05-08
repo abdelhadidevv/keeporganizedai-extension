@@ -18,8 +18,6 @@ describe('FolderItem', () => {
     index: 0,
     isExpanded: false,
     isSelected: false,
-    isLocked: false,
-    lockType: 'none' as const,
     onToggle: vi.fn(),
     onSelect: vi.fn(),
   };
@@ -131,26 +129,6 @@ describe('FolderItem', () => {
     });
     render(<FolderItem {...defaultProps} folder={nestedFolder} isExpanded={true} />);
     expect(screen.getByText('(3)')).toBeInTheDocument();
-  });
-
-  it('shows lock badge for hard-locked folders', () => {
-    render(<FolderItem {...defaultProps} isLocked={true} lockType="hard" />);
-    const lockIcon = document.querySelector('.lucide-lock');
-    expect(lockIcon).toBeInTheDocument();
-    const badge = lockIcon?.closest('[class*="inline-flex"]');
-    expect(badge).toBeInTheDocument();
-  });
-
-  it('shows lock badge for smart-locked folders', () => {
-    render(<FolderItem {...defaultProps} isLocked={true} lockType="smart" />);
-    const lockIcon = document.querySelector('.lucide-lock');
-    expect(lockIcon).toBeInTheDocument();
-  });
-
-  it('does not show lock badge when isLocked is false', () => {
-    render(<FolderItem {...defaultProps} isLocked={false} lockType="none" />);
-    const lockIcon = document.querySelector('.lucide-lock');
-    expect(lockIcon).not.toBeInTheDocument();
   });
 
   it('applies depth indentation via CSS variable', () => {

@@ -1,2 +1,2 @@
-export { DndProvider } from './DndProvider';
+export { DndProvider, useDndState } from './DndProvider';
 export type { DragData } from './DndProvider';

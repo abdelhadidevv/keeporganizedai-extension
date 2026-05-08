@@ -1,0 +1,1 @@
+export { BookmarkBarZone } from './BookmarkBarZone';
