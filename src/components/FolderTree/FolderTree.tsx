@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { BookmarkNode, LockType } from '@/types/index';
+import { BookmarkNode } from '@/types/index';
 import { BookmarkItem } from '@/components/BookmarkItem';
 import { cn } from '@/lib/utils';
 import { getFolderColor } from '@/utils/folder-colors';
@@ -16,7 +16,6 @@ export interface FolderTreeProps {
   onFolderClick?: (id: string) => void;
   onBookmarkClick?: (bookmark: BookmarkNode) => void;
   onBookmarkDelete?: (bookmarkId: string) => void;
-  lockStates?: Record<string, LockType>;
   maxDepth?: number;
   className?: string;
   highlightQuery?: string;
@@ -34,7 +33,6 @@ interface RenderFolderProps {
   onFolderClick?: (id: string) => void;
   onBookmarkClick?: (bookmark: BookmarkNode) => void;
   onBookmarkDelete?: (bookmarkId: string) => void;
-  lockStates?: Record<string, LockType>;
   maxDepth?: number;
   highlightQuery?: string;
   isSubFolder?: boolean;
@@ -52,15 +50,12 @@ function RenderFolder({
   onFolderClick,
   onBookmarkClick,
   onBookmarkDelete,
-  lockStates,
   maxDepth,
   highlightQuery = '',
   isSubFolder,
 }: RenderFolderProps) {
   const isExpanded = expandedIds.has(folder.id);
   const isSelected = selectedId === folder.id;
-  const lockType = lockStates?.[folder.id] ?? 'none';
-  const isLocked = lockType !== 'none';
   const children = folder.children ?? [];
   const subFolders = children.filter((child) => !child.url);
   const bookmarks = children.filter((child) => child.url);
@@ -95,29 +90,31 @@ function RenderFolder({
         isExpanded={isExpanded}
         isSelected={isSelected}
         isSubFolder={isSubFolder}
-        isLocked={isLocked}
-        lockType={lockType}
         onToggle={hasChildren ? handleToggle : () => {}}
         onSelect={handleSelect}
         highlightQuery={highlightQuery}
       />
 
       {isExpanded && (
-        <div
-          className="w-full rounded-b-lg"
-          // style={{ backgroundColor: `color-mix(in srgb, ${folderColor}, transparent 95%)` }}
-        >
-          {bookmarks.map((bookmark, index) => (
-            <BookmarkItem
-              key={bookmark.id}
-              bookmark={bookmark}
-              onClick={onBookmarkClick}
-              onDelete={onBookmarkDelete}
-              highlightQuery={highlightQuery}
-              folderColor={folderColor}
-              isLastBookmark={index === bookmarks.length - 1 && subFolders.length === 0}
-            />
-          ))}
+        <div className="w-full rounded-b-lg">
+          {bookmarks.length > 0 && (
+            <SortableContext
+              items={bookmarks.map((b) => b.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {bookmarks.map((bookmark, index) => (
+                <BookmarkItem
+                  key={bookmark.id}
+                  bookmark={bookmark}
+                  onClick={onBookmarkClick}
+                  onDelete={onBookmarkDelete}
+                  highlightQuery={highlightQuery}
+                  folderColor={folderColor}
+                  isLastBookmark={index === bookmarks.length - 1 && subFolders.length === 0}
+                />
+              ))}
+            </SortableContext>
+          )}
           {subFolders.length > 0 && (
             <SortableContext
               items={subFolders.map((f) => f.id)}
@@ -141,7 +138,6 @@ function RenderFolder({
                     onFolderClick={onFolderClick}
                     onBookmarkClick={onBookmarkClick}
                     onBookmarkDelete={onBookmarkDelete}
-                    lockStates={lockStates}
                     maxDepth={maxDepth}
                     highlightQuery={highlightQuery}
                     isSubFolder
@@ -177,7 +173,6 @@ export function FolderTree({
   onFolderClick,
   onBookmarkClick,
   onBookmarkDelete,
-  lockStates,
   maxDepth,
   className,
   highlightQuery = '',
@@ -215,45 +210,52 @@ export function FolderTree({
 
   return (
     <div className={cn('flex flex-col p-1 gap-1.5', className)} role="tree">
-      <SortableContext
-        items={folders.filter((f) => !f.url).map((f) => f.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        {folders.map((folder, i) => {
-          if (folder.url) {
-            return (
+      {folders.filter((f) => f.url).length > 0 && (
+        <SortableContext
+          items={folders.filter((f) => f.url).map((f) => f.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {folders
+            .filter((f) => f.url)
+            .map((bookmark) => (
               <BookmarkItem
-                key={folder.id}
-                bookmark={folder}
+                key={bookmark.id}
+                bookmark={bookmark}
                 onClick={onBookmarkClick}
                 onDelete={onBookmarkDelete}
                 highlightQuery={highlightQuery}
                 hideBorder
               />
-            );
-          }
-
-          return (
-            <RenderFolder
-              key={folder.id}
-              folder={folder}
-              depth={0}
-              index={i}
-              expandedIds={expandedIds}
-              selectedId={selectedId}
-              onToggle={handleToggle}
-              onToggleOriginal={onToggle}
-              onSelect={onSelect}
-              onFolderClick={onFolderClick}
-              onBookmarkClick={onBookmarkClick}
-              onBookmarkDelete={onBookmarkDelete}
-              lockStates={lockStates}
-              maxDepth={maxDepth}
-              highlightQuery={highlightQuery}
-            />
-          );
-        })}
-      </SortableContext>
+            ))}
+        </SortableContext>
+      )}
+      {folders.filter((f) => !f.url).length > 0 && (
+        <SortableContext
+          items={folders.filter((f) => !f.url).map((f) => f.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {folders
+            .filter((f) => !f.url)
+            .map((folder, i) => (
+              <RenderFolder
+                key={folder.id}
+                folder={folder}
+                depth={0}
+                index={i}
+                expandedIds={expandedIds}
+                selectedId={selectedId}
+                onToggle={handleToggle}
+                onToggleOriginal={onToggle}
+                onSelect={onSelect}
+                onFolderClick={onFolderClick}
+                onBookmarkClick={onBookmarkClick}
+                onBookmarkDelete={onBookmarkDelete}
+                maxDepth={maxDepth}
+                highlightQuery={highlightQuery}
+              />
+            ))}
+        </SortableContext>
+      )}
     </div>
   );
 }

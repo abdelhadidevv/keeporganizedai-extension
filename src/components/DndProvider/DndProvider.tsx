@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from 'react';
+import { useCallback, useState, createContext, useContext, useMemo, type ReactNode } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -14,6 +14,17 @@ import {
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { toast } from 'sonner';
 import { DropIndicator } from '@/components/DropIndicator/DropIndicator';
+
+interface DragState {
+  isDragging: boolean;
+  activeItem: { type: 'folder' | 'bookmark'; title: string; id: string } | null;
+}
+
+const DndStateContext = createContext<DragState>({ isDragging: false, activeItem: null });
+
+export function useDndState(): DragState {
+  return useContext(DndStateContext);
+}
 
 interface DragData {
   type: 'folder' | 'bookmark';
@@ -35,7 +46,8 @@ interface DndProviderProps {
     targetIndex: number
   ) => Promise<boolean>;
   onRefresh: () => void;
-  lockStates: Record<string, 'none' | 'hard' | 'smart'>;
+  onTrash?: (itemId: string, type: 'folder' | 'bookmark') => void;
+  onPinToBar?: (itemId: string, type: 'folder' | 'bookmark') => void;
 }
 
 export interface DropTargetInfo {
@@ -43,7 +55,40 @@ export interface DropTargetInfo {
   position: 'before' | 'after' | 'inside';
 }
 
-export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProviderProps) {
+function getSiblingIndexFromSortable(over: NonNullable<DragOverEvent['over']>): number {
+  const nodeData = over.data.current?.node as { index?: number } | undefined;
+
+  if (nodeData && typeof nodeData.index === 'number') {
+    return nodeData.index;
+  }
+
+  const targetElement = document.querySelector(`[data-draggable-id="${over.id}"]`);
+  if (!targetElement) return 0;
+
+  const container = targetElement.parentElement;
+  if (!container) return 0;
+
+  const siblings = Array.from(container.children).filter((el) =>
+    el.hasAttribute('data-draggable-id')
+  );
+  return siblings.indexOf(targetElement);
+}
+
+function getPointerY(event: DragOverEvent): number {
+  const translatedRect = event.active.rect.current.translated;
+  if (translatedRect) {
+    return translatedRect.top + translatedRect.height / 2;
+  }
+  return 0;
+}
+
+export function DndProvider({
+  children,
+  onMove,
+  onRefresh,
+  onTrash,
+  onPinToBar,
+}: DndProviderProps) {
   const [activeItem, setActiveItem] = useState<DragData | null>(null);
   const [dropTargetInfo, setDropTargetInfo] = useState<DropTargetInfo | null>(null);
 
@@ -58,17 +103,6 @@ export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProv
     })
   );
 
-  const canDropOnTarget = useCallback(
-    (targetId: string): boolean => {
-      if (!activeItem) return false;
-      if (activeItem.node.id === targetId) return false;
-      const lockType = lockStates[targetId];
-      if (lockType === 'hard') return false;
-      return true;
-    },
-    [activeItem, lockStates]
-  );
-
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const { active } = event;
     const data = active.data.current as DragData;
@@ -78,8 +112,13 @@ export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProv
 
   const handleDragOver = useCallback(
     (event: DragOverEvent) => {
-      const { over } = event;
+      const { over, active } = event;
       if (!over || !activeItem) {
+        setDropTargetInfo(null);
+        return;
+      }
+
+      if (over.id === 'trash-zone' || over.id === 'bookmark-bar-zone') {
         setDropTargetInfo(null);
         return;
       }
@@ -87,27 +126,78 @@ export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProv
       const overData = over.data.current as { type?: string; parentId?: string | null };
       const overId = over.id as string;
 
-      if (overData.type === 'folder' && canDropOnTarget(overId)) {
-        const lockType = lockStates[overId];
-        if (lockType === 'hard') {
+      if (overData.type === 'folder') {
+        const activeData = active.data.current as DragData | undefined;
+        const isActiveFolder = activeData?.type === 'folder';
+        const isSameParent = activeData?.parentId === overData.parentId;
+
+        if (isActiveFolder) {
+          if (!isSameParent) {
+            setDropTargetInfo(null);
+            return;
+          }
+
+          const pointerY = getPointerY(event);
+          const { rect } = over;
+          if (rect) {
+            const middleY = rect.top + rect.height / 2;
+            if (pointerY < middleY) {
+              setDropTargetInfo({ id: overId, position: 'before' });
+            } else {
+              setDropTargetInfo({ id: overId, position: 'after' });
+            }
+          } else {
+            setDropTargetInfo({ id: overId, position: 'inside' });
+          }
+        } else {
+          setDropTargetInfo({ id: overId, position: 'inside' });
+        }
+      } else if (overData.type === 'bookmark') {
+        const isActiveFolder = activeItem.type === 'folder';
+        const isSameParent = activeItem.parentId === overData.parentId;
+
+        if (isActiveFolder && !isSameParent) {
           setDropTargetInfo(null);
           return;
         }
-        setDropTargetInfo({ id: overId, position: 'inside' });
-      } else if (overData.type === 'bookmark') {
-        setDropTargetInfo({ id: overId, position: 'before' });
+
+        const pointerY = getPointerY(event);
+        const { rect } = over;
+        if (rect) {
+          const middleY = rect.top + rect.height / 2;
+          if (pointerY < middleY) {
+            setDropTargetInfo({ id: overId, position: 'before' });
+          } else {
+            setDropTargetInfo({ id: overId, position: 'after' });
+          }
+        } else {
+          setDropTargetInfo({ id: overId, position: 'before' });
+        }
       }
     },
-    [activeItem, canDropOnTarget, lockStates]
+    [activeItem]
   );
 
   const handleDragEnd = useCallback(
     async (event: DragEndEvent) => {
       const { active, over } = event;
+      const dropPosition = dropTargetInfo?.position ?? 'inside';
       setActiveItem(null);
       setDropTargetInfo(null);
 
       if (!over) return;
+
+      if (over.id === 'trash-zone') {
+        const activeData = active.data.current as DragData;
+        onTrash?.(activeData.node.id, activeData.type);
+        return;
+      }
+
+      if (over.id === 'bookmark-bar-zone') {
+        const activeData = active.data.current as DragData;
+        onPinToBar?.(activeData.node.id, activeData.type);
+        return;
+      }
 
       const activeData = active.data.current as DragData;
       const activeId = active.id as string;
@@ -124,10 +214,18 @@ export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProv
         if (sourceParentId !== overParentId) {
           return;
         }
+
+        if (dropPosition === 'inside') {
+          toast.warning('Cannot move a folder into another folder');
+          return;
+        }
+
         const targetParentId = overParentId ?? '0';
+        const siblingIndex = getSiblingIndexFromSortable(over);
+        const targetIndex = dropPosition === 'before' ? siblingIndex : siblingIndex + 1;
+
         try {
-          await onMove(activeId, sourceParentId, targetParentId, 0);
-          toast.success('Reordered successfully');
+          await onMove(activeId, sourceParentId, targetParentId, targetIndex);
           onRefresh();
         } catch {
           toast.error('Failed to reorder');
@@ -136,24 +234,25 @@ export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProv
       }
 
       let targetParentId: string;
+      let targetIndex: number;
 
-      if (overData.type === 'folder' && lockStates[overId] !== 'hard') {
+      if (overData.type === 'folder') {
         targetParentId = overId;
-      } else if (overData.parentId) {
-        targetParentId = overData.parentId;
+        targetIndex = 0;
       } else {
-        return;
+        targetParentId = overData.parentId ?? '0';
+        const siblingIndex = getSiblingIndexFromSortable(over);
+        targetIndex = dropPosition === 'before' ? siblingIndex : siblingIndex + 1;
       }
 
       try {
-        await onMove(activeId, sourceParentId, targetParentId, 0);
-        toast.success('Moved successfully');
+        await onMove(activeId, sourceParentId, targetParentId, targetIndex);
         onRefresh();
       } catch {
         toast.error('Failed to move item');
       }
     },
-    [onMove, onRefresh, lockStates]
+    [onMove, onRefresh, dropTargetInfo, onTrash, onPinToBar]
   );
 
   const handleDragCancel = useCallback(() => {
@@ -161,27 +260,43 @@ export function DndProvider({ children, onMove, onRefresh, lockStates }: DndProv
     setDropTargetInfo(null);
   }, []);
 
+  const dragState = useMemo<DragState>(
+    () => ({
+      isDragging: activeItem !== null,
+      activeItem: activeItem
+        ? {
+            type: activeItem.type,
+            title: activeItem.node.title || 'Untitled',
+            id: activeItem.node.id,
+          }
+        : null,
+    }),
+    [activeItem]
+  );
+
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-      onDragCancel={handleDragCancel}
-    >
-      {children}
-      <DragOverlay>
-        {activeItem && (
-          <div className="opacity-80 bg-background border border-muted/30 rounded-lg shadow-lg p-2 px-3 text-sm font-medium">
-            {activeItem.node.title || 'Untitled'}
-          </div>
+    <DndStateContext.Provider value={dragState}>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
+      >
+        {children}
+        <DragOverlay>
+          {activeItem && (
+            <div className="opacity-80 bg-background border border-muted/30 rounded-lg shadow-lg p-2 px-3 text-sm font-medium">
+              {activeItem.node.title || 'Untitled'}
+            </div>
+          )}
+        </DragOverlay>
+        {dropTargetInfo && activeItem && (
+          <DropIndicator targetId={dropTargetInfo.id} position={dropTargetInfo.position} />
         )}
-      </DragOverlay>
-      {dropTargetInfo && activeItem && (
-        <DropIndicator targetId={dropTargetInfo.id} position={dropTargetInfo.position} />
-      )}
-    </DndContext>
+      </DndContext>
+    </DndStateContext.Provider>
   );
 }
 

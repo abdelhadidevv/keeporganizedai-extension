@@ -1,47 +1,102 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface DropIndicatorProps {
   targetId: string;
   position: 'before' | 'after' | 'inside';
 }
 
+function computeLineStyle(targetId: string, pos: 'before' | 'after'): React.CSSProperties | null {
+  const targetElement = document.querySelector(`[data-draggable-id="${targetId}"]`);
+  if (!targetElement) return null;
+
+  const rect = targetElement.getBoundingClientRect();
+
+  if (pos === 'before') {
+    return {
+      position: 'fixed',
+      top: `${rect.top - 2}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`,
+      height: '2px',
+      backgroundColor: 'var(--color-primary)',
+      borderRadius: '1px',
+      zIndex: 9999,
+      pointerEvents: 'none',
+    };
+  }
+
+  return {
+    position: 'fixed',
+    top: `${rect.bottom + 2}px`,
+    left: `${rect.left}px`,
+    width: `${rect.width}px`,
+    height: '2px',
+    backgroundColor: 'var(--color-primary)',
+    borderRadius: '1px',
+    zIndex: 9999,
+    pointerEvents: 'none',
+  };
+}
+
+function computeInsideStyle(targetId: string): React.CSSProperties | null {
+  const targetElement = document.querySelector(`[data-draggable-id="${targetId}"]`);
+  if (!targetElement) return null;
+
+  const rect = targetElement.getBoundingClientRect();
+
+  return {
+    position: 'fixed',
+    top: `${rect.top}px`,
+    left: `${rect.left}px`,
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    border: '2px solid var(--color-primary)',
+    borderRadius: '8px',
+    backgroundColor: 'var(--color-primary)/10',
+    zIndex: 9998,
+    pointerEvents: 'none',
+    transition: 'all 0.15s ease',
+  };
+}
+
 export function DropIndicator({ targetId, position }: DropIndicatorProps) {
-  const [style, setStyle] = useState<React.CSSProperties>({});
+  const indicatorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const targetElement = document.querySelector(`[data-draggable-id="${targetId}"]`);
-    if (!targetElement) return;
+    if (position !== 'inside') {
+      let animationFrameId: number;
+      let lastStyle: React.CSSProperties | null = null;
 
-    const rect = targetElement.getBoundingClientRect();
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+      const updatePosition = () => {
+        const newStyle = computeLineStyle(targetId, position as 'before' | 'after');
+        if (newStyle && indicatorRef.current) {
+          if (
+            !lastStyle ||
+            newStyle.top !== lastStyle.top ||
+            newStyle.left !== lastStyle.left ||
+            newStyle.width !== lastStyle.width
+          ) {
+            Object.assign(indicatorRef.current.style, newStyle);
+            lastStyle = newStyle;
+          }
+        }
+        animationFrameId = requestAnimationFrame(updatePosition);
+      };
 
-    if (position === 'before') {
-      setStyle({
-        position: 'fixed',
-        top: rect.top + scrollTop - 2,
-        left: rect.left + scrollLeft,
-        width: rect.width,
-        height: 2,
-        backgroundColor: '#3B82F6',
-        borderRadius: 1,
-        zIndex: 9999,
-        pointerEvents: 'none',
-      });
-    } else if (position === 'after') {
-      setStyle({
-        position: 'fixed',
-        top: rect.bottom + scrollTop + 2,
-        left: rect.left + scrollLeft,
-        width: rect.width,
-        height: 2,
-        backgroundColor: '#3B82F6',
-        borderRadius: 1,
-        zIndex: 9999,
-        pointerEvents: 'none',
-      });
+      animationFrameId = requestAnimationFrame(updatePosition);
+
+      return () => {
+        cancelAnimationFrame(animationFrameId);
+      };
     }
+
+    const newStyle = computeInsideStyle(targetId);
+    if (newStyle && indicatorRef.current) {
+      Object.assign(indicatorRef.current.style, newStyle);
+    }
+
+    return () => {};
   }, [targetId, position]);
 
-  return <div style={style} />;
+  return <div ref={indicatorRef} />;
 }

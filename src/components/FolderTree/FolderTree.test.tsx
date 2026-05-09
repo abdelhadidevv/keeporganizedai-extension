@@ -303,17 +303,6 @@ describe('FolderTree', () => {
     });
   });
 
-  describe('Lock States', () => {
-    it('passes lock state to folder items', () => {
-      const folders: BookmarkNode[] = [
-        createMockFolder({ id: 'folder-1', title: 'Locked Folder' }),
-      ];
-      render(<FolderTree folders={folders} lockStates={{ 'folder-1': 'hard' }} />);
-      const items = screen.getAllByRole('treeitem');
-      expect(items[0]).toHaveAttribute('aria-selected', 'false');
-    });
-  });
-
   describe('Selection', () => {
     it('highlights selected folder', () => {
       const folders: BookmarkNode[] = [

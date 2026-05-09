@@ -199,8 +199,8 @@ export function LockToggle({
       <Modal open={showHardLockConfirm} onOpenChange={setShowHardLockConfirm}>
         <ModalContent className="max-w-[420px]">
           <ModalHeader>
-            <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--color-error)]/10">
-              <AlertTriangle className="h-6 w-6 text-[var(--color-error)]" />
+            <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-error/10">
+              <AlertTriangle className="h-6 w-6 text-error" />
             </div>
             <ModalTitle>Confirm Hard Lock</ModalTitle>
             <ModalDescription>

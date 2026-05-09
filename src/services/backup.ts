@@ -6,6 +6,7 @@ const BACKUP_INDEX_KEY = 'backupIndex';
 const MAX_BACKUPS = 10;
 const BACKUP_VERSION = '1.0';
 
+export type { BackupData } from '@/types';
 export interface BackupMetadata {
   id: string;
   createdAt: string;
@@ -176,7 +177,7 @@ async function deleteAllBookmarksExceptRoot(): Promise<void> {
       const deletePromises = nodesToDelete.map(
         (id) =>
           new Promise<void>((res) => {
-            chrome.bookmarks.remove(id, () => {
+            chrome.bookmarks.removeTree(id, () => {
               if (chrome.runtime.lastError) {
                 console.warn(`Failed to delete bookmark ${id}:`, chrome.runtime.lastError.message);
               }
@@ -398,12 +399,23 @@ function generateChromeHtmlBackup(backupData: BackupData): string {
   return html;
 }
 
-async function exportAsDownload(backupData: BackupData): Promise<void> {
+async function exportAsDownload(): Promise<void> {
+  const tree = await getAllBookmarks();
+
+  const backupData: BackupData = {
+    version: BACKUP_VERSION,
+    createdAt: new Date().toISOString(),
+    bookmarkTree: tree,
+  };
+
   const htmlContent = generateChromeHtmlBackup(backupData);
   const blob = new Blob([htmlContent], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const filename = `bookmarks-backup-${timestamp}.html`;
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const year = now.getFullYear() % 100;
+  const filename = `bookmarks_${month}_${day}_${year}.html`;
 
   const link = document.createElement('a');
   link.href = url;
@@ -412,6 +424,244 @@ async function exportAsDownload(backupData: BackupData): Promise<void> {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+async function exportToJson(): Promise<void> {
+  const tree = await getAllBookmarks();
+
+  const backupData: BackupData = {
+    version: BACKUP_VERSION,
+    createdAt: new Date().toISOString(),
+    bookmarkTree: tree,
+  };
+
+  const jsonContent = JSON.stringify(backupData, null, 2);
+  const blob = new Blob([jsonContent], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const year = now.getFullYear() % 100;
+  const filename = `bookmarks_${month}_${day}_${year}.json`;
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function parseHtmlContent(html: string): BackupData {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  let bookmarkCount = 0;
+  let folderCount = 0;
+
+  function parseDl(dl: Element | null): BookmarkNode[] {
+    if (!dl) return [];
+
+    const children: BookmarkNode[] = [];
+    const dtElements = dl.children;
+
+    for (let i = 0; i < dtElements.length; i += 1) {
+      const dt = dtElements[i];
+      const h3 = dt.querySelector(':scope > H3');
+      const a = dt.querySelector(':scope > A');
+      const nestedDl = dt.querySelector(':scope > DL');
+
+      if (h3) {
+        folderCount += 1;
+        const folder: BookmarkNode = {
+          id: `imported_folder_${Date.now()}_${folderCount}`,
+          title: h3.textContent || 'Untitled Folder',
+          children: parseDl(nestedDl),
+        };
+        children.push(folder);
+      } else if (a) {
+        bookmarkCount += 1;
+        const bookmark: BookmarkNode = {
+          id: `imported_bookmark_${Date.now()}_${bookmarkCount}`,
+          title: a.textContent || 'Untitled',
+          url: a.getAttribute('HREF') || '',
+        };
+        children.push(bookmark);
+      }
+    }
+
+    return children;
+  }
+
+  const dl = doc.querySelector('DL');
+  const bookmarkTree = parseDl(dl);
+
+  return {
+    version: BACKUP_VERSION,
+    createdAt: new Date().toISOString(),
+    bookmarkTree,
+  };
+}
+
+function parseJsonContent(json: string): BackupData {
+  const data = JSON.parse(json);
+
+  if (!data.bookmarkTree || !Array.isArray(data.bookmarkTree)) {
+    throw new Error('Invalid JSON format: missing bookmarkTree array');
+  }
+
+  return {
+    version: data.version || BACKUP_VERSION,
+    createdAt: data.createdAt || new Date().toISOString(),
+    bookmarkTree: data.bookmarkTree,
+  };
+}
+
+async function parseHtmlImport(file: File): Promise<BackupData> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const content = reader.result as string;
+        const data = parseHtmlContent(content);
+        resolve(data);
+      } catch (error) {
+        reject(new Error('Failed to parse HTML bookmark file'));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsText(file);
+  });
+}
+
+async function parseJsonImport(file: File): Promise<BackupData> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const content = reader.result as string;
+        const data = parseJsonContent(content);
+        resolve(data);
+      } catch (error) {
+        reject(error instanceof Error ? error : new Error('Failed to parse JSON bookmark file'));
+      }
+    };
+    reader.onerror = () => reject(new Error('Failed to read file'));
+    reader.readAsText(file);
+  });
+}
+
+async function parseFileImport(file: File): Promise<BackupData> {
+  const extension = file.name.split('.').pop()?.toLowerCase();
+
+  if (extension === 'html' || extension === 'htm') {
+    return parseHtmlImport(file);
+  }
+  if (extension === 'json') {
+    return parseJsonImport(file);
+  }
+
+  throw new Error('Unsupported file format. Use .html or .json files.');
+}
+
+function countNodes(nodes: BookmarkNode[]): { bookmarks: number; folders: number } {
+  let bookmarks = 0;
+  let folders = 0;
+
+  function traverse(nodeList: BookmarkNode[]): void {
+    nodeList.forEach((node) => {
+      if (node.url) {
+        bookmarks += 1;
+      } else {
+        folders += 1;
+      }
+      if (node.children) {
+        traverse(node.children);
+      }
+    });
+  }
+
+  traverse(nodes);
+  return { bookmarks, folders };
+}
+
+async function importBookmarks(data: BackupData, mode: 'merge' | 'replace'): Promise<void> {
+  if (mode === 'replace') {
+    await deleteAllBookmarksExceptRoot();
+  }
+
+  const importFolderTitle = 'Imported Bookmarks';
+
+  const importFolderId = await new Promise<string>((resolve, reject) => {
+    chrome.bookmarks.getChildren('2', (children) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(chrome.runtime.lastError.message));
+        return;
+      }
+
+      const existing = children.find((child) => !child.url && child.title === importFolderTitle);
+
+      if (existing) {
+        resolve(existing.id);
+      } else {
+        chrome.bookmarks.create({ title: importFolderTitle, parentId: '2' }, (result) => {
+          if (chrome.runtime.lastError) {
+            reject(new Error(chrome.runtime.lastError.message));
+            return;
+          }
+          resolve(result.id);
+        });
+      }
+    });
+  });
+
+  async function importNodes(nodes: BookmarkNode[], parentId: string): Promise<void> {
+    const promises = nodes.map(async (node) => {
+      if (node.url) {
+        await new Promise<void>((resolve, reject) => {
+          chrome.bookmarks.create(
+            {
+              title: node.title,
+              url: node.url,
+              parentId,
+            },
+            () => {
+              if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError.message));
+                return;
+              }
+              resolve();
+            }
+          );
+        });
+      } else {
+        const newFolderId = await new Promise<string>((resolve, reject) => {
+          chrome.bookmarks.create(
+            {
+              title: node.title,
+              parentId,
+            },
+            (result) => {
+              if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError.message));
+                return;
+              }
+              resolve(result.id);
+            }
+          );
+        });
+
+        if (node.children && node.children.length > 0) {
+          await importNodes(node.children, newFolderId);
+        }
+      }
+    });
+
+    await Promise.all(promises);
+  }
+
+  await importNodes(data.bookmarkTree, importFolderId);
 }
 
 export const backupService = {
@@ -426,4 +676,10 @@ export const backupService = {
   createChromeBackupFolder,
   restoreToChromeFolder,
   exportAsDownload,
+  exportToJson,
+  parseHtmlImport,
+  parseJsonImport,
+  parseFileImport,
+  importBookmarks,
+  countNodes,
 };

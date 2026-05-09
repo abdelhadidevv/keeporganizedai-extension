@@ -218,8 +218,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
 
   const handleDownloadBackup = useCallback(async () => {
     try {
-      const backup = await backupService.getLatestBackup();
-      if (backup) await backupService.exportAsDownload(backup);
+      await backupService.exportAsDownload();
     } catch {
       setError('Failed to download backup');
     }

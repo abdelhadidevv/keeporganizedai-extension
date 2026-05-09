@@ -160,7 +160,6 @@ export function useMainScreen(): UseMainScreenReturn {
   }, [loadBookmarks]);
 
   const toggleExpanded = useCallback((id: string) => {
-    console.log('toggleExpanded:', id);
     setExpandedFolderIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {

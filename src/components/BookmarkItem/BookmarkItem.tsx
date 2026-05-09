@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Bookmark, Copy, Check, Trash2, GripVertical } from 'lucide-react';
-import { useDraggable } from '@dnd-kit/core';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { BookmarkNode } from '@/types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui';
@@ -14,7 +15,6 @@ export interface BookmarkItemProps {
   highlightQuery?: string;
   folderColor?: string;
   isLastBookmark?: boolean;
-  isDragging?: boolean;
   hideBorder?: boolean;
 }
 
@@ -25,14 +25,13 @@ export function BookmarkItem({
   highlightQuery = '',
   folderColor,
   isLastBookmark,
-  isDragging = false,
   hideBorder,
 }: BookmarkItemProps) {
   const [showActions, setShowActions] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: bookmark.id,
     data: {
       type: 'bookmark',
@@ -42,8 +41,10 @@ export function BookmarkItem({
   });
 
   const style: React.CSSProperties = {
-    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    transform: CSS.Transform.toString(transform),
+    transition,
     opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 1000 : undefined,
   } as React.CSSProperties;
 
   const getFavicon = useCallback(() => {
@@ -100,10 +101,6 @@ export function BookmarkItem({
   return (
     <div
       ref={setNodeRef}
-      /* eslint-disable-next-line react/jsx-props-no-spreading */
-      {...attributes}
-      /* eslint-disable-next-line react/jsx-props-no-spreading */
-      {...listeners}
       role="button"
       tabIndex={0}
       onClick={handleClick}
@@ -118,8 +115,8 @@ export function BookmarkItem({
       data-draggable-id={bookmark.id}
       className={cn(
         'group flex items-center gap-2.5 px-3 py-2.5 cursor-pointer transition-all duration-200',
-        'hover:bg-[var(--folder-color)]/10',
-        !hideBorder && 'border-l-2 border-[var(--folder-color)]',
+        'hover:bg-(--folder-color)/10',
+        !hideBorder && 'border-l-2 border-(--folder-color)',
         isLastBookmark && 'rounded-b-lg'
       )}
       style={
@@ -130,9 +127,17 @@ export function BookmarkItem({
         } as React.CSSProperties
       }
     >
-      <GripVertical className="w-3.5 h-3.5 flex-shrink-0 text-muted-foreground/40 cursor-grab active:cursor-grabbing" />
+      <span
+        className="cursor-grab active:cursor-grabbing"
+        /* eslint-disable-next-line react/jsx-props-no-spreading */
+        {...attributes}
+        /* eslint-disable-next-line react/jsx-props-no-spreading */
+        {...listeners}
+      >
+        <GripVertical className="w-3.5 h-3.5 shrink-0 text-muted-foreground/40" />
+      </span>
 
-      <div className="flex-shrink-0 w-5 h-5">
+      <div className="shrink-0 w-5 h-5">
         {favicon ? (
           <img
             src={favicon}

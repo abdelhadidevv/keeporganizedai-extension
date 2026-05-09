@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { VERSION } from '@/utils/constants';
 import { AIProviderSection } from './Sections/AIProviderSection';
 import { ThemeSection } from './Sections/ThemeSection';
-// import { BackupSection } from './Sections/BackupSection';
+import { ImportExportSection } from './Sections/ImportExportSection';
 
 interface SettingsScreenProps {
   onBack: () => void;
@@ -32,12 +32,12 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
       <main className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
         <AIProviderSection isLoading={isLoading} />
         <ThemeSection />
-        {/* <BackupSection /> */}
+        <ImportExportSection />
       </main>
 
       <footer
         className={cn(
-          'flex items-center justify-between px-4 py-3 select-none',
+          'flex items-center justify-between px-4 py-3 select-none h-14.25',
           'border-t border-muted/20',
           'bg-muted/5'
         )}
