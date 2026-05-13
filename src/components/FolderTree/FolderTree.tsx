@@ -14,6 +14,7 @@ export interface FolderTreeProps {
   onToggle?: (id: string) => void;
   onSelect?: (id: string) => void;
   onFolderClick?: (id: string) => void;
+  onFolderContextMenu?: (folder: BookmarkNode, event: React.MouseEvent) => void;
   onBookmarkClick?: (bookmark: BookmarkNode) => void;
   onBookmarkDelete?: (bookmarkId: string) => void;
   maxDepth?: number;
@@ -31,6 +32,7 @@ interface RenderFolderProps {
   onToggleOriginal?: (id: string) => void;
   onSelect?: (id: string) => void;
   onFolderClick?: (id: string) => void;
+  onFolderContextMenu?: (folder: BookmarkNode, event: React.MouseEvent) => void;
   onBookmarkClick?: (bookmark: BookmarkNode) => void;
   onBookmarkDelete?: (bookmarkId: string) => void;
   maxDepth?: number;
@@ -48,6 +50,7 @@ function RenderFolder({
   onToggleOriginal,
   onSelect,
   onFolderClick,
+  onFolderContextMenu,
   onBookmarkClick,
   onBookmarkDelete,
   maxDepth,
@@ -92,6 +95,7 @@ function RenderFolder({
         isSubFolder={isSubFolder}
         onToggle={hasChildren ? handleToggle : () => {}}
         onSelect={handleSelect}
+        onContextMenu={onFolderContextMenu}
         highlightQuery={highlightQuery}
       />
 
@@ -136,6 +140,7 @@ function RenderFolder({
                     onToggleOriginal={onToggleOriginal}
                     onSelect={onSelect}
                     onFolderClick={onFolderClick}
+                    onFolderContextMenu={onFolderContextMenu}
                     onBookmarkClick={onBookmarkClick}
                     onBookmarkDelete={onBookmarkDelete}
                     maxDepth={maxDepth}
@@ -171,6 +176,7 @@ export function FolderTree({
   onToggle,
   onSelect,
   onFolderClick,
+  onFolderContextMenu,
   onBookmarkClick,
   onBookmarkDelete,
   maxDepth,
@@ -248,6 +254,7 @@ export function FolderTree({
                 onToggleOriginal={onToggle}
                 onSelect={onSelect}
                 onFolderClick={onFolderClick}
+                onFolderContextMenu={onFolderContextMenu}
                 onBookmarkClick={onBookmarkClick}
                 onBookmarkDelete={onBookmarkDelete}
                 maxDepth={maxDepth}

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { ChevronRight, Folder, FolderOpen, GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -14,6 +15,7 @@ export interface FolderItemProps {
   isSubFolder?: boolean;
   onToggle: (id: string) => void;
   onSelect: (id: string) => void;
+  onContextMenu?: (folder: BookmarkNode, event: React.MouseEvent) => void;
   highlightQuery?: string;
 }
 
@@ -33,6 +35,7 @@ export function FolderItem({
   isSubFolder,
   onToggle,
   onSelect,
+  onContextMenu,
   highlightQuery = '',
 }: FolderItemProps) {
   const bookmarkCount = countLeafBookmarks(folder);
@@ -69,6 +72,14 @@ export function FolderItem({
     }
   };
 
+  const handleContextMenu = React.useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      onContextMenu?.(folder, event);
+    },
+    [folder, onContextMenu]
+  );
+
   return (
     <div
       ref={setNodeRef}
@@ -77,6 +88,7 @@ export function FolderItem({
       aria-selected={isSelected}
       tabIndex={0}
       onClick={handleActivate}
+      onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}
       data-draggable-id={folder.id}
       className={cn(

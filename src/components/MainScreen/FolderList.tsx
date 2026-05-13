@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { BookmarkNode } from '@/types';
 import { FolderTree } from '@/components/FolderTree';
+import { FolderContextMenu } from '@/components/FolderContextMenu';
 import { EmptyState, createEmptyState } from '@/components/EmptyState';
 import {
   Modal,
@@ -12,6 +13,7 @@ import {
   Button,
 } from '@/components/ui';
 import { deleteBookmark, deleteFolder, moveBookmark } from '@/services/bookmarks';
+import { backupService } from '@/services/backup';
 import { toast } from 'sonner';
 import { DndProvider } from '@/components/DndProvider';
 import { TrashZone } from '@/components/TrashZone';
@@ -54,6 +56,11 @@ export function FolderList({
     title: string;
     url: string;
     parentId: string;
+  } | null>(null);
+  const [contextMenuTarget, setContextMenuTarget] = useState<{
+    x: number;
+    y: number;
+    folder: BookmarkNode;
   } | null>(null);
 
   const handleBookmarkClick = useCallback((bookmark: BookmarkNode) => {
@@ -202,6 +209,27 @@ export function FolderList({
     }
   }, [trashTarget, onRefresh]);
 
+  const handleFolderContextMenu = useCallback((folder: BookmarkNode, event: React.MouseEvent) => {
+    event.preventDefault();
+    setContextMenuTarget({ x: event.clientX, y: event.clientY, folder });
+  }, []);
+
+  const handleContextMenuClose = useCallback(() => {
+    setContextMenuTarget(null);
+  }, []);
+
+  const handleShareFolder = useCallback(async () => {
+    if (!contextMenuTarget) return;
+    const { folder } = contextMenuTarget;
+    try {
+      await backupService.exportFolderAsHtml(folder.id, folder.title);
+      toast.success(`"${folder.title}" exported as HTML`);
+    } catch {
+      toast.error('Failed to export folder');
+    }
+    setContextMenuTarget(null);
+  }, [contextMenuTarget]);
+
   const handlePinToBar = useCallback(
     (itemId: string, _type: 'folder' | 'bookmark') => {
       const findNode = (nodes: BookmarkNode[], id: string): BookmarkNode | null => {
@@ -285,6 +313,7 @@ export function FolderList({
               expandedIds={expandedFolderIds}
               onToggle={onToggleExpanded}
               onSelect={onSelectFolder}
+              onFolderContextMenu={handleFolderContextMenu}
               onBookmarkClick={handleBookmarkClick}
               onBookmarkDelete={handleBookmarkDelete}
               highlightQuery={highlightQuery}
@@ -293,6 +322,16 @@ export function FolderList({
           <TrashZone />
         </div>
       </DndProvider>
+
+      {contextMenuTarget && (
+        <FolderContextMenu
+          x={contextMenuTarget.x}
+          y={contextMenuTarget.y}
+          folderName={contextMenuTarget.folder.title}
+          onShare={handleShareFolder}
+          onClose={handleContextMenuClose}
+        />
+      )}
 
       <Modal open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
         <ModalContent className="max-w-[420px]">

@@ -664,6 +664,124 @@ async function importBookmarks(data: BackupData, mode: 'merge' | 'replace'): Pro
   await importNodes(data.bookmarkTree, importFolderId);
 }
 
+export interface FolderExportJson {
+  folderName: string;
+  bookmarks: { title: string; url: string }[];
+  subfolders: FolderExportJson[];
+}
+
+async function getFolderSubtree(folderId: string): Promise<chrome.bookmarks.BookmarkTreeNode> {
+  return new Promise((resolve, reject) => {
+    chrome.bookmarks.getSubTree(folderId, (result) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(chrome.runtime.lastError.message));
+        return;
+      }
+      resolve(result[0]);
+    });
+  });
+}
+
+function folderToJson(node: BookmarkNode | chrome.bookmarks.BookmarkTreeNode): FolderExportJson {
+  const result: FolderExportJson = {
+    folderName: node.title || 'Untitled',
+    bookmarks: [],
+    subfolders: [],
+  };
+
+  const children =
+    (node as BookmarkNode).children ?? (node as chrome.bookmarks.BookmarkTreeNode).children;
+  if (children) {
+    for (const child of children) {
+      if (child.url) {
+        result.bookmarks.push({ title: child.title || 'Untitled', url: child.url });
+      } else {
+        result.subfolders.push(folderToJson(child));
+      }
+    }
+  }
+
+  return result;
+}
+
+async function exportFolderAsHtml(folderId: string, folderTitle: string): Promise<void> {
+  const subtree = await getFolderSubtree(folderId);
+
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const year = now.getFullYear() % 100;
+  const filename = `${folderTitle}_bookmarks_${month}_${day}_${year}.html`;
+
+  let html = `<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<!-- This is an automatically generated file. It will be read and overwritten. DO NOT EDIT! -->
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>${escapeHtml(folderTitle)}</TITLE>
+<H1>${escapeHtml(folderTitle)}</H1>
+<DL><p>
+`;
+  html += nodeToHtml(subtree as BookmarkNode, '    ');
+  html += '</DL><p>\n';
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+async function exportFolderAsJson(folderId: string): Promise<void> {
+  const subtree = await getFolderSubtree(folderId);
+  const json = folderToJson(subtree);
+
+  const jsonContent = JSON.stringify(json, null, 2);
+  const blob = new Blob([jsonContent], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const filename = `${subtree.title || 'Untitled'}_bookmarks.json`;
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function collectMarkdownLines(
+  node: BookmarkNode | chrome.bookmarks.BookmarkTreeNode,
+  depth: number,
+  lines: string[]
+): void {
+  const indent = '  '.repeat(depth);
+  if (node.url) {
+    lines.push(`${indent}- [${node.title || 'Untitled'}](${node.url})`);
+  } else {
+    if (depth > 0) {
+      lines.push(`${indent}### ${node.title || 'Untitled'}`);
+    }
+    const children =
+      (node as BookmarkNode).children ?? (node as chrome.bookmarks.BookmarkTreeNode).children;
+    if (children) {
+      for (const child of children) {
+        collectMarkdownLines(child, depth + 1, lines);
+      }
+    }
+  }
+}
+
+async function copyFolderAsMarkdown(folderId: string): Promise<string> {
+  const subtree = await getFolderSubtree(folderId);
+  const lines: string[] = [];
+  collectMarkdownLines(subtree, 0, lines);
+  return lines.join('\n');
+}
+
 export const backupService = {
   getBackupMetadata,
   createBackup,
@@ -682,4 +800,8 @@ export const backupService = {
   parseFileImport,
   importBookmarks,
   countNodes,
+  getFolderSubtree,
+  exportFolderAsHtml,
+  exportFolderAsJson,
+  copyFolderAsMarkdown,
 };
