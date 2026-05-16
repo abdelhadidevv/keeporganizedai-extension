@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "KeepOrganizedAI"
+  },
+  "appDesc": {
+    "message": "Organizador de favoritos com IA. Categorize favoritos em minutos com pesquisa rápida e pastas inteligentes."
+  },
+  "openSidePanel": {
+    "message": "Abrir painel lateral"
+  }
+}

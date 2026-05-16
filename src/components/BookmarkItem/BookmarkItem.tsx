@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Bookmark, Copy, Check, Trash2, GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -27,6 +28,7 @@ export function BookmarkItem({
   isLastBookmark,
   hideBorder,
 }: BookmarkItemProps) {
+  const { t } = useTranslation('common');
   const [showActions, setShowActions] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null);
@@ -116,7 +118,7 @@ export function BookmarkItem({
       className={cn(
         'group flex items-center gap-2.5 px-3 py-2.5 cursor-pointer transition-all duration-200',
         'hover:bg-(--folder-color)/10',
-        !hideBorder && 'border-l-2 border-(--folder-color)',
+        !hideBorder && 'border-s-2 border-(--folder-color)',
         isLastBookmark && 'rounded-b-lg'
       )}
       style={
@@ -153,8 +155,8 @@ export function BookmarkItem({
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-foreground truncate" title={bookmark.title}>
           {highlightQuery
-            ? highlightText(bookmark.title || 'Untitled', highlightQuery)
-            : bookmark.title || 'Untitled'}
+            ? highlightText(bookmark.title || t('bookmark_item.untitled'), highlightQuery)
+            : bookmark.title || t('bookmark_item.untitled')}
         </p>
         <p
           className={cn(
@@ -180,7 +182,7 @@ export function BookmarkItem({
             variant="ghost"
             size="icon-sm"
             onClick={handleCopyUrl}
-            title={isCopied ? 'Copied!' : 'Copy URL'}
+            title={isCopied ? t('bookmark_item.copied') : t('bookmark_item.copy_url')}
           >
             {isCopied ? (
               <Check className="w-3.5 h-3.5 text-[var(--color-success)]" />
@@ -195,7 +197,7 @@ export function BookmarkItem({
             variant="ghost"
             size="icon-sm"
             onClick={handleDelete}
-            title="Delete bookmark"
+            title={t('bookmark_item.delete')}
             className="hover:text-[var(--color-error)]"
           >
             <Trash2 className="w-3.5 h-3.5" />

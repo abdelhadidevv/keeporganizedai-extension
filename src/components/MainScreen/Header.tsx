@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Wand2 } from 'lucide-react';
 import { Button, ThemedIcon } from '@/components/ui';
 import { cn } from '@/lib/utils';
@@ -15,6 +16,7 @@ export function Header({
   isAutoOrganizeLoading = false,
   className,
 }: HeaderProps) {
+  const { t } = useTranslation('common');
   return (
     <header
       className={cn(
@@ -23,14 +25,14 @@ export function Header({
         className
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1" dir="ltr">
         <ThemedIcon
           light="/logo-light.svg"
           dark="/logo-dark.svg"
           alt="KeepOrganizedAI"
-          className="w-8 h-8"
+          className="w-7 h-7"
         />
-        <h1 className="text-[18px] font-medium">
+        <h1 className="text-[18px] font-medium text-center h-max ">
           KeepOrganized
           <span className="text-primary">AI</span>
         </h1>
@@ -46,7 +48,7 @@ export function Header({
             loading={isAutoOrganizeLoading}
             leftIcon={!isAutoOrganizeLoading ? <Wand2 className="w-4 h-4" /> : undefined}
           >
-            Auto-Organize
+            {t('header.auto_organize')}
           </Button>
         )}
       </div>

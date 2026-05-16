@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "KeepOrganizedAI"
+  },
+  "appDesc": {
+    "message": "Organizador de marcadores con IA. Categoriza tus marcadores en minutos con búsqueda rápida y carpetas inteligentes."
+  },
+  "openSidePanel": {
+    "message": "Abrir panel lateral"
+  }
+}

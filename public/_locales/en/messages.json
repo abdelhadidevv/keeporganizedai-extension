@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "KeepOrganizedAI"
+  },
+  "appDesc": {
+    "message": "AI-powered bookmark organizer. Categorize bookmarks in minutes with fast search and smart folders."
+  },
+  "openSidePanel": {
+    "message": "Open side panel"
+  }
+}

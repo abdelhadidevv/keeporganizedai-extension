@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { ChevronDown, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -23,11 +24,13 @@ export function Select({
   value,
   onValueChange,
   options,
-  placeholder = 'Select an option',
+  placeholder: placeholderProp,
   className,
   disabled = false,
   fullWidth = false,
 }: SelectProps) {
+  const { t } = useTranslation('common');
+  const placeholder = placeholderProp ?? t('select.placeholder');
   const selectedOption = options.find((o) => o.value === value);
 
   return (

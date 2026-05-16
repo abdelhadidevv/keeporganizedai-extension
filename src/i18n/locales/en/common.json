@@ -1,0 +1,208 @@
+{
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "loading": "Loading...",
+  "merge": "Merge",
+  "replace": "Replace",
+  "restore": "Restore",
+  "modal": {
+    "close_aria_label": "Close"
+  },
+  "spinner": {
+    "aria_label": "Loading"
+  },
+  "loader": {
+    "default_label": "Loading..."
+  },
+  "select": {
+    "placeholder": "Select an option"
+  },
+  "search": {
+    "placeholder": "Search bookmarks... (/)",
+    "aria_label": "Search",
+    "clear_aria_label": "Clear search",
+    "clear_title": "Clear search"
+  },
+  "empty_state": {
+    "no_bookmarks": {
+      "title": "No bookmarks yet",
+      "description": "Start adding bookmarks to organize them"
+    },
+    "no_results": {
+      "title": "No results found",
+      "description": "Try adjusting your search or filters"
+    },
+    "empty_folder": {
+      "title": "This folder is empty",
+      "description": "Drag bookmarks here or add new ones"
+    },
+    "no_categories": {
+      "title": "No categories defined",
+      "description": "Create your first category to get started"
+    }
+  },
+  "error_state": {
+    "default_title": "Something went wrong",
+    "retry_button": "Try again",
+    "load_bookmarks": {
+      "title": "Failed to load bookmarks",
+      "message": "Could not retrieve your bookmarks. Please try again."
+    },
+    "save_failed": {
+      "title": "Failed to save changes",
+      "message": "Your changes could not be saved. Please try again."
+    },
+    "network_error": {
+      "title": "Network error",
+      "message": "Please check your internet connection and try again."
+    },
+    "ai_error": {
+      "title": "AI processing failed",
+      "message": "The AI service encountered an error. Please try again."
+    },
+    "missing_api_key": {
+      "title": "API key required",
+      "message": "No API key configured for {{provider}}. Please add your API key in Settings."
+    }
+  },
+  "loading_state": {
+    "aria_label": "Loading",
+    "analyzing": "Analyzing your bookmarks...",
+    "categorizing": "Categorizing bookmarks...",
+    "organizing": "Organizing folders...",
+    "finalizing": "Finalizing...",
+    "loading_bookmarks": "Loading bookmarks...",
+    "processing": "Processing..."
+  },
+  "settings": {
+    "title": "Settings",
+    "back_aria_label": "Back to main screen",
+    "footer_version": "KeepOrganizedAI v{{version}}",
+    "ai_provider": {
+      "heading": "AI Provider",
+      "provider_label": "Provider",
+      "model_label": "Model",
+      "api_key_label": "API Key",
+      "api_key_required": "API key required for AI features",
+      "refresh": "Refresh",
+      "no_models_found": "No models found. Make sure Ollama is running.",
+      "ollama_endpoint": "Ollama Endpoint",
+      "ollama_endpoint_placeholder": "http://localhost:11434",
+      "providers": {
+        "gemini": "Google Gemini",
+        "openai": "OpenAI",
+        "claude": "Anthropic Claude",
+        "ollama": "Ollama (Local)"
+      },
+      "api_key_placeholder": "Enter your {{provider}} API key",
+      "no_key_needed": "No API key needed"
+    },
+    "language": {
+      "heading": "Language",
+      "label": "Language"
+    },
+    "theme": {
+      "heading": "Appearance",
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "aria_label": "Current theme: {{theme}}. Click to change.",
+      "current": "Current: {{theme}}"
+    },
+    "import_export": {
+      "heading": "Import && Export",
+      "export_bookmarks": "Export Bookmarks",
+      "export_html": "Export as HTML",
+      "export_json": "Export as JSON",
+      "import_bookmarks": "Import Bookmarks",
+      "choose_file": "Choose File",
+      "supported_formats": "Supports HTML (Chrome bookmarks) and JSON files",
+      "modal_title": "Import Bookmarks Preview",
+      "bookmarks_label": "Bookmarks",
+      "folders_label": "Folders",
+      "import_mode": "Import Mode",
+      "replace_all": "Replace All",
+      "replace_warning": "This will delete all your current bookmarks and replace them with the imported file. This action cannot be undone.",
+      "toast_export_failed": "Failed to export bookmarks",
+      "toast_import_failed": "Failed to import bookmarks",
+      "toast_import_success_merge": "Bookmarks merged successfully",
+      "toast_import_success_replace": "Bookmarks replaced successfully",
+      "toast_parse_failed": "Failed to parse file"
+    }
+  },
+  "main_screen": {
+    "expand_all": "Expand all",
+    "collapse_all": "Collapse all",
+    "refresh": "Refresh bookmarks (R)",
+    "settings_button": "Settings",
+    "footer_version": "KeepOrganizedAI v{{version}}"
+  },
+  "header": {
+    "auto_organize": "Auto-Organize"
+  },
+  "folder_list": {
+    "loading_title": "Loading bookmarks...",
+    "error_title": "Error loading bookmarks",
+    "try_again": "Try again",
+    "delete_bookmark_title": "Delete Bookmark",
+    "delete_bookmark_message": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "delete_folder_title": "Delete Folder",
+    "delete_folder_message": "Are you sure you want to delete \"{{title}}\" and all its contents? This action cannot be undone.",
+    "toast_bookmark_deleted": "Bookmark deleted",
+    "toast_bookmark_restored": "Bookmark restored",
+    "toast_failed_delete": "Failed to delete bookmark",
+    "toast_failed_restore": "Failed to restore bookmark",
+    "toast_folder_deleted": "Folder \"{{title}}\" deleted",
+    "toast_failed_delete_folder": "Failed to delete",
+    "toast_failed_move": "Failed to move item: {{message}}",
+    "toast_folder_exported": "\"{{title}}\" exported as HTML",
+    "toast_failed_export": "Failed to export folder",
+    "toast_failed_pin": "Failed to pin to Bookmarks Bar",
+    "undo": "Undo",
+    "delete_this_bookmark": "this bookmark",
+    "delete_this_item": "this item"
+  },
+  "lock_toggle": {
+    "none": "None",
+    "none_description": "Allow AI to reorganize this folder",
+    "hard_lock": "Hard Lock",
+    "hard_lock_description": "Permanent \u2014 cannot be undone by AI",
+    "smart_lock_applied": "Smart Lock applied",
+    "failed_to_update": "Failed to update lock state",
+    "active": "Active",
+    "confirm_title": "Confirm Hard Lock",
+    "confirm_message": "Hard Lock is permanent and cannot be undone by AI. The folder will be protected from all automated changes.",
+    "confirm_button": "Confirm Hard Lock"
+  },
+  "folder_context_menu": {
+    "share_with_friend": "Share with friend",
+    "share_description": "Export folder as HTML file"
+  },
+  "trash_zone": {
+    "delete_title": "Delete \"{{title}}\"?",
+    "drop_hint": "Drop here to delete",
+    "type_folder": "Folder",
+    "type_bookmark": "Bookmark"
+  },
+  "bookmark_bar_zone": {
+    "pin_title": "Pin \"{{title}}\" to Bookmarks Bar",
+    "drop_hint": "Drop here to pin to Bookmarks Bar",
+    "type_folder": "Folder",
+    "type_bookmark": "Bookmark"
+  },
+  "bookmark_item": {
+    "untitled": "Untitled",
+    "copied": "Copied!",
+    "copy_url": "Copy URL",
+    "delete": "Delete bookmark"
+  },
+  "folder_tree": {
+    "no_folders": "No folders found"
+  },
+  "dnd_provider": {
+    "cannot_move_folder": "Cannot move a folder into another folder",
+    "failed_reorder": "Failed to reorder",
+    "failed_move": "Failed to move item"
+  }
+}

@@ -1,7 +1,2 @@
-export {
-  EmptyState,
-  type EmptyStateProps,
-  type EmptyStatePreset,
-  EMPTY_STATE_PRESETS,
-  createEmptyState,
-} from './EmptyState';
+export { EmptyState, type EmptyStateProps } from './EmptyState';
+export { getEmptyPresets, createEmptyState, type EmptyPresetKey } from '@/states/presets';

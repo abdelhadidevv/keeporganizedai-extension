@@ -1,9 +1,11 @@
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui';
 import { useSettings } from '@/hooks/useSettings';
 import { cn } from '@/lib/utils';
 import { VERSION } from '@/utils/constants';
 import { AIProviderSection } from './Sections/AIProviderSection';
+import { LanguageSection } from './Sections/LanguageSection';
 import { ThemeSection } from './Sections/ThemeSection';
 import { ImportExportSection } from './Sections/ImportExportSection';
 
@@ -12,6 +14,7 @@ interface SettingsScreenProps {
 }
 
 export function SettingsScreen({ onBack }: SettingsScreenProps) {
+  const { t } = useTranslation('common');
   const { isLoading } = useSettings();
 
   return (
@@ -23,15 +26,21 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
           'bg-muted/5'
         )}
       >
-        <Button variant="ghost" size="icon-sm" onClick={onBack} aria-label="Back to main screen">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onBack}
+          aria-label={t('settings.back_aria_label')}
+        >
           <ArrowLeft className="w-4 h-4" />
         </Button>
-        <h1 className="text-xl font-semibold">Settings</h1>
+        <h1 className="text-xl font-semibold">{t('settings.title')}</h1>
       </header>
 
       <main className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
         <AIProviderSection isLoading={isLoading} />
         <ThemeSection />
+        <LanguageSection />
         <ImportExportSection />
       </main>
 
@@ -42,7 +51,9 @@ export function SettingsScreen({ onBack }: SettingsScreenProps) {
           'bg-muted/5'
         )}
       >
-        <span className="text-xs text-muted-foreground">KeepOrganizedAI v{VERSION}</span>
+        <span className="text-xs text-muted-foreground">
+          {t('settings.footer_version', { version: VERSION })}
+        </span>
       </footer>
     </div>
   );

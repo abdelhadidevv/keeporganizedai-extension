@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable operator-linebreak */
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Lock, Tag, FileCheck, Download, ArrowRight, Check } from 'lucide-react';
 import { LoadingState } from '@/components/LoadingState/LoadingState';
 import { ErrorState } from '@/components/ErrorState/ErrorState';
@@ -24,6 +25,7 @@ interface Step3Props {
 }
 
 export function Step3ApplyOrganization({ onComplete }: Step3Props) {
+  const { t } = useTranslation('wizard');
   const categories = useWizardStore((s) => s.categories);
   const lockStates = useWizardStore((s) => s.lockStates);
   const applyPhase = useWizardStore((s) => s.applyPhase);
@@ -84,34 +86,34 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
     setIsLoading(true);
     setError(null);
     setProgress(0);
-    setStatusMessage('Starting organization…');
+    setStatusMessage(t('step3.starting'));
     setApplyPhase('collect');
 
     const provider = (await getSync<AIProvider>(STORAGE_KEYS.AI_PROVIDER)) || 'gemini';
 
     try {
       setProgress(10);
-      setStatusMessage('Collecting bookmarks…');
+      setStatusMessage(t('step3.collecting'));
       const bookmarks = await collectUnlockedBookmarks();
 
       if (bookmarks.length === 0) {
-        throw new Error('No bookmarks found to organize');
+        throw new Error(t('step3.no_bookmarks'));
       }
 
       setProgress(20);
-      setStatusMessage(`Found ${bookmarks.length} bookmarks`);
+      setStatusMessage(t('step3.found_bookmarks', { count: bookmarks.length }));
       setApplyPhase('assign');
 
       setProgress(30);
-      setStatusMessage('Assigning bookmarks to categories…');
+      setStatusMessage(t('step3.assigning'));
       const assignments = await aiService.assignBookmarks(bookmarks, categories, provider);
 
       setProgress(40);
-      setStatusMessage('Creating backup…');
+      setStatusMessage(t('step3.creating_backup'));
       await backupService.createBackup();
 
       setProgress(50);
-      setStatusMessage('Creating category folders…');
+      setStatusMessage(t('step3.creating_folders'));
       setApplyPhase('apply');
 
       const categoryFolderIds: Record<string, string> = {};
@@ -122,7 +124,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
       }
 
       setProgress(60);
-      setStatusMessage('Moving bookmarks to categories…');
+      setStatusMessage(t('step3.moving'));
       let processed = 0;
       // eslint-disable-next-line no-restricted-syntax,no-await-in-loop
       for (const bookmark of bookmarks) {
@@ -132,11 +134,13 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
         }
         processed += 1;
         setProgress(60 + Math.round((processed / bookmarks.length) * 25));
-        setStatusMessage(`Moving bookmark ${processed} of ${bookmarks.length}…`);
+        setStatusMessage(
+          t('step3.moving_progress', { current: processed, total: bookmarks.length })
+        );
       }
 
       setProgress(85);
-      setStatusMessage('Cleaning up empty folders…');
+      setStatusMessage(t('step3.cleaning'));
       const tree = await getBookmarkTree();
       const hardLockedFolderIds = new Set(
         Object.entries(lockStates)
@@ -176,7 +180,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
       }
 
       setProgress(90);
-      setStatusMessage('Generating summary…');
+      setStatusMessage(t('step3.generating_summary'));
       const summary: Record<string, { categoryName: string; count: number }> = {};
       assignments.forEach((a) => {
         const cat = categories.find((c) => c.id === a.categoryId);
@@ -188,15 +192,15 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
 
       setAssignmentSummary(summary);
       setProgress(100);
-      setStatusMessage('Organization complete!');
+      setStatusMessage(t('step3.complete'));
       setApplyPhase('success');
     } catch (err) {
       isApplyingRef.current = false;
       const aiError = err as { message?: string; code?: string };
       const errorMessage =
         aiError.code === 'MISSING_API_KEY'
-          ? `No API key configured for ${provider}. Please add your API key in Settings.`
-          : aiError.message || 'Failed to apply organization';
+          ? t('step3.no_api_key', { provider })
+          : aiError.message || t('step3.failed_to_apply');
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -220,7 +224,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
     try {
       await backupService.exportAsDownload();
     } catch {
-      setError('Failed to download backup');
+      setError(t('step3.failed_to_download'));
     }
   }, []);
 
@@ -231,12 +235,12 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
   if (isLoading && applyPhase !== 'success') {
     return (
       <div className="flex flex-col h-full">
-        <div className="flex flex-col items-center justify-center gap-6 p-12 flex-shrink-0">
+        <div className="flex flex-col items-center justify-center gap-6 p-12 shrink-0">
           <LoadingState variant="dots" message={statusMessage} />
-          <div className="w-full max-w-[280px]">
-            <div className="h-[3px] bg-muted rounded-full overflow-hidden">
+          <div className="w-full max-w-70">
+            <div className="h-0.75 bg-muted rounded-full overflow-hidden">
               <div
-                className="h-full bg-[var(--color-primary)] rounded-full transition-[width] duration-300 ease-out"
+                className="h-full bg-primary rounded-full transition-[width] duration-300 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -252,8 +256,8 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
       <ErrorState
         message={error}
         retryAction={handleRetry}
-        title="Failed to organize bookmarks"
-        icon={<FileCheck className="w-6 h-6 text-[var(--color-error)]" />}
+        title={t('step3.failed_to_apply')}
+        icon={<FileCheck className="w-6 h-6 text-error" />}
       />
     );
   }
@@ -263,30 +267,31 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
   if (applyPhase === 'success') {
     return (
       <div className="flex flex-col h-full">
-        <div className="flex flex-col items-center gap-4 pb-4 flex-shrink-0">
-          <div className="w-[72px] h-[72px] rounded-full bg-[var(--color-success)]/10 flex items-center justify-center">
-            <Check className="w-9 h-9 text-[var(--color-success)]" />
+        <div className="flex flex-col items-center gap-4 pb-4 shrink-0">
+          <div className="w-18 h-18 rounded-full bg-primary-hover/10 flex items-center justify-center">
+            <Check className="w-9 h-9 text-primary-hover" />
           </div>
 
           <div className="text-center">
             <h3 className="text-xl font-semibold tracking-tight text-foreground mb-1.5">
-              Organization Complete!
+              {t('step3.heading_complete')}
             </h3>
             <p className="text-sm text-muted-foreground">
-              {totalAssignments} bookmark
-              {totalAssignments !== 1 ? 's' : ''} organized into{' '}
-              {Object.keys(assignmentSummary).length} categories
+              {t('step3.summary_line_other', {
+                count: totalAssignments,
+                categories: Object.keys(assignmentSummary).length,
+              })}
             </p>
           </div>
 
           <div className="flex gap-3">
             <Button variant="outline" onClick={handleDownloadBackup}>
-              <Download className="w-3.5 h-3.5 mr-1.5" />
-              Download Backup
+              <Download className="w-3.5 h-3.5 me-1.5" />
+              {t('step3.download_backup')}
             </Button>
             <Button onClick={handleViewResults}>
-              View Results
-              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+              {t('step3.view_results')}
+              <ArrowRight className="w-3.5 h-3.5 ms-1.5 rtl:scale-x-[-1]" />
             </Button>
           </div>
         </div>
@@ -304,7 +309,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
                     className="flex items-center gap-3 px-4 py-3 bg-muted/5 border border-muted/30 rounded-xl"
                   >
                     {isLocked ? (
-                      <Lock className="w-3.5 h-3.5 text-[var(--color-warning)] shrink-0" />
+                      <Lock className="w-3.5 h-3.5 text-warning shrink-0" />
                     ) : (
                       <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                     )}
@@ -312,8 +317,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
                       {summary.categoryName}
                     </span>
                     <span className="text-[12px] text-muted-foreground">
-                      {summary.count} bookmark
-                      {summary.count !== 1 ? 's' : ''}
+                      {t('step3.bookmark_count_other', { count: summary.count })}
                     </span>
                   </div>
                 );

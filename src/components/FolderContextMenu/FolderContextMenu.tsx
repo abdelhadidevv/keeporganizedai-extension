@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -11,16 +12,18 @@ interface FolderContextMenuProps {
   onClose: () => void;
 }
 
-const menuItems = [
-  {
-    icon: <Share2 className="h-4 w-4" />,
-    label: 'Share with friend',
-    description: 'Export folder as HTML file',
-    actionKey: 'share',
-  },
-] as const;
-
 export function FolderContextMenu({ x, y, folderName, onShare, onClose }: FolderContextMenuProps) {
+  const { t } = useTranslation('common');
+
+  const menuItems = [
+    {
+      icon: <Share2 className="h-4 w-4" />,
+      label: t('folder_context_menu.share_with_friend'),
+      description: t('folder_context_menu.share_description'),
+      actionKey: 'share',
+    },
+  ] as const;
+
   const handleAction = React.useCallback(
     (actionKey: string) => {
       switch (actionKey) {

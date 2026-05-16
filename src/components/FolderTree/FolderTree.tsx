@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { BookmarkNode } from '@/types/index';
 import { BookmarkItem } from '@/components/BookmarkItem';
@@ -183,6 +184,7 @@ export function FolderTree({
   className,
   highlightQuery = '',
 }: FolderTreeProps) {
+  const { t } = useTranslation('common');
   const isControlled = controlledExpandedIds !== undefined;
   const initialExpanded = new Set(defaultExpandedIds ?? []);
   const [internalExpandedIds, setInternalExpandedIds] = useState<Set<string>>(initialExpanded);
@@ -210,7 +212,9 @@ export function FolderTree({
 
   if (folders.length === 0) {
     return (
-      <div className={cn('p-4 text-sm text-muted-foreground', className)}>No folders found</div>
+      <div className={cn('p-4 text-sm text-muted-foreground', className)}>
+        {t('folder_tree.no_folders')}
+      </div>
     );
   }
 

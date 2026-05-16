@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useDroppable } from '@dnd-kit/core';
 import { Trash2 } from 'lucide-react';
 import { useDndState } from '@/components/DndProvider';
@@ -24,14 +25,8 @@ function getTextClassName(isOver: boolean): string {
   return 'text-foreground';
 }
 
-function getDisplayText(isOver: boolean, title: string | undefined): string {
-  if (isOver) {
-    return `Delete "${title}"?`;
-  }
-  return 'Drop here to delete';
-}
-
 export function TrashZone() {
+  const { t } = useTranslation('common');
   const { isDragging, activeItem } = useDndState();
   const { setNodeRef, isOver } = useDroppable({
     id: 'trash-zone',
@@ -41,7 +36,15 @@ export function TrashZone() {
   if (!isDragging) return null;
 
   const title = activeItem?.title ?? '';
-  const typeLabel = activeItem?.type === 'folder' ? 'Folder' : 'Bookmark';
+  const typeLabel =
+    activeItem?.type === 'folder' ? t('trash_zone.type_folder') : t('trash_zone.type_bookmark');
+
+  const getDisplayText = (isOverVal: boolean, ttl: string | undefined): string => {
+    if (isOverVal) {
+      return t('trash_zone.delete_title', { title: ttl });
+    }
+    return t('trash_zone.drop_hint');
+  };
 
   return (
     <div
@@ -72,7 +75,7 @@ export function TrashZone() {
             getTextClassName(isOver)
           )}
         >
-          {getDisplayText(isOver, title)}
+          {getDisplayText(isOver, title) as string}
         </span>
         {activeItem && <span className="text-xs text-muted-foreground">{typeLabel}</span>}
       </div>

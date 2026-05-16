@@ -1,4 +1,6 @@
 import { useCallback, useState, createContext, useContext, useMemo, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   DndContext,
   DragOverlay,
@@ -89,6 +91,7 @@ export function DndProvider({
   onTrash,
   onPinToBar,
 }: DndProviderProps) {
+  const { t } = useTranslation('common');
   const [activeItem, setActiveItem] = useState<DragData | null>(null);
   const [dropTargetInfo, setDropTargetInfo] = useState<DropTargetInfo | null>(null);
 
@@ -216,7 +219,7 @@ export function DndProvider({
         }
 
         if (dropPosition === 'inside') {
-          toast.warning('Cannot move a folder into another folder');
+          toast.warning(t('dnd_provider.cannot_move_folder'));
           return;
         }
 
@@ -228,7 +231,7 @@ export function DndProvider({
           await onMove(activeId, sourceParentId, targetParentId, targetIndex);
           onRefresh();
         } catch {
-          toast.error('Failed to reorder');
+          toast.error(t('dnd_provider.failed_reorder'));
         }
         return;
       }
@@ -249,10 +252,10 @@ export function DndProvider({
         await onMove(activeId, sourceParentId, targetParentId, targetIndex);
         onRefresh();
       } catch {
-        toast.error('Failed to move item');
+        toast.error(t('dnd_provider.failed_move'));
       }
     },
-    [onMove, onRefresh, dropTargetInfo, onTrash, onPinToBar]
+    [onMove, onRefresh, dropTargetInfo, onTrash, onPinToBar, t]
   );
 
   const handleDragCancel = useCallback(() => {
@@ -266,12 +269,12 @@ export function DndProvider({
       activeItem: activeItem
         ? {
             type: activeItem.type,
-            title: activeItem.node.title || 'Untitled',
+            title: activeItem.node.title || t('bookmark_item.untitled'),
             id: activeItem.node.id,
           }
         : null,
     }),
-    [activeItem]
+    [activeItem, t]
   );
 
   return (
@@ -288,7 +291,7 @@ export function DndProvider({
         <DragOverlay>
           {activeItem && (
             <div className="opacity-80 bg-background border border-muted/30 rounded-lg shadow-lg p-2 px-3 text-sm font-medium">
-              {activeItem.node.title || 'Untitled'}
+              {activeItem.node.title || t('bookmark_item.untitled')}
             </div>
           )}
         </DragOverlay>

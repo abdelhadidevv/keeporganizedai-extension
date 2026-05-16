@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChevronRight, Folder, FolderOpen, GripVertical } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder, FolderOpen, GripVertical } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { BookmarkNode } from '@/types';
@@ -93,9 +93,9 @@ export function FolderItem({
       data-draggable-id={folder.id}
       className={cn(
         'group flex items-center gap-2.5 py-2.5 px-2 cursor-pointer transition-all duration-200',
-        'pl-[calc(var(--spacing-4)*var(--depth))]',
+        'ps-[calc(var(--spacing-4)*var(--depth))]',
         'hover:bg-(--folder-color)/10',
-        (isSubFolder || isExpanded) && 'border-l-2 border-(--folder-color)',
+        (isSubFolder || isExpanded) && 'border-s-2 border-(--folder-color)',
         isExpanded && !isSubFolder && 'rounded-t-lg',
         !isExpanded && isSubFolder && 'rounded-tr-lg rounded-br-lg',
         !isExpanded && !isSubFolder && 'rounded-lg'
@@ -104,11 +104,15 @@ export function FolderItem({
     >
       <span
         className={cn(
-          'shrink-0 w-5 h-5 flex items-center justify-center transition-transform duration-200',
+          'shrink-0 w-5 h-5 flex items-center justify-center transition-transform duration-200 text-muted-foreground',
           !hasChildren && 'invisible'
         )}
       >
-        <ChevronRight className={cn('w-4 h-4 text-muted-foreground', isExpanded && 'rotate-90')} />
+        {isExpanded ? (
+          <ChevronDown className="w-4 h-4" />
+        ) : (
+          <ChevronRight className="w-4 h-4 rtl:scale-x-[-1]" />
+        )}
       </span>
 
       <span

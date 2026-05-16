@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { Spinner } from '@/components/ui/Spinner';
 import { Progress } from '@/components/ui/Progress';
 
-interface LoadingStateProps {
+export interface LoadingStateProps {
   message?: string;
   variant?: 'spinner' | 'progress' | 'dots';
   progress?: number;
@@ -17,8 +18,12 @@ const variantStyles = {
 };
 
 function DotsIndicator() {
+  const { t } = useTranslation('common');
   return (
-    <div className="flex items-center justify-center gap-1" aria-label="Loading">
+    <div
+      className="flex items-center justify-center gap-1"
+      aria-label={t('loading_state.aria_label')}
+    >
       <span
         className="h-2 w-2 rounded-full bg-[var(--color-primary)]"
         style={{
@@ -43,13 +48,19 @@ function DotsIndicator() {
   );
 }
 
+function valueOrDefault<T>(value: T | undefined, fallback: T): T {
+  return value !== undefined ? value : fallback;
+}
+
 export function LoadingState({
-  message,
+  message: messageProp,
   variant = 'spinner',
   progress = 0,
   className,
 }: LoadingStateProps) {
+  const { t } = useTranslation('common');
   const clampedProgress = Math.min(Math.max(progress, 0), 100);
+  const message = valueOrDefault(messageProp, t('loading_state.loading_bookmarks'));
 
   return (
     <div
@@ -74,54 +85,4 @@ export function LoadingState({
       {message && <p className="mt-3 text-sm text-muted-foreground">{message}</p>}
     </div>
   );
-}
-
-export type LoadingPreset = {
-  analyzingBookmarks: { message: string; variant: 'dots' };
-  categorizing: { message: string; variant: 'progress'; progress: number };
-  organizing: { message: string; variant: 'progress'; progress: number };
-  finalizing: { message: string; variant: 'progress'; progress: number };
-  loadingBookmarks: { message: string; variant: 'spinner' };
-  processing: { message: string; variant: 'dots' };
-};
-
-export const LOADING_PRESETS: LoadingPreset = {
-  analyzingBookmarks: {
-    message: 'Analyzing your bookmarks...',
-    variant: 'dots',
-  },
-  categorizing: {
-    message: 'Categorizing bookmarks...',
-    variant: 'progress',
-    progress: 33,
-  },
-  organizing: {
-    message: 'Organizing folders...',
-    variant: 'progress',
-    progress: 66,
-  },
-  finalizing: {
-    message: 'Finalizing...',
-    variant: 'progress',
-    progress: 90,
-  },
-  loadingBookmarks: {
-    message: 'Loading bookmarks...',
-    variant: 'spinner',
-  },
-  processing: {
-    message: 'Processing...',
-    variant: 'dots',
-  },
-};
-
-export function createLoadingState(
-  preset: keyof LoadingPreset,
-  overrides?: Partial<LoadingStateProps>
-): LoadingStateProps {
-  const presetConfig = LOADING_PRESETS[preset];
-  return {
-    ...presetConfig,
-    ...overrides,
-  };
 }

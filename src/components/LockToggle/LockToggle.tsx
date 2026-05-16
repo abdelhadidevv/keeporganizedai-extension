@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { Lock, Unlock, Sparkles, AlertTriangle, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -33,30 +34,6 @@ interface LockOption {
   variant: 'default' | 'destructive' | 'warning';
 }
 
-const LOCK_OPTIONS: LockOption[] = [
-  {
-    value: 'none',
-    label: 'None',
-    icon: <Unlock className="h-4 w-4" />,
-    description: 'Allow AI to reorganize this folder',
-    variant: 'default',
-  },
-  // {
-  //   value: 'smart',
-  //   label: 'Smart Lock',
-  //   icon: <Sparkles className="h-4 w-4" />,
-  //   description: 'AI can unlock when reorganizing',
-  //   variant: 'warning',
-  // },
-  {
-    value: 'hard',
-    label: 'Hard Lock',
-    icon: <Lock className="h-4 w-4" />,
-    description: 'Permanent — cannot be undone by AI',
-    variant: 'destructive',
-  },
-];
-
 const stateStyles: Record<LockType, string> = {
   none: 'bg-muted/10 text-muted border-muted/20 hover:bg-muted/20',
   smart:
@@ -71,9 +48,27 @@ export function LockToggle({
   className,
   disabled = false,
 }: LockToggleProps) {
+  const { t } = useTranslation('common');
   const [isOpen, setIsOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [showHardLockConfirm, setShowHardLockConfirm] = React.useState(false);
+
+  const LOCK_OPTIONS: LockOption[] = [
+    {
+      value: 'none',
+      label: t('lock_toggle.none'),
+      icon: <Unlock className="h-4 w-4" />,
+      description: t('lock_toggle.none_description'),
+      variant: 'default',
+    },
+    {
+      value: 'hard',
+      label: t('lock_toggle.hard_lock'),
+      icon: <Lock className="h-4 w-4" />,
+      description: t('lock_toggle.hard_lock_description'),
+      variant: 'destructive',
+    },
+  ];
 
   const currentOption = LOCK_OPTIONS.find((o) => o.value === currentLockState) ?? LOCK_OPTIONS[0];
 
@@ -91,7 +86,7 @@ export function LockToggle({
       }
 
       if (option.value === 'smart') {
-        toast.warning('Smart Lock applied', {
+        toast.warning(t('lock_toggle.smart_lock_applied'), {
           description: option.description,
           icon: <Sparkles className="h-4 w-4" />,
         });
@@ -99,7 +94,7 @@ export function LockToggle({
 
       await applyLockState(option.value);
     },
-    [currentLockState]
+    [currentLockState, t]
   );
 
   const applyLockState = React.useCallback(
@@ -110,7 +105,7 @@ export function LockToggle({
         await lockStateService.setLockState(folderId, newState);
         onChange?.(newState);
       } catch {
-        toast.error('Failed to update lock state');
+        toast.error(t('lock_toggle.failed_to_update'));
       } finally {
         setIsLoading(false);
       }
@@ -188,7 +183,9 @@ export function LockToggle({
                   <span className="text-xs text-muted-foreground">{option.description}</span>
                 </div>
                 {option.value === currentLockState && (
-                  <span className="ml-auto text-xs text-[var(--color-primary)]">Active</span>
+                  <span className="ml-auto text-xs text-[var(--color-primary)]">
+                    {t('lock_toggle.active')}
+                  </span>
                 )}
               </DropdownMenuPrimitive.Item>
             ))}
@@ -202,19 +199,16 @@ export function LockToggle({
             <div className="mx-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-error/10">
               <AlertTriangle className="h-6 w-6 text-error" />
             </div>
-            <ModalTitle>Confirm Hard Lock</ModalTitle>
-            <ModalDescription>
-              Hard Lock is permanent and cannot be undone by AI. The folder will be protected from
-              all automated changes.
-            </ModalDescription>
+            <ModalTitle>{t('lock_toggle.confirm_title')}</ModalTitle>
+            <ModalDescription>{t('lock_toggle.confirm_message')}</ModalDescription>
           </ModalHeader>
           <ModalBody />
           <ModalFooter>
             <Button variant="outline" onClick={() => setShowHardLockConfirm(false)}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button variant="destructive" onClick={handleConfirmHardLock}>
-              Confirm Hard Lock
+              {t('lock_toggle.confirm_button')}
             </Button>
           </ModalFooter>
         </ModalContent>

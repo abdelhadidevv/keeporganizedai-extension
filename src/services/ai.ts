@@ -72,20 +72,27 @@ async function getModel(provider: AIProvider): Promise<string> {
   return DEFAULT_MODEL[provider] || '';
 }
 
+class AIError extends Error {
+  code: string;
+  provider: AIProvider;
+  retryable: boolean;
+
+  constructor(code: string, message: string, provider: AIProvider, retryable: boolean) {
+    super(message);
+    this.name = 'AIError';
+    this.code = code;
+    this.provider = provider;
+    this.retryable = retryable;
+  }
+}
+
 function createAiError(
   code: string,
   message: string,
   provider: AIProvider,
   retryable: boolean
 ): never {
-  throw new Error(
-    JSON.stringify({
-      code,
-      message,
-      provider,
-      retryable,
-    })
-  );
+  throw new AIError(code, message, provider, retryable);
 }
 
 async function getApiKeyOrThrow(provider: AIProvider): Promise<string> {

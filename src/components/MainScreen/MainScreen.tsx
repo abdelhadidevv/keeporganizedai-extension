@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Settings, RotateCcw, ChevronDown, ChevronUp } from 'lucide-react';
 import { useMainScreen } from '@/hooks/useMainScreen';
 import { Search } from '@/components/Search';
@@ -14,6 +15,7 @@ interface MainScreenProps {
 }
 
 export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenProps) {
+  const { t } = useTranslation('common');
   const {
     filteredFolders,
     isLoading,
@@ -80,23 +82,28 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
     <div className="flex flex-col h-screen bg-background text-foreground">
       <Header onAutoOrganize={onAutoOrganizeClick} isAutoOrganizeDisabled={!hasBookmarks} />
       <div className="w-full px-4 py-3 border-b border-muted/20 flex items-center gap-2">
-        <Search
-          ref={searchInputRef}
-          placeholder="Search bookmarks... (/)"
-          onChange={handleSearch}
-          value={searchQuery}
-        />
-        <Button variant="ghost" size="icon-sm" onClick={expandAll} title="Expand all">
+        <Search ref={searchInputRef} onChange={handleSearch} value={searchQuery} />
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={expandAll}
+          title={t('main_screen.expand_all')}
+        >
           <ChevronDown className="w-4 h-4" />
         </Button>
-        <Button variant="ghost" size="icon-sm" onClick={collapseAll} title="Collapse all">
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={collapseAll}
+          title={t('main_screen.collapse_all')}
+        >
           <ChevronUp className="w-4 h-4" />
         </Button>
         <Button
           variant="ghost"
           size="icon-sm"
           onClick={refreshBookmarks}
-          title="Refresh bookmarks (R)"
+          title={t('main_screen.refresh')}
         >
           <RotateCcw className="w-4 h-4" />
         </Button>
@@ -121,10 +128,12 @@ export function MainScreen({ onAutoOrganizeClick, onSettingsClick }: MainScreenP
           'bg-muted/5'
         )}
       >
-        <span className="text-xs text-muted-foreground">KeepOrganizedAI v{VERSION}</span>
+        <span className="text-xs text-muted-foreground">
+          {t('main_screen.footer_version', { version: VERSION })}
+        </span>
         <Button variant="ghost" size="sm" onClick={onSettingsClick}>
-          <Settings className="w-4 h-4 mr-1" />
-          Settings
+          <Settings className="w-4 h-4 me-1" />
+          {t('main_screen.settings_button')}
         </Button>
       </footer>
     </div>

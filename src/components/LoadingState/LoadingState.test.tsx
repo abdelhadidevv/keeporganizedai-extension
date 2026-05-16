@@ -1,34 +1,44 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { LoadingState, LOADING_PRESETS, createLoadingState } from './LoadingState';
+import i18n from 'i18next';
+import { LoadingState } from './LoadingState';
+import { getLoadingPresets, createLoadingState } from '@/states/presets';
 
-describe('LOADING_PRESETS', () => {
+const t = i18n.getFixedT('en', 'common');
+
+describe('getLoadingPresets', () => {
   it('has analyzingBookmarks preset with dots variant', () => {
-    expect(LOADING_PRESETS.analyzingBookmarks.variant).toBe('dots');
-    expect(LOADING_PRESETS.analyzingBookmarks.message).toBe('Analyzing your bookmarks...');
+    const presets = getLoadingPresets(t);
+    expect(presets.analyzingBookmarks.variant).toBe('dots');
+    expect(presets.analyzingBookmarks.message).toBe('Analyzing your bookmarks...');
   });
 
   it('has categorizing preset with progress at 33', () => {
-    expect(LOADING_PRESETS.categorizing.variant).toBe('progress');
-    expect(LOADING_PRESETS.categorizing.progress).toBe(33);
+    const presets = getLoadingPresets(t);
+    expect(presets.categorizing.variant).toBe('progress');
+    expect(presets.categorizing.progress).toBe(33);
   });
 
   it('has organizing preset with progress at 66', () => {
-    expect(LOADING_PRESETS.organizing.variant).toBe('progress');
-    expect(LOADING_PRESETS.organizing.progress).toBe(66);
+    const presets = getLoadingPresets(t);
+    expect(presets.organizing.variant).toBe('progress');
+    expect(presets.organizing.progress).toBe(66);
   });
 
   it('has finalizing preset with progress at 90', () => {
-    expect(LOADING_PRESETS.finalizing.variant).toBe('progress');
-    expect(LOADING_PRESETS.finalizing.progress).toBe(90);
+    const presets = getLoadingPresets(t);
+    expect(presets.finalizing.variant).toBe('progress');
+    expect(presets.finalizing.progress).toBe(90);
   });
 
   it('has loadingBookmarks preset with spinner variant', () => {
-    expect(LOADING_PRESETS.loadingBookmarks.variant).toBe('spinner');
+    const presets = getLoadingPresets(t);
+    expect(presets.loadingBookmarks.variant).toBe('spinner');
   });
 
   it('has processing preset with dots variant', () => {
-    expect(LOADING_PRESETS.processing.variant).toBe('dots');
+    const presets = getLoadingPresets(t);
+    expect(presets.processing.variant).toBe('dots');
   });
 });
 
@@ -54,9 +64,9 @@ describe('LoadingState', () => {
     expect(dots).toHaveLength(3);
   });
 
-  it('hides message when not provided', () => {
-    const { container } = render(<LoadingState variant="spinner" />);
-    expect(container.querySelector('p')).not.toBeInTheDocument();
+  it('shows default message when not provided', () => {
+    render(<LoadingState variant="spinner" />);
+    expect(screen.getByText('Loading bookmarks...')).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
@@ -66,7 +76,7 @@ describe('LoadingState', () => {
   });
 
   it('uses preset configs correctly', () => {
-    const state = createLoadingState('analyzingBookmarks');
+    const state = createLoadingState(t, 'analyzingBookmarks');
     expect(state.message).toBe('Analyzing your bookmarks...');
     expect(state.variant).toBe('dots');
   });
@@ -98,14 +108,14 @@ describe('LoadingState', () => {
     ] as const;
 
     presetKeys.forEach((key) => {
-      const state = createLoadingState(key);
+      const state = createLoadingState(t, key);
       expect(state.message).toBeTruthy();
       expect(['spinner', 'progress', 'dots']).toContain(state.variant);
     });
   });
 
   it('createLoadingState merges overrides with preset', () => {
-    const state = createLoadingState('categorizing', { message: 'Custom message' });
+    const state = createLoadingState(t, 'categorizing', { message: 'Custom message' });
     expect(state.message).toBe('Custom message');
     expect(state.variant).toBe('progress');
   });

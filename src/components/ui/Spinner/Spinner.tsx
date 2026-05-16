@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
@@ -13,15 +14,16 @@ const sizeMap = {
 };
 
 function Spinner({ className, size = 'md', ...props }: SpinnerProps) {
+  const { t } = useTranslation('common');
   return (
     <div
       role="status"
-      aria-label="Loading"
+      aria-label={t('spinner.aria_label')}
       className={cn('inline-flex items-center justify-center', className)}
       {...props}
     >
       <Loader2 className={cn(sizeMap[size], 'animate-spin text-[var(--color-primary)]')} />
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only">{t('loader.default_label')}</span>
     </div>
   );
 }
@@ -30,16 +32,18 @@ interface LoaderProps extends SpinnerProps {
   label?: string;
 }
 
-function Loader({ className, label = 'Loading...', size = 'md', ...props }: LoaderProps) {
+function Loader({ className, label, size = 'md', ...props }: LoaderProps) {
+  const { t } = useTranslation('common');
+  const displayLabel = label ?? t('loader.default_label');
   return (
     <div
       className={cn('inline-flex items-center gap-2', className)}
       role="status"
-      aria-label={label}
+      aria-label={displayLabel}
       {...props}
     >
       <Spinner size={size} />
-      <span className="text-sm text-muted">{label}</span>
+      <span className="text-sm text-muted">{displayLabel}</span>
     </div>
   );
 }

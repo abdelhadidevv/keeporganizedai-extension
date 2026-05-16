@@ -37,3 +37,5 @@ coverage/
 .agents
 
 skills-lock.json
+
+CONTEXT.md

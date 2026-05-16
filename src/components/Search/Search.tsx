@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search as SearchIcon, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
@@ -15,7 +16,7 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
   (
     {
       className,
-      placeholder = 'Search...',
+      placeholder: placeholderProp,
       debounceMs = 300,
       onChange,
       onSearch,
@@ -25,6 +26,8 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
     },
     ref
   ) => {
+    const { t } = useTranslation('common');
+    const placeholder = placeholderProp ?? t('search.placeholder');
     const internalInputRef = React.useRef<HTMLInputElement>(null);
     const inputRef = (ref as React.RefObject<HTMLInputElement>) || internalInputRef;
     const [internalValue, setInternalValue] = React.useState('');
@@ -117,19 +120,19 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
 
     return (
       <div className={cn('w-full relative', wrapperClassName)}>
-        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+        <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-muted">
           <SearchIcon size={16} />
         </span>
         <input
           type="text"
           role="searchbox"
-          aria-label="Search"
+          aria-label={t('search.aria_label')}
           className={cn(
-            'flex h-10 w-full rounded-lg border border-muted/30 bg-transparent px-3 py-2 pr-10 text-sm text-foreground placeholder:text-muted-foreground transition-colors',
+            'flex h-10 w-full rounded-lg border border-muted/30 bg-transparent px-3 py-2 pe-10 text-sm text-foreground placeholder:text-muted-foreground transition-colors',
             'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-1',
             'disabled:cursor-not-allowed disabled:opacity-50',
             'dark:border-muted/50',
-            'pl-10',
+            'ps-10',
             className
           )}
           placeholder={placeholder}
@@ -142,14 +145,14 @@ export const Search = React.forwardRef<HTMLInputElement, SearchProps>(
           {...props}
         />
         {hasValue && (
-          <span className="absolute inset-y-0 right-0 flex items-center pr-1">
+          <span className="absolute inset-y-0 end-0 flex items-center pe-1">
             <Button
               variant="ghost"
               size="sm"
               className="h-6 w-6 p-0 text-muted hover:text-foreground"
               onClick={handleClear}
-              aria-label="Clear search"
-              title="Clear search"
+              aria-label={t('search.clear_aria_label')}
+              title={t('search.clear_title')}
             >
               <X size={14} />
             </Button>
