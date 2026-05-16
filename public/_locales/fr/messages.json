@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "KeepOrganizedAI"
+  },
+  "appDesc": {
+    "message": "Organisateur de marque-pages par IA. Catégorisez vos marque-pages en quelques minutes avec une recherche rapide et des dossiers intelligents."
+  },
+  "openSidePanel": {
+    "message": "Ouvrir le panneau latéral"
+  }
+}

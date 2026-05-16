@@ -1,0 +1,208 @@
+{
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "loading": "جارٍ التحميل...",
+  "merge": "دمج",
+  "replace": "استبدال",
+  "restore": "استعادة",
+  "modal": {
+    "close_aria_label": "إغلاق"
+  },
+  "spinner": {
+    "aria_label": "جارٍ التحميل"
+  },
+  "loader": {
+    "default_label": "جارٍ التحميل..."
+  },
+  "select": {
+    "placeholder": "اختر خيارًا"
+  },
+  "search": {
+    "placeholder": "البحث في الإشارات... (/)",
+    "aria_label": "بحث",
+    "clear_aria_label": "مسح البحث",
+    "clear_title": "مسح البحث"
+  },
+  "empty_state": {
+    "no_bookmarks": {
+      "title": "لا توجد إشارات بعد",
+      "description": "ابدأ بإضافة إشارات مرجعية لتنظيمها"
+    },
+    "no_results": {
+      "title": "لم يتم العثور على نتائج",
+      "description": "حاول تعديل بحثك أو عوامل التصفية"
+    },
+    "empty_folder": {
+      "title": "هذا المجلد فارغ",
+      "description": "اسحب الإشارات هنا أو أضف إشارات جديدة"
+    },
+    "no_categories": {
+      "title": "لم يتم تحديد فئات",
+      "description": "أنشئ فئتك الأولى للبدء"
+    }
+  },
+  "error_state": {
+    "default_title": "حدث خطأ ما",
+    "retry_button": "حاول مرة أخرى",
+    "load_bookmarks": {
+      "title": "فشل في تحميل الإشارات",
+      "message": "تعذر استرداد الإشارات المرجعية. حاول مرة أخرى من فضلك."
+    },
+    "save_failed": {
+      "title": "فشل في حفظ التغييرات",
+      "message": "تعذر حفظ تغييراتك. حاول مرة أخرى من فضلك."
+    },
+    "network_error": {
+      "title": "خطأ في الشبكة",
+      "message": "تحقق من اتصالك بالإنترنت وحاول مرة أخرى."
+    },
+    "ai_error": {
+      "title": "فشلت معالجة الذكاء الاصطناعي",
+      "message": "واجهت خدمة الذكاء الاصطناعي خطأ. حاول مرة أخرى من فضلك."
+    },
+    "missing_api_key": {
+      "title": "مطلوب مفتاح API",
+      "message": "لم يتم تكوين مفتاح API لـ {{provider}}. يرجى إضافة مفتاح API في الإعدادات."
+    }
+  },
+  "loading_state": {
+    "aria_label": "جارٍ التحميل",
+    "analyzing": "جارٍ تحليل الإشارات...",
+    "categorizing": "جارٍ تصنيف الإشارات...",
+    "organizing": "جارٍ تنظيم المجلدات...",
+    "finalizing": "جارٍ إنهاء العملية...",
+    "loading_bookmarks": "جارٍ تحميل الإشارات...",
+    "processing": "جارٍ المعالجة..."
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "back_aria_label": "العودة إلى الشاشة الرئيسية",
+    "footer_version": "KeepOrganizedAI v{{version}}",
+    "ai_provider": {
+      "heading": "مزود الذكاء الاصطناعي",
+      "provider_label": "المزود",
+      "model_label": "النموذج",
+      "api_key_label": "مفتاح API",
+      "api_key_required": "مطلوب مفتاح API لميزات الذكاء الاصطناعي",
+      "refresh": "تحديث",
+      "no_models_found": "لم يتم العثور على نماذج. تأكد من تشغيل Ollama.",
+      "ollama_endpoint": "نقطة اتصال Ollama",
+      "ollama_endpoint_placeholder": "http://localhost:11434",
+      "providers": {
+        "gemini": "Google Gemini",
+        "openai": "OpenAI",
+        "claude": "Anthropic Claude",
+        "ollama": "Ollama (محلي)"
+      },
+      "api_key_placeholder": "أدخل مفتاح API الخاص بـ {{provider}}",
+      "no_key_needed": "لا حاجة لمفتاح API"
+    },
+    "language": {
+      "heading": "اللغة",
+      "label": "اللغة"
+    },
+    "theme": {
+      "heading": "المظهر",
+      "label": "الوضع",
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "النظام",
+      "aria_label": "السمة الحالية: {{theme}}. انقر للتغيير.",
+      "current": "الحالية: {{theme}}"
+    },
+    "import_export": {
+      "heading": "استيراد وتصدير",
+      "export_bookmarks": "تصدير الإشارات",
+      "export_html": "تصدير كـ HTML",
+      "export_json": "تصدير كـ JSON",
+      "import_bookmarks": "استيراد الإشارات",
+      "choose_file": "اختر ملفًا",
+      "supported_formats": "يدعم ملفات HTML (إشارات Chrome) و JSON",
+      "modal_title": "معاينة استيراد الإشارات",
+      "bookmarks_label": "الإشارات",
+      "folders_label": "المجلدات",
+      "import_mode": "وضع الاستيراد",
+      "replace_all": "استبدال الكل",
+      "replace_warning": "سيؤدي هذا إلى حذف جميع إشاراتك الحالية واستبدالها بالملف المستورد. لا يمكن التراجع عن هذا الإجراء.",
+      "toast_export_failed": "فشل تصدير الإشارات",
+      "toast_import_failed": "فشل استيراد الإشارات",
+      "toast_import_success_merge": "تم دمج الإشارات بنجاح",
+      "toast_import_success_replace": "تم استبدال الإشارات بنجاح",
+      "toast_parse_failed": "فشل تحليل الملف"
+    }
+  },
+  "main_screen": {
+    "expand_all": "توسيع الكل",
+    "collapse_all": "طي الكل",
+    "refresh": "تحديث الإشارات (R)",
+    "settings_button": "الإعدادات",
+    "footer_version": "KeepOrganizedAI v{{version}}"
+  },
+  "header": {
+    "auto_organize": "تنظيم تلقائي"
+  },
+  "folder_list": {
+    "loading_title": "جارٍ تحميل الإشارات...",
+    "error_title": "خطأ في تحميل الإشارات",
+    "try_again": "حاول مرة أخرى",
+    "delete_bookmark_title": "حذف إشارة",
+    "delete_bookmark_message": "هل أنت متأكد من حذف \"{{title}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+    "delete_folder_title": "حذف مجلد",
+    "delete_folder_message": "هل أنت متأكد من حذف \"{{title}}\" وكل محتوياته؟ لا يمكن التراجع عن هذا الإجراء.",
+    "toast_bookmark_deleted": "تم حذف الإشارة",
+    "toast_bookmark_restored": "تمت استعادة الإشارة",
+    "toast_failed_delete": "فشل حذف الإشارة",
+    "toast_failed_restore": "فشل استعادة الإشارة",
+    "toast_folder_deleted": "تم حذف المجلد \"{{title}}\"",
+    "toast_failed_delete_folder": "فشل الحذف",
+    "toast_failed_move": "فشل نقل العنصر: {{message}}",
+    "toast_folder_exported": "تم تصدير \"{{title}}\" كـ HTML",
+    "toast_failed_export": "فشل تصدير المجلد",
+    "toast_failed_pin": "فشل تثبيت الإشارة في شريط الإشارات",
+    "undo": "تراجع",
+    "delete_this_bookmark": "هذه الإشارة",
+    "delete_this_item": "هذا العنصر"
+  },
+  "lock_toggle": {
+    "none": "بلا",
+    "none_description": "السماح للذكاء الاصطناعي بإعادة تنظيم هذا المجلد",
+    "hard_lock": "قفل",
+    "hard_lock_description": "قفل — لا يمكن للذكاء الاصطناعي عمل تغيرات عليه",
+    "smart_lock_applied": "تم تطبيق القفل الذكي",
+    "failed_to_update": "فشل تحديث حالة القفل",
+    "active": "نشط",
+    "confirm_title": "تأكيد القفل",
+    "confirm_message": "سيتم حماية المجلد من جميع التغييرات التلقائية بواسطة الذكاء الاصطناعي.",
+    "confirm_button": "تأكيد القفل"
+  },
+  "folder_context_menu": {
+    "share_with_friend": "مشاركة مع صديق",
+    "share_description": "تصدير المجلد كملف HTML"
+  },
+  "trash_zone": {
+    "delete_title": "حذف \"{{title}}\"?",
+    "drop_hint": "أسقط هنا للحذف",
+    "type_folder": "مجلد",
+    "type_bookmark": "إشارة"
+  },
+  "bookmark_bar_zone": {
+    "pin_title": "تثبيت \"{{title}}\" في شريط الإشارات",
+    "drop_hint": "أسقط هنا للتثبيت في شريط الإشارات",
+    "type_folder": "مجلد",
+    "type_bookmark": "إشارة"
+  },
+  "bookmark_item": {
+    "untitled": "بدون عنوان",
+    "copied": "تم النسخ!",
+    "copy_url": "نسخ الرابط",
+    "delete": "حذف الإشارة"
+  },
+  "folder_tree": {
+    "no_folders": "لم يتم العثور على مجلدات"
+  },
+  "dnd_provider": {
+    "cannot_move_folder": "لا يمكن نقل مجلد داخل مجلد آخر",
+    "failed_reorder": "فشل إعادة الترتيب",
+    "failed_move": "فشل نقل العنصر"
+  }
+}

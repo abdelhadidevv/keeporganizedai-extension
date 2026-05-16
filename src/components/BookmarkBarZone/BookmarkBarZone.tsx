@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useDroppable } from '@dnd-kit/core';
 import { Star } from 'lucide-react';
 import { useDndState } from '@/components/DndProvider';
@@ -24,14 +25,8 @@ function getTextClassName(isOver: boolean): string {
   return 'text-foreground';
 }
 
-function getDisplayText(isOver: boolean, title: string | undefined): string {
-  if (isOver) {
-    return `Pin "${title}" to Bookmarks Bar`;
-  }
-  return 'Drop here to pin to Bookmarks Bar';
-}
-
 export function BookmarkBarZone() {
+  const { t } = useTranslation('common');
   const { isDragging, activeItem } = useDndState();
   const { setNodeRef, isOver } = useDroppable({
     id: 'bookmark-bar-zone',
@@ -41,7 +36,17 @@ export function BookmarkBarZone() {
   if (!isDragging) return null;
 
   const title = activeItem?.title ?? '';
-  const typeLabel = activeItem?.type === 'folder' ? 'Folder' : 'Bookmark';
+  const typeLabel =
+    activeItem?.type === 'folder'
+      ? t('bookmark_bar_zone.type_folder')
+      : t('bookmark_bar_zone.type_bookmark');
+
+  const getDisplayText = (isOverVal: boolean, ttl: string | undefined): string => {
+    if (isOverVal) {
+      return t('bookmark_bar_zone.pin_title', { title: ttl });
+    }
+    return t('bookmark_bar_zone.drop_hint');
+  };
 
   return (
     <div
@@ -72,7 +77,7 @@ export function BookmarkBarZone() {
             getTextClassName(isOver)
           )}
         >
-          {getDisplayText(isOver, title)}
+          {getDisplayText(isOver, title) as string}
         </span>
         {activeItem && <span className="text-xs text-muted-foreground">{typeLabel}</span>}
       </div>

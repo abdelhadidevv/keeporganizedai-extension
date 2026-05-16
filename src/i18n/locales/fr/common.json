@@ -1,0 +1,208 @@
+{
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "loading": "Chargement...",
+  "merge": "Fusionner",
+  "replace": "Remplacer",
+  "restore": "Restaurer",
+  "modal": {
+    "close_aria_label": "Fermer"
+  },
+  "spinner": {
+    "aria_label": "Chargement"
+  },
+  "loader": {
+    "default_label": "Chargement..."
+  },
+  "select": {
+    "placeholder": "Sélectionnez une option"
+  },
+  "search": {
+    "placeholder": "Rechercher...",
+    "aria_label": "Recherche",
+    "clear_aria_label": "Effacer la recherche",
+    "clear_title": "Effacer la recherche"
+  },
+  "empty_state": {
+    "no_bookmarks": {
+      "title": "Pas encore de marque-pages",
+      "description": "Ajoutez des marque-pages pour les organiser"
+    },
+    "no_results": {
+      "title": "Aucun résultat",
+      "description": "Essayez d'ajuster votre recherche ou vos filtres"
+    },
+    "empty_folder": {
+      "title": "Ce dossier est vide",
+      "description": "Glissez des marque-pages ici ou ajoutez-en de nouveaux"
+    },
+    "no_categories": {
+      "title": "Aucune catégorie définie",
+      "description": "Créez votre première catégorie pour commencer"
+    }
+  },
+  "error_state": {
+    "default_title": "Quelque chose s'est mal passé",
+    "retry_button": "Réessayer",
+    "load_bookmarks": {
+      "title": "Échec du chargement des marque-pages",
+      "message": "Impossible de récupérer vos marque-pages. Veuillez réessayer."
+    },
+    "save_failed": {
+      "title": "Échec de la sauvegarde",
+      "message": "Vos modifications n'ont pas pu être sauvegardées. Veuillez réessayer."
+    },
+    "network_error": {
+      "title": "Erreur réseau",
+      "message": "Veuillez vérifier votre connexion Internet et réessayer."
+    },
+    "ai_error": {
+      "title": "Échec du traitement IA",
+      "message": "Le service IA a rencontré une erreur. Veuillez réessayer."
+    },
+    "missing_api_key": {
+      "title": "Clé API requise",
+      "message": "Aucune clé API configurée pour {{provider}}. Veuillez ajouter votre clé API dans les paramètres."
+    }
+  },
+  "loading_state": {
+    "aria_label": "Chargement",
+    "analyzing": "Analyse de vos marque-pages...",
+    "categorizing": "Catégorisation des marque-pages...",
+    "organizing": "Organisation des dossiers...",
+    "finalizing": "Finalisation...",
+    "loading_bookmarks": "Chargement des marque-pages...",
+    "processing": "Traitement..."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "back_aria_label": "Retour à l'écran principal",
+    "footer_version": "KeepOrganizedAI v{{version}}",
+    "ai_provider": {
+      "heading": "Fournisseur d'IA",
+      "provider_label": "Fournisseur",
+      "model_label": "Modèle",
+      "api_key_label": "Clé API",
+      "api_key_required": "Clé API requise pour les fonctionnalités IA",
+      "refresh": "Actualiser",
+      "no_models_found": "Aucun modèle trouvé. Assurez-vous qu'Ollama est en cours d'exécution.",
+      "ollama_endpoint": "Point d'accès Ollama",
+      "ollama_endpoint_placeholder": "http://localhost:11434",
+      "providers": {
+        "gemini": "Google Gemini",
+        "openai": "OpenAI",
+        "claude": "Anthropic Claude",
+        "ollama": "Ollama (Local)"
+      },
+      "api_key_placeholder": "Entrez votre clé API {{provider}}",
+      "no_key_needed": "Aucune clé API nécessaire"
+    },
+    "language": {
+      "heading": "Langue",
+      "label": "Langue"
+    },
+    "theme": {
+      "heading": "Apparence",
+      "label": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système",
+      "aria_label": "Thème actuel : {{theme}}. Cliquez pour changer.",
+      "current": "Actuel : {{theme}}"
+    },
+    "import_export": {
+      "heading": "Importer && Exporter",
+      "export_bookmarks": "Exporter les marque-pages",
+      "export_html": "Exporter en HTML",
+      "export_json": "Exporter en JSON",
+      "import_bookmarks": "Importer des marque-pages",
+      "choose_file": "Choisir un fichier",
+      "supported_formats": "Prend en charge les fichiers HTML (marque-pages Chrome) et JSON",
+      "modal_title": "Aperçu de l'importation",
+      "bookmarks_label": "Marque-pages",
+      "folders_label": "Dossiers",
+      "import_mode": "Mode d'importation",
+      "replace_all": "Tout remplacer",
+      "replace_warning": "Cela supprimera tous vos marque-pages actuels et les remplacera par le fichier importé. Cette action est irréversible.",
+      "toast_export_failed": "Échec de l'exportation des marque-pages",
+      "toast_import_failed": "Échec de l'importation des marque-pages",
+      "toast_import_success_merge": "Marque-pages fusionnés avec succès",
+      "toast_import_success_replace": "Marque-pages remplacés avec succès",
+      "toast_parse_failed": "Échec de l'analyse du fichier"
+    }
+  },
+  "main_screen": {
+    "expand_all": "Tout développer",
+    "collapse_all": "Tout réduire",
+    "refresh": "Actualiser les marque-pages (R)",
+    "settings_button": "Paramètres",
+    "footer_version": "KeepOrganizedAI v{{version}}"
+  },
+  "header": {
+    "auto_organize": "Organisation automatique"
+  },
+  "folder_list": {
+    "loading_title": "Chargement des marque-pages...",
+    "error_title": "Erreur de chargement des marque-pages",
+    "try_again": "Réessayer",
+    "delete_bookmark_title": "Supprimer le marque-page",
+    "delete_bookmark_message": "Êtes-vous sûr de vouloir supprimer \"{{title}}\" ? Cette action est irréversible.",
+    "delete_folder_title": "Supprimer le dossier",
+    "delete_folder_message": "Êtes-vous sûr de vouloir supprimer \"{{title}}\" et tout son contenu ? Cette action est irréversible.",
+    "toast_bookmark_deleted": "Marque-page supprimé",
+    "toast_bookmark_restored": "Marque-page restauré",
+    "toast_failed_delete": "Échec de la suppression du marque-page",
+    "toast_failed_restore": "Échec de la restauration du marque-page",
+    "toast_folder_deleted": "Dossier \"{{title}}\" supprimé",
+    "toast_failed_delete_folder": "Échec de la suppression",
+    "toast_failed_move": "Échec du déplacement de l'élément : {{message}}",
+    "toast_folder_exported": "\"{{title}}\" exporté en HTML",
+    "toast_failed_export": "Échec de l'exportation du dossier",
+    "toast_failed_pin": "Échec de l'épinglage à la barre de marque-pages",
+    "undo": "Annuler",
+    "delete_this_bookmark": "ce marque-page",
+    "delete_this_item": "cet élément"
+  },
+  "lock_toggle": {
+    "none": "Aucun",
+    "none_description": "Autoriser l'IA à réorganiser ce dossier",
+    "hard_lock": "Verrouillage permanent",
+    "hard_lock_description": "Permanent — ne peut pas être annulé par l'IA",
+    "smart_lock_applied": "Verrouillage intelligent appliqué",
+    "failed_to_update": "Échec de la mise à jour de l'état de verrouillage",
+    "active": "Actif",
+    "confirm_title": "Confirmer le verrouillage permanent",
+    "confirm_message": "Le verrouillage permanent est définitif et ne peut pas être annulé par l'IA. Le dossier sera protégé contre toutes les modifications automatisées.",
+    "confirm_button": "Confirmer le verrouillage permanent"
+  },
+  "folder_context_menu": {
+    "share_with_friend": "Partager avec un ami",
+    "share_description": "Exporter le dossier en fichier HTML"
+  },
+  "trash_zone": {
+    "delete_title": "Supprimer \"{{title}}\" ?",
+    "drop_hint": "Déposez ici pour supprimer",
+    "type_folder": "Dossier",
+    "type_bookmark": "Marque-page"
+  },
+  "bookmark_bar_zone": {
+    "pin_title": "Épingler \"{{title}}\" à la barre de marque-pages",
+    "drop_hint": "Déposez ici pour épingler à la barre de marque-pages",
+    "type_folder": "Dossier",
+    "type_bookmark": "Marque-page"
+  },
+  "bookmark_item": {
+    "untitled": "Sans titre",
+    "copied": "Copié !",
+    "copy_url": "Copier l'URL",
+    "delete": "Supprimer le marque-page"
+  },
+  "folder_tree": {
+    "no_folders": "Aucun dossier trouvé"
+  },
+  "dnd_provider": {
+    "cannot_move_folder": "Impossible de déplacer un dossier dans un autre dossier",
+    "failed_reorder": "Échec du réordonnancement",
+    "failed_move": "Échec du déplacement de l'élément"
+  }
+}

@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "KeepOrganizedAI",
+  "name": "__MSG_appName__",
   "version": "1.2.0",
-  "description": "AI-powered bookmark organizer. Categorize bookmarks in minutes with fast search and smart folders.",
+  "default_locale": "en",
+  "description": "__MSG_appDesc__",
   "permissions": ["bookmarks", "storage", "sidePanel", "commands"],
   "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
   "background": {
@@ -27,7 +28,7 @@
         "default": "Ctrl+Shift+K",
         "mac": "Command+Shift+K"
       },
-      "description": "Open side panel"
+      "description": "__MSG_openSidePanel__"
     }
   }
 }

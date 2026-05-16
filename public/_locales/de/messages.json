@@ -1,0 +1,11 @@
+{
+  "appName": {
+    "message": "KeepOrganizedAI"
+  },
+  "appDesc": {
+    "message": "KI-gestützter Lesezeichen-Manager. Kategorisiere Lesezeichen in Minuten mit schneller Suche und intelligenten Ordnern."
+  },
+  "openSidePanel": {
+    "message": "Seitenleiste öffnen"
+  }
+}

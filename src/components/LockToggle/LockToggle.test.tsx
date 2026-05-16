@@ -4,6 +4,29 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LockToggle } from './LockToggle';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'lock_toggle.none': 'None',
+        'lock_toggle.none_description': 'Allow AI to reorganize this folder',
+        'lock_toggle.hard_lock': 'Hard Lock',
+        'lock_toggle.hard_lock_description': 'Permanent — cannot be undone by AI',
+        'lock_toggle.smart_lock_applied': 'Smart Lock applied',
+        'lock_toggle.failed_to_update': 'Failed to update lock state',
+        'lock_toggle.active': 'Active',
+        'lock_toggle.confirm_title': 'Confirm Hard Lock',
+        'lock_toggle.confirm_message':
+          'Hard Lock is permanent and cannot be undone by AI. The folder will be protected from all automated changes.',
+        'lock_toggle.confirm_button': 'Confirm Hard Lock',
+        cancel: 'Cancel',
+      };
+      return translations[key] || key;
+    },
+    i18n: { language: 'en', changeLanguage: vi.fn() },
+  }),
+}));
+
 vi.mock('@/services/lockState', () => ({
   lockStateService: {
     setLockState: vi.fn(),

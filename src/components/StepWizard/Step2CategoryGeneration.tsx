@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useWizardStore } from '@/store';
 import { Category, AIProvider } from '@/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -7,14 +8,16 @@ import { Info, Lock, Sparkles, Tag } from 'lucide-react';
 import { aiService } from '@/services/ai';
 import { LoadingState } from '@/components/LoadingState/LoadingState';
 import { ErrorState } from '@/components/ErrorState/ErrorState';
+import { createErrorState } from '@/states/presets';
 
 export function Step2CategoryGeneration() {
+  const { t } = useTranslation('wizard');
   const lockStates = useWizardStore((s) => s.lockStates);
   const categories = useWizardStore((s) => s.categories);
   const setCategories = useWizardStore((s) => s.setCategories);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ title?: string; message: string } | null>(null);
   const [generatedCategories, setGeneratedCategories] = useState<Category[]>([]);
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const hasGeneratedRef = useRef(false);
@@ -93,14 +96,14 @@ export function Step2CategoryGeneration() {
       if (generated.length > 0) {
         setCategories(generated);
       }
-    } catch (err) {
+    } catch (err: any) {
       hasGeneratedRef.current = false;
-      const aiError = err as { message?: string; code?: string };
-      const errorMessage =
-        aiError.code === 'MISSING_API_KEY'
-          ? `No API key configured for ${provider}. Please add your API key in Settings.`
-          : aiError.message || 'Failed to generate categories';
-      setError(errorMessage);
+      if (err?.code === 'MISSING_API_KEY') {
+        const state = createErrorState(t, 'missingApiKey', undefined, { provider });
+        setError(state);
+      } else {
+        setError({ message: err?.message || t('step2.failed_to_generate') });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -122,21 +125,18 @@ export function Step2CategoryGeneration() {
       <div className="flex flex-col items-center justify-center gap-4 p-12">
         <LoadingState
           variant="dots"
-          message={`Analyzing ${bookmarkCount > 0 ? bookmarkCount : 'your'} bookmarks…`}
+          message={
+            bookmarkCount > 0
+              ? t('step2.analyzing', { count: bookmarkCount })
+              : t('step2.analyzing_your')
+          }
         />
       </div>
     );
   }
 
   if (error) {
-    return (
-      <ErrorState
-        message={error}
-        retryAction={handleRetry}
-        title="Failed to generate categories"
-        icon={<Sparkles className="w-6 h-6 text-[var(--color-error)]" />}
-      />
-    );
+    return <ErrorState message={error.message} title={error.title} retryAction={handleRetry} />;
   }
 
   const displayCategories = generatedCategories.length > 0 ? generatedCategories : categories;
@@ -148,46 +148,45 @@ export function Step2CategoryGeneration() {
       <div className="flex flex-col items-start justify-between gap-4 pb-5 border-b border-muted/30">
         <div className="w-full flex justify-between items-center">
           <h3 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-foreground">
-            Categories Generated
+            {t('step2.heading')}
           </h3>
           <div className="flex items-center gap-1.5 font-medium text-primary bg-primary-light border border-primary/30 rounded-full p-1">
             <Tag className="w-3 h-3" />
             <span className="text-[13px]">{bookmarkCount}</span>
-            <span className="text-[12px">bookmarks</span>
+            <span className="text-[12px">{t('step2.bookmarks_label')}</span>
             <span className="text-muted-foreground text-[11px] mx-0.5">·</span>
             <span className="text-[13px]">{displayCategories.length}</span>
-            <span className="text-[12px]">categories</span>
+            <span className="text-[12px]">{t('step2.categories_label')}</span>
           </div>
         </div>
 
         <p className="text-[13px] leading-relaxed text-muted-foreground">
-          AI has analyzed your bookmarks and created categories. Click Next to apply the
-          organization.
+          {t('step2.description')}
         </p>
       </div>
 
       {displayCategories.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-3 p-12 text-muted-foreground">
           <Tag className="w-10 h-10 opacity-40" />
-          <p className="text-sm">No categories to display</p>
+          <p className="text-sm">{t('step2.no_categories')}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-6 mt-5">
           {lockedCategories.length > 0 && (
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Lock className="w-3.5 h-3.5 text-[var(--color-warning)]" />
+                <Lock className="w-3.5 h-3.5 text-warning" />
                 <span className="text-[13px] font-semibold text-foreground">
-                  Protected ({lockedCategories.length})
+                  {t('step2.protected_label', { count: lockedCategories.length })}
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {lockedCategories.map((cat) => (
                   <div
                     key={cat.id}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-warning)]/10 border border-[var(--color-warning)]/30 rounded-full text-[13px] font-medium text-[var(--color-warning)]"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-warning/10 border border-warning/30 rounded-full text-[13px] font-medium text-warning"
                   >
-                    <Lock className="w-[11px] h-[11px] text-[var(--color-warning)]" />
+                    <Lock className="w-[11px] h-[11px] text-warning" />
                     {cat.name}
                   </div>
                 ))}
@@ -200,7 +199,7 @@ export function Step2CategoryGeneration() {
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-3.5 h-3.5 text-primary" />
                 <span className="text-[13px] font-semibold text-foreground">
-                  AI-Generated ({aiCategories.length})
+                  {t('step2.ai_generated_label', { count: aiCategories.length })}
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -218,7 +217,7 @@ export function Step2CategoryGeneration() {
 
           <div className="flex items-center gap-2 pt-4 border-t border-muted/30 text-[12px] text-muted-foreground">
             <Info className="w-3 h-3 shrink-0" />
-            <span>Click Next to apply this organization to your bookmarks.</span>
+            <span>{t('step2.footer_hint')}</span>
           </div>
         </div>
       )}

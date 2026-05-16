@@ -1,7 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FolderOpen, Layers, SearchX } from 'lucide-react';
-import { EmptyState, EMPTY_STATE_PRESETS, createEmptyState } from './EmptyState';
+import i18n from 'i18next';
+import { EmptyState } from './EmptyState';
+import { getEmptyPresets, createEmptyState } from '@/states/presets';
+
+const t = i18n.getFixedT('en', 'common');
 
 describe('EmptyState', () => {
   it('renders title and description', () => {
@@ -41,38 +45,35 @@ describe('EmptyState', () => {
   });
 
   it('uses preset configs correctly', () => {
-    expect(EMPTY_STATE_PRESETS.noBookmarks.title).toBe('No bookmarks yet');
-    expect(EMPTY_STATE_PRESETS.noBookmarks.description).toBe(
-      'Start adding bookmarks to organize them'
-    );
-    expect(EMPTY_STATE_PRESETS.noBookmarks.icon).toBeTruthy();
+    const presets = getEmptyPresets(t);
+    expect(presets.noBookmarks.title).toBe('No bookmarks yet');
+    expect(presets.noBookmarks.description).toBe('Start adding bookmarks to organize them');
+    expect(presets.noBookmarks.icon).toBeTruthy();
 
-    expect(EMPTY_STATE_PRESETS.noResults.title).toBe('No results found');
-    expect(EMPTY_STATE_PRESETS.noResults.icon).toBeTruthy();
+    expect(presets.noResults.title).toBe('No results found');
+    expect(presets.noResults.icon).toBeTruthy();
 
-    expect(EMPTY_STATE_PRESETS.emptyFolder.title).toBe('This folder is empty');
-    expect(EMPTY_STATE_PRESETS.emptyFolder.description).toBe('Drag bookmarks here or add new ones');
+    expect(presets.emptyFolder.title).toBe('This folder is empty');
+    expect(presets.emptyFolder.description).toBe('Drag bookmarks here or add new ones');
 
-    expect(EMPTY_STATE_PRESETS.noCategories.title).toBe('No categories defined');
-    expect(EMPTY_STATE_PRESETS.noCategories.description).toBe(
-      'Create your first category to get started'
-    );
+    expect(presets.noCategories.title).toBe('No categories defined');
+    expect(presets.noCategories.description).toBe('Create your first category to get started');
   });
 
   it('merge behavior (preset + custom props)', () => {
-    const state = createEmptyState('noBookmarks', {
+    const state = createEmptyState(t, 'noBookmarks', {
       description: 'Custom description',
     });
     expect(state.title).toBe('No bookmarks yet');
     expect(state.description).toBe('Custom description');
     expect(state.icon).toBeTruthy();
 
-    const stateWithCustomIcon = createEmptyState('noResults', {
+    const stateWithCustomIcon = createEmptyState(t, 'noResults', {
       icon: <Layers data-testid="custom" />,
     });
     expect(stateWithCustomIcon.icon).toBeTruthy();
 
-    const stateWithAction = createEmptyState('emptyFolder', {
+    const stateWithAction = createEmptyState(t, 'emptyFolder', {
       action: { label: 'Add Bookmark', onClick: vi.fn() },
     });
     expect(stateWithAction.action).toBeTruthy();

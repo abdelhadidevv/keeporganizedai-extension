@@ -18,7 +18,7 @@ describe('Search', () => {
 
   it('renders with default placeholder', () => {
     render(<Search />);
-    expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search bookmarks... (/)')).toBeInTheDocument();
   });
 
   it('renders with search icon', () => {

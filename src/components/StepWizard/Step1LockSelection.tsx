@@ -1,4 +1,5 @@
 /* eslint-disable operator-linebreak */
+import { useTranslation } from 'react-i18next';
 import { useWizardStore } from '@/store';
 import { ChevronDown, ChevronRight, Folder, Loader2, Lock } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -118,13 +119,14 @@ function LockableFolderItem({
   onLockChange,
   currentLockState,
 }: LockableFolderItemProps) {
+  const { t } = useTranslation('wizard');
   return (
     <div
       className={[
         'flex items-center gap-3 p-3 transition-colors duration-100',
         !isLast && 'border-b border-muted/10',
-        isHardLocked && 'bg-[var(--color-warning)]/10',
-        !isHardLocked && isLocked && 'bg-[var(--color-warning)]/5',
+        isHardLocked && 'bg-warning/10',
+        !isHardLocked && isLocked && 'bg-warning/5',
         !isHardLocked && !isLocked && 'hover:bg-muted/10',
       ].join(' ')}
     >
@@ -132,31 +134,32 @@ function LockableFolderItem({
         <button
           type="button"
           onClick={() => onToggleExpand(folder.id)}
-          className="w-[18px] h-[18px] flex items-center justify-center shrink-0 p-0 border-none bg-transparent cursor-pointer text-muted hover:text-foreground"
+          className="w-4.5 h-4.5 flex items-center justify-center shrink-0 p-0 border-none bg-transparent cursor-pointer text-muted hover:text-foreground"
         >
-          {isExpanded ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+          {isExpanded ? (
+            <ChevronDown className="w-3 h-3" />
+          ) : (
+            <ChevronRight className="w-3 h-3 rtl:scale-x-[-1]" />
+          )}
         </button>
       )}
 
       <div
         className={[
           'w-8 h-8 flex items-center justify-center rounded-lg border shrink-0 transition-all duration-150',
-          isLocked
-            ? 'bg-[var(--color-warning)]/20 border-[var(--color-warning)]/30'
-            : 'bg-muted/10 border-muted/20',
+          isLocked ? 'bg-warning/20 border-warning/30' : 'bg-muted/10 border-muted/20',
         ].join(' ')}
       >
         <Folder
-          className={`w-[15px] h-[15px] ${isLocked ? 'text-[var(--color-warning)]' : 'text-muted-foreground'}`}
+          className={`w-3.75 h-3.75 ${isLocked ? 'text-warning' : 'text-muted-foreground'}`}
         />
       </div>
       <div className="flex flex-col flex-1 min-w-0">
         <span className="text-sm font-medium text-foreground truncate mb-0.5">{folder.title}</span>
         <span className="text-[12px] text-muted-foreground">
-          {folder.bookmarkCount} bookmark
-          {folder.bookmarkCount !== 1 ? 's' : ''}
+          {t('step1.bookmark_count_other', { count: folder.bookmarkCount })}
           {folder.childCount > 0 &&
-            ` • ${folder.childCount} subfolder${folder.childCount !== 1 ? 's' : ''}`}
+            ` • ${t('step1.subfolder_count_one', { count: folder.childCount })}`}
         </span>
       </div>
       <div className="shrink-0">
@@ -171,6 +174,7 @@ function LockableFolderItem({
 }
 
 export function Step1LockSelection() {
+  const { t } = useTranslation('wizard');
   const lockStates = useWizardStore((s) => s.lockStates);
   const setLockStates = useWizardStore((s) => s.setLockStates);
   const [folderTree, setFolderTree] = useState<FolderNode[]>([]);
@@ -221,8 +225,8 @@ export function Step1LockSelection() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-12">
-        <Loader2 className="w-5 h-5 animate-spin text-[var(--color-primary)]" />
-        <p className="text-sm text-muted-foreground">Loading folders…</p>
+        <Loader2 className="w-5 h-5 animate-spin text-primary" />
+        <p className="text-sm text-muted-foreground">{t('step1.loading_folders')}</p>
       </div>
     );
   }
@@ -230,11 +234,11 @@ export function Step1LockSelection() {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-12">
-        <p className="text-sm text-[var(--color-error)]">
-          Error:
+        <p className="text-sm text-error">
+          {t('step1.error_prefix')}
           {error}
         </p>
-        <Button onClick={loadFolders}>Retry</Button>
+        <Button onClick={loadFolders}>{t('step1.retry')}</Button>
       </div>
     );
   }
@@ -244,22 +248,18 @@ export function Step1LockSelection() {
       <div className="flex items-start justify-between gap-4 pb-1">
         <div>
           <h3 className="text-lg font-semibold tracking-tight text-foreground mb-1">
-            Lock folders to protect
+            {t('step1.heading')}
           </h3>
-          <p className="text-[13px] leading-relaxed text-muted-foreground max-w-[280px]">
-            Lock folders to protect them from AI reorganization. All other folders will be
-            organized.
+          <p className="text-[13px] leading-relaxed text-muted-foreground max-w-70">
+            {t('step1.description')}
           </p>
         </div>
 
-        <div className="flex items-center gap-1.5 shrink-0 mt-0.5 bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 rounded-full px-3 py-1">
-          <Lock className="w-3 h-3 text-[var(--color-primary)]" />
-          <span className="font-mono text-[13px] font-medium text-[var(--color-primary)]">
-            {lockedCount}
-          </span>
-          <span className="text-[12px] font-medium text-[var(--color-primary)]">
-            {lockedCount !== 1 ? 'folders' : 'folder'}
-            locked
+        <div className="flex items-center gap-1.5 shrink-0 mt-0.5 bg-primary/10 border border-primary/20 rounded-full px-3 py-1">
+          <Lock className="w-3 h-3 text-primary" />
+          <span className="font-mono text-[13px] font-medium text-primary">{lockedCount}</span>
+          <span className="text-[12px] font-medium text-primary">
+            {t('step1.folder_locked_other')}
           </span>
         </div>
       </div>
@@ -290,7 +290,7 @@ export function Step1LockSelection() {
         {visibleFolders.length === 0 && (
           <div className="flex flex-col items-center justify-center gap-3 p-12 text-muted-foreground">
             <Folder className="w-10 h-10 opacity-40" />
-            <p className="text-sm">No folders found</p>
+            <p className="text-sm">{t('step1.no_folders')}</p>
           </div>
         )}
       </div>

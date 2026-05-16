@@ -1,7 +1,11 @@
 import { XCircle } from 'lucide-react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { ErrorState, createErrorState } from './ErrorState';
+import i18n from 'i18next';
+import { ErrorState } from './ErrorState';
+import { createErrorState } from '@/states/presets';
+
+const t = i18n.getFixedT('en', 'common');
 
 describe('ErrorState', () => {
   it('renders message', () => {
@@ -44,14 +48,14 @@ describe('ErrorState', () => {
   });
 
   it('uses preset configs correctly', () => {
-    const errorProps = createErrorState('loadBookmarks');
+    const errorProps = createErrorState(t, 'loadBookmarks');
     expect(errorProps.title).toBe('Failed to load bookmarks');
     expect(errorProps.message).toBe('Could not retrieve your bookmarks. Please try again.');
   });
 
   it('merge behavior (preset + custom props)', () => {
     const retryAction = vi.fn();
-    const errorProps = createErrorState('networkError', { retryAction });
+    const errorProps = createErrorState(t, 'networkError', { retryAction });
     expect(errorProps.title).toBe('Network error');
     expect(errorProps.message).toBe('Please check your internet connection and try again.');
     expect(errorProps.retryAction).toBe(retryAction);

@@ -1,0 +1,208 @@
+{
+  "cancel": "Abbrechen",
+  "delete": "Löschen",
+  "loading": "Laden...",
+  "merge": "Zusammenführen",
+  "replace": "Ersetzen",
+  "restore": "Wiederherstellen",
+  "modal": {
+    "close_aria_label": "Schließen"
+  },
+  "spinner": {
+    "aria_label": "Laden"
+  },
+  "loader": {
+    "default_label": "Laden..."
+  },
+  "select": {
+    "placeholder": "Option auswählen"
+  },
+  "search": {
+    "placeholder": "Lesezeichen suchen... (/)",
+    "aria_label": "Suchen",
+    "clear_aria_label": "Suche löschen",
+    "clear_title": "Suche löschen"
+  },
+  "empty_state": {
+    "no_bookmarks": {
+      "title": "Noch keine Lesezeichen",
+      "description": "Beginnen Sie damit, Lesezeichen hinzuzufügen und zu organisieren"
+    },
+    "no_results": {
+      "title": "Keine Ergebnisse gefunden",
+      "description": "Versuchen Sie, Ihre Suche oder Filter anzupassen"
+    },
+    "empty_folder": {
+      "title": "Dieser Ordner ist leer",
+      "description": "Ziehen Sie Lesezeichen hierher oder fügen Sie neue hinzu"
+    },
+    "no_categories": {
+      "title": "Keine Kategorien definiert",
+      "description": "Erstellen Sie Ihre erste Kategorie, um zu beginnen"
+    }
+  },
+  "error_state": {
+    "default_title": "Etwas ist schiefgelaufen",
+    "retry_button": "Erneut versuchen",
+    "load_bookmarks": {
+      "title": "Lesezeichen konnten nicht geladen werden",
+      "message": "Ihre Lesezeichen konnten nicht abgerufen werden. Bitte versuchen Sie es erneut."
+    },
+    "save_failed": {
+      "title": "Änderungen konnten nicht gespeichert werden",
+      "message": "Ihre Änderungen konnten nicht gespeichert werden. Bitte versuchen Sie es erneut."
+    },
+    "network_error": {
+      "title": "Netzwerkfehler",
+      "message": "Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
+    },
+    "ai_error": {
+      "title": "KI-Verarbeitung fehlgeschlagen",
+      "message": "Der KI-Dienst ist auf einen Fehler gestoßen. Bitte versuchen Sie es erneut."
+    },
+    "missing_api_key": {
+      "title": "API-Schlüssel erforderlich",
+      "message": "Kein API-Schlüssel für {{provider}} konfiguriert. Bitte fügen Sie Ihren API-Schlüssel in den Einstellungen hinzu."
+    }
+  },
+  "loading_state": {
+    "aria_label": "Laden",
+    "analyzing": "Ihre Lesezeichen werden analysiert...",
+    "categorizing": "Lesezeichen werden kategorisiert...",
+    "organizing": "Ordner werden organisiert...",
+    "finalizing": "Abschließen...",
+    "loading_bookmarks": "Lesezeichen werden geladen...",
+    "processing": "Verarbeitung..."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "back_aria_label": "Zurück zum Hauptbildschirm",
+    "footer_version": "KeepOrganizedAI v{{version}}",
+    "ai_provider": {
+      "heading": "KI-Anbieter",
+      "provider_label": "Anbieter",
+      "model_label": "Modell",
+      "api_key_label": "API-Schlüssel",
+      "api_key_required": "API-Schlüssel für KI-Funktionen erforderlich",
+      "refresh": "Aktualisieren",
+      "no_models_found": "Keine Modelle gefunden. Stellen Sie sicher, dass Ollama ausgeführt wird.",
+      "ollama_endpoint": "Ollama-Endpunkt",
+      "ollama_endpoint_placeholder": "http://localhost:11434",
+      "providers": {
+        "gemini": "Google Gemini",
+        "openai": "OpenAI",
+        "claude": "Anthropic Claude",
+        "ollama": "Ollama (Lokal)"
+      },
+      "api_key_placeholder": "Geben Sie Ihren {{provider}} API-Schlüssel ein",
+      "no_key_needed": "Kein API-Schlüssel erforderlich"
+    },
+    "language": {
+      "heading": "Sprache",
+      "label": "Sprache"
+    },
+    "theme": {
+      "heading": "Darstellung",
+      "label": "Thema",
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System",
+      "aria_label": "Aktuelles Thema: {{theme}}. Klicken zum Ändern.",
+      "current": "Aktuell: {{theme}}"
+    },
+    "import_export": {
+      "heading": "Import & Export",
+      "export_bookmarks": "Lesezeichen exportieren",
+      "export_html": "Als HTML exportieren",
+      "export_json": "Als JSON exportieren",
+      "import_bookmarks": "Lesezeichen importieren",
+      "choose_file": "Datei auswählen",
+      "supported_formats": "Unterstützt HTML- (Chrome-Lesezeichen) und JSON-Dateien",
+      "modal_title": "Vorschau des Lesezeichenimports",
+      "bookmarks_label": "Lesezeichen",
+      "folders_label": "Ordner",
+      "import_mode": "Importmodus",
+      "replace_all": "Alles ersetzen",
+      "replace_warning": "Dadurch werden alle aktuellen Lesezeichen gelöscht und durch die importierte Datei ersetzt. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "toast_export_failed": "Lesezeichen konnten nicht exportiert werden",
+      "toast_import_failed": "Lesezeichen konnten nicht importiert werden",
+      "toast_import_success_merge": "Lesezeichen erfolgreich zusammengeführt",
+      "toast_import_success_replace": "Lesezeichen erfolgreich ersetzt",
+      "toast_parse_failed": "Datei konnte nicht verarbeitet werden"
+    }
+  },
+  "main_screen": {
+    "expand_all": "Alle erweitern",
+    "collapse_all": "Alle einklappen",
+    "refresh": "Lesezeichen aktualisieren (R)",
+    "settings_button": "Einstellungen",
+    "footer_version": "KeepOrganizedAI v{{version}}"
+  },
+  "header": {
+    "auto_organize": "Automatisch organisieren"
+  },
+  "folder_list": {
+    "loading_title": "Lesezeichen werden geladen...",
+    "error_title": "Fehler beim Laden der Lesezeichen",
+    "try_again": "Erneut versuchen",
+    "delete_bookmark_title": "Lesezeichen löschen",
+    "delete_bookmark_message": "Möchten Sie \"{{title}}\" wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "delete_folder_title": "Ordner löschen",
+    "delete_folder_message": "Möchten Sie \"{{title}}\" und seinen gesamten Inhalt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "toast_bookmark_deleted": "Lesezeichen gelöscht",
+    "toast_bookmark_restored": "Lesezeichen wiederhergestellt",
+    "toast_failed_delete": "Lesezeichen konnte nicht gelöscht werden",
+    "toast_failed_restore": "Lesezeichen konnte nicht wiederhergestellt werden",
+    "toast_folder_deleted": "Ordner \"{{title}}\" gelöscht",
+    "toast_failed_delete_folder": "Löschen fehlgeschlagen",
+    "toast_failed_move": "Element konnte nicht verschoben werden: {{message}}",
+    "toast_folder_exported": "\"{{title}}\" als HTML exportiert",
+    "toast_failed_export": "Ordner konnte nicht exportiert werden",
+    "toast_failed_pin": "Anheften an die Lesezeichenleiste fehlgeschlagen",
+    "undo": "Rückgängig",
+    "delete_this_bookmark": "dieses Lesezeichen",
+    "delete_this_item": "dieses Element"
+  },
+  "lock_toggle": {
+    "none": "Keine",
+    "none_description": "KI darf diesen Ordner neu organisieren",
+    "hard_lock": "Dauerhafte Sperre",
+    "hard_lock_description": "Permanent — kann von der KI nicht rückgängig gemacht werden",
+    "smart_lock_applied": "Intelligente Sperre angewendet",
+    "failed_to_update": "Sperrstatus konnte nicht aktualisiert werden",
+    "active": "Aktiv",
+    "confirm_title": "Dauerhafte Sperre bestätigen",
+    "confirm_message": "Die dauerhafte Sperre ist permanent und kann von der KI nicht rückgängig gemacht werden. Der Ordner wird vor allen automatisierten Änderungen geschützt.",
+    "confirm_button": "Dauerhafte Sperre bestätigen"
+  },
+  "folder_context_menu": {
+    "share_with_friend": "Mit Freund teilen",
+    "share_description": "Ordner als HTML-Datei exportieren"
+  },
+  "trash_zone": {
+    "delete_title": "\"{{title}}\" löschen?",
+    "drop_hint": "Hier ablegen zum Löschen",
+    "type_folder": "Ordner",
+    "type_bookmark": "Lesezeichen"
+  },
+  "bookmark_bar_zone": {
+    "pin_title": "\"{{title}}\" an die Lesezeichenleiste anheften",
+    "drop_hint": "Hier ablegen zum Anheften an die Lesezeichenleiste",
+    "type_folder": "Ordner",
+    "type_bookmark": "Lesezeichen"
+  },
+  "bookmark_item": {
+    "untitled": "Ohne Titel",
+    "copied": "Kopiert!",
+    "copy_url": "URL kopieren",
+    "delete": "Lesezeichen löschen"
+  },
+  "folder_tree": {
+    "no_folders": "Keine Ordner gefunden"
+  },
+  "dnd_provider": {
+    "cannot_move_folder": "Ein Ordner kann nicht in einen anderen Ordner verschoben werden",
+    "failed_reorder": "Neuordnung fehlgeschlagen",
+    "failed_move": "Element konnte nicht verschoben werden"
+  }
+}

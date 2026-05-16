@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'motion/react';
 import { MainScreen } from '@/components/MainScreen';
 import { SettingsScreen } from '@/components/SettingsScreen/SettingsScreen';
 import { StepWizard } from '@/components/StepWizard/StepWizard';
 import { Toaster } from '@/components/ui';
+import { RTL_LANGS } from '@/i18n/config';
 
 type Screen = 'main' | 'settings' | 'wizard';
 
 function App() {
+  const { i18n } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<Screen>('main');
+
+  const handleLanguageChange = useCallback((lng: string) => {
+    const newDir = RTL_LANGS.includes(lng) ? 'rtl' : 'ltr';
+    document.documentElement.lang = lng;
+    document.documentElement.dir = newDir;
+  }, []);
+
+  useEffect(() => {
+    handleLanguageChange(i18n.language);
+  }, [i18n.language, handleLanguageChange]);
 
   const handleAutoOrganizeClick = () => {
     setCurrentScreen('wizard');

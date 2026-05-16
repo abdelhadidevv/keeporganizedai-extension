@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Download, Upload, FileText, FolderOpen, AlertCircle, ArrowLeftRight } from 'lucide-react';
 import {
   Button,
@@ -23,6 +24,7 @@ interface ImportPreview {
 }
 
 export function ImportExportSection() {
+  const { t } = useTranslation('common');
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [preview, setPreview] = useState<ImportPreview | null>(null);
@@ -35,7 +37,7 @@ export function ImportExportSection() {
       await backupService.exportAsDownload();
     } catch (error) {
       console.error('Export failed:', error);
-      toast.error('Failed to export bookmarks');
+      toast.error(t('settings.import_export.toast_export_failed'));
     } finally {
       setIsExporting(false);
     }
@@ -47,7 +49,7 @@ export function ImportExportSection() {
       await backupService.exportToJson();
     } catch (error) {
       console.error('Export failed:', error);
-      toast.error('Failed to export bookmarks');
+      toast.error(t('settings.import_export.toast_export_failed'));
     } finally {
       setIsExporting(false);
     }
@@ -70,7 +72,9 @@ export function ImportExportSection() {
       });
     } catch (error) {
       console.error('Import parsing failed:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to parse file');
+      toast.error(
+        error instanceof Error ? error.message : t('settings.import_export.toast_parse_failed')
+      );
     } finally {
       setIsImporting(false);
       if (fileInputRef.current) {
@@ -84,11 +88,17 @@ export function ImportExportSection() {
 
     try {
       await backupService.importBookmarks(preview.data, importMode);
-      toast.success(`Bookmarks ${importMode === 'merge' ? 'merged' : 'replaced'} successfully`);
+      toast.success(
+        importMode === 'merge'
+          ? t('settings.import_export.toast_import_success_merge')
+          : t('settings.import_export.toast_import_success_replace')
+      );
       setPreview(null);
     } catch (error) {
       console.error('Import failed:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to import bookmarks');
+      toast.error(
+        error instanceof Error ? error.message : t('settings.import_export.toast_import_failed')
+      );
     }
   };
 
@@ -99,13 +109,15 @@ export function ImportExportSection() {
   return (
     <section className="space-y-3">
       <h2 className="text-sm font-medium text-foreground uppercase tracking-wider">
-        Import & Export
+        {t('settings.import_export.heading')}
       </h2>
 
       <div className="rounded-lg border border-muted/20 bg-card p-4 space-y-4">
         <div className="space-y-3">
-          <span className="block text-xs text-muted-foreground">Export Bookmarks</span>
-          <div className="flex gap-2">
+          <span className="block text-xs text-muted-foreground">
+            {t('settings.import_export.export_bookmarks')}
+          </span>
+          <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
               size="sm"
@@ -113,7 +125,7 @@ export function ImportExportSection() {
               loading={isExporting}
               leftIcon={<Download className="w-4 h-4" />}
             >
-              Export as HTML
+              {t('settings.import_export.export_html')}
             </Button>
             <Button
               variant="outline"
@@ -122,7 +134,7 @@ export function ImportExportSection() {
               loading={isExporting}
               leftIcon={<Download className="w-4 h-4" />}
             >
-              Export as JSON
+              {t('settings.import_export.export_json')}
             </Button>
           </div>
         </div>
@@ -130,7 +142,9 @@ export function ImportExportSection() {
         <div className="border-t border-muted/20" />
 
         <div className="space-y-3">
-          <span className="block text-xs text-muted-foreground">Import Bookmarks</span>
+          <span className="block text-xs text-muted-foreground">
+            {t('settings.import_export.import_bookmarks')}
+          </span>
           <input
             ref={fileInputRef}
             type="file"
@@ -145,10 +159,10 @@ export function ImportExportSection() {
             loading={isImporting}
             leftIcon={<Upload className="w-4 h-4" />}
           >
-            Choose File
+            {t('settings.import_export.choose_file')}
           </Button>
           <p className="text-xs text-muted-foreground">
-            Supports HTML (Chrome bookmarks) and JSON files
+            {t('settings.import_export.supported_formats')}
           </p>
         </div>
       </div>
@@ -156,7 +170,7 @@ export function ImportExportSection() {
       <Modal open={!!preview} onOpenChange={(open) => !open && handleCancelPreview()}>
         <ModalContent className="max-w-[480px]">
           <ModalHeader>
-            <ModalTitle>Import Bookmarks Preview</ModalTitle>
+            <ModalTitle>{t('settings.import_export.modal_title')}</ModalTitle>
           </ModalHeader>
           <ModalBody>
             <div className="space-y-4">
@@ -170,20 +184,26 @@ export function ImportExportSection() {
                   <FileText className="w-5 h-5 text-[var(--color-primary)]" />
                   <div>
                     <div className="text-lg font-semibold">{preview?.bookmarkCount ?? 0}</div>
-                    <div className="text-xs text-muted-foreground">Bookmarks</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t('settings.import_export.bookmarks_label')}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/10">
                   <FolderOpen className="w-5 h-5 text-[var(--color-primary)]" />
                   <div>
                     <div className="text-lg font-semibold">{preview?.folderCount ?? 0}</div>
-                    <div className="text-xs text-muted-foreground">Folders</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t('settings.import_export.folders_label')}
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <span className="block text-sm font-medium">Import Mode</span>
+                <span className="block text-sm font-medium">
+                  {t('settings.import_export.import_mode')}
+                </span>
                 <div className="flex gap-2">
                   <button
                     type="button"
@@ -195,7 +215,7 @@ export function ImportExportSection() {
                         : 'border-muted/30 hover:bg-muted/10'
                     )}
                   >
-                    Merge
+                    {t('merge')}
                   </button>
                   <button
                     type="button"
@@ -207,7 +227,7 @@ export function ImportExportSection() {
                         : 'border-muted/30 hover:bg-muted/10'
                     )}
                   >
-                    Replace All
+                    {t('settings.import_export.replace_all')}
                   </button>
                 </div>
               </div>
@@ -215,24 +235,21 @@ export function ImportExportSection() {
               {importMode === 'replace' && (
                 <div className="flex items-start gap-2 p-3 rounded-lg bg-[var(--color-error)]/10 text-[var(--color-error)]">
                   <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-                  <p className="text-xs">
-                    This will delete all your current bookmarks and replace them with the imported
-                    file. This action cannot be undone.
-                  </p>
+                  <p className="text-xs">{t('settings.import_export.replace_warning')}</p>
                 </div>
               )}
             </div>
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" onClick={handleCancelPreview}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               variant={importMode === 'replace' ? 'destructive' : 'default'}
               onClick={handleImportConfirm}
               leftIcon={<ArrowLeftRight className="w-4 h-4" />}
             >
-              {importMode === 'merge' ? 'Merge' : 'Replace'}
+              {importMode === 'merge' ? t('merge') : t('replace')}
             </Button>
           </ModalFooter>
         </ModalContent>

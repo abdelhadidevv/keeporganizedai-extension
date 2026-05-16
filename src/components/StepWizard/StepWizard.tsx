@@ -1,7 +1,9 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/Button/Button';
+import { RTL_LANGS } from '@/i18n/config';
 import {
   Modal,
   ModalContent,
@@ -19,15 +21,9 @@ import { Step3ApplyOrganization } from './Step3ApplyOrganization';
 
 const TOTAL_STEPS = 3;
 
-const STEP_TITLES: Record<number, string> = {
-  1: 'Lock Folders',
-  2: 'Generate Categories',
-  3: 'Apply Organization',
-};
-
-const stepVariants = {
+const stepVariants = (rtlMultiplier: number) => ({
   enter: (direction: number) => ({
-    x: direction > 0 ? 50 : -50,
+    x: (direction > 0 ? 50 : -50) * rtlMultiplier,
     opacity: 0,
   }),
   center: {
@@ -35,10 +31,10 @@ const stepVariants = {
     opacity: 1,
   },
   exit: (direction: number) => ({
-    x: direction < 0 ? 50 : -50,
+    x: (direction < 0 ? 50 : -50) * rtlMultiplier,
     opacity: 0,
   }),
-};
+});
 
 interface StepWizardProps {
   onComplete: () => void;
@@ -46,6 +42,9 @@ interface StepWizardProps {
 }
 
 export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
+  const { t, i18n } = useTranslation('wizard');
+  const rtlMultiplier = RTL_LANGS.includes(i18n.language) ? -1 : 1;
+  const variants = useMemo(() => stepVariants(rtlMultiplier), [rtlMultiplier]);
   const currentStep = useWizardStore((s) => s.currentStep);
   const applyPhase = useWizardStore((s) => s.applyPhase);
   const goNext = useWizardStore((s) => s.goNext);
@@ -119,15 +118,15 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
       <div className="shrink-0 mb-6">
         <div className="flex items-center justify-between mb-4">
           <span className="text-[11px] font-medium text-muted-foreground uppercase">
-            Step {currentStep} of {TOTAL_STEPS}
+            {t('step_indicator', { current: currentStep, total: TOTAL_STEPS })}
           </span>
           <span className="text-[12px] font-bold tracking-tight text-foreground">
-            {STEP_TITLES[currentStep]}
+            {t(`step_titles.${currentStep}`)}
           </span>
         </div>
         <div className="h-[3px] bg-muted/20 rounded-full">
           <div
-            className="h-full bg-[var(--color-primary)] rounded-full transition-[width] duration-500 ease-out"
+            className="h-full bg-primary rounded-full transition-[width] duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -138,7 +137,7 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
           <motion.div
             key={currentStep}
             custom={direction}
-            variants={stepVariants}
+            variants={variants}
             initial="enter"
             animate="center"
             exit="exit"
@@ -160,13 +159,13 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
           disabled={applyPhase === 'success'}
           className="text-sm font-medium px-5 py-2 rounded-[9px] border border-muted/20 bg-transparent text-muted hover:bg-muted/10 hover:text-foreground hover:border-muted/30 transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:border-muted/20"
         >
-          Cancel
+          {t('cancel')}
         </button>
 
         <div className="flex gap-2.5">
           {currentStep > 1 && !isLastStep && (
             <Button variant="outline" onClick={handleGoBack}>
-              Back
+              {t('back')}
             </Button>
           )}
           {!isLastStep && (
@@ -181,7 +180,7 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
                   : 'bg-muted/20 border-muted/20 text-muted/50 cursor-not-allowed opacity-60',
               ].join(' ')}
             >
-              Next
+              {t('next')}
             </button>
           )}
         </div>
@@ -195,19 +194,16 @@ export function StepWizard({ onComplete, onCancel }: StepWizardProps) {
           onFocusOutside={(e) => e.preventDefault()}
         >
           <ModalHeader>
-            <ModalTitle>Cancel Organization?</ModalTitle>
-            <ModalDescription className="mt-2">
-              Are you sure you want to cancel? Your progress will be lost and you will need to start
-              over.
-            </ModalDescription>
+            <ModalTitle>{t('cancel_modal_title')}</ModalTitle>
+            <ModalDescription className="mt-2">{t('cancel_modal_description')}</ModalDescription>
           </ModalHeader>
           <ModalBody />
           <ModalFooter>
             <Button variant="outline" onClick={handleCloseCancelModal}>
-              Continue
+              {t('cancel_modal_continue')}
             </Button>
             <Button variant="destructive" onClick={handleConfirmCancel}>
-              Cancel &amp; Exit
+              {t('cancel_modal_exit')}
             </Button>
           </ModalFooter>
         </ModalContent>

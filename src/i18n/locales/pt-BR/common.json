@@ -1,0 +1,208 @@
+{
+  "cancel": "Cancelar",
+  "delete": "Excluir",
+  "loading": "Carregando...",
+  "merge": "Mesclar",
+  "replace": "Substituir",
+  "restore": "Restaurar",
+  "modal": {
+    "close_aria_label": "Fechar"
+  },
+  "spinner": {
+    "aria_label": "Carregando"
+  },
+  "loader": {
+    "default_label": "Carregando..."
+  },
+  "select": {
+    "placeholder": "Selecione uma opção"
+  },
+  "search": {
+    "placeholder": "Pesquisar...",
+    "aria_label": "Pesquisar",
+    "clear_aria_label": "Limpar pesquisa",
+    "clear_title": "Limpar pesquisa"
+  },
+  "empty_state": {
+    "no_bookmarks": {
+      "title": "Nenhum favorito ainda",
+      "description": "Adicione favoritos para organizá-los"
+    },
+    "no_results": {
+      "title": "Nenhum resultado encontrado",
+      "description": "Tente ajustar sua pesquisa ou filtros"
+    },
+    "empty_folder": {
+      "title": "Esta pasta está vazia",
+      "description": "Arraste favoritos para cá ou adicione novos"
+    },
+    "no_categories": {
+      "title": "Nenhuma categoria definida",
+      "description": "Crie sua primeira categoria para começar"
+    }
+  },
+  "error_state": {
+    "default_title": "Algo deu errado",
+    "retry_button": "Tentar novamente",
+    "load_bookmarks": {
+      "title": "Falha ao carregar favoritos",
+      "message": "Não foi possível recuperar seus favoritos. Tente novamente."
+    },
+    "save_failed": {
+      "title": "Falha ao salvar alterações",
+      "message": "Suas alterações não puderam ser salvas. Tente novamente."
+    },
+    "network_error": {
+      "title": "Erro de rede",
+      "message": "Verifique sua conexão com a internet e tente novamente."
+    },
+    "ai_error": {
+      "title": "Falha no processamento de IA",
+      "message": "O serviço de IA encontrou um erro. Tente novamente."
+    },
+    "missing_api_key": {
+      "title": "Chave de API necessária",
+      "message": "Nenhuma chave de API configurada para {{provider}}. Adicione sua chave de API nas Configurações."
+    }
+  },
+  "loading_state": {
+    "aria_label": "Carregando",
+    "analyzing": "Analisando seus favoritos...",
+    "categorizing": "Categorizando favoritos...",
+    "organizing": "Organizando pastas...",
+    "finalizing": "Finalizando...",
+    "loading_bookmarks": "Carregando favoritos...",
+    "processing": "Processando..."
+  },
+  "settings": {
+    "title": "Configurações",
+    "back_aria_label": "Voltar para tela principal",
+    "footer_version": "KeepOrganizedAI v{{version}}",
+    "ai_provider": {
+      "heading": "Provedor de IA",
+      "provider_label": "Provedor",
+      "model_label": "Modelo",
+      "api_key_label": "Chave de API",
+      "api_key_required": "Chave de API necessária para recursos de IA",
+      "refresh": "Atualizar",
+      "no_models_found": "Nenhum modelo encontrado. Certifique-se de que o Ollama está em execução.",
+      "ollama_endpoint": "Endpoint do Ollama",
+      "ollama_endpoint_placeholder": "http://localhost:11434",
+      "providers": {
+        "gemini": "Google Gemini",
+        "openai": "OpenAI",
+        "claude": "Anthropic Claude",
+        "ollama": "Ollama (Local)"
+      },
+      "api_key_placeholder": "Insira sua chave de API do {{provider}}",
+      "no_key_needed": "Nenhuma chave de API necessária"
+    },
+    "language": {
+      "heading": "Idioma",
+      "label": "Idioma"
+    },
+    "theme": {
+      "heading": "Aparência",
+      "label": "Tema",
+      "light": "Claro",
+      "dark": "Escuro",
+      "system": "Sistema",
+      "aria_label": "Tema atual: {{theme}}. Clique para alterar.",
+      "current": "Atual: {{theme}}"
+    },
+    "import_export": {
+      "heading": "Importar && Exportar",
+      "export_bookmarks": "Exportar Favoritos",
+      "export_html": "Exportar como HTML",
+      "export_json": "Exportar como JSON",
+      "import_bookmarks": "Importar Favoritos",
+      "choose_file": "Escolher Arquivo",
+      "supported_formats": "Suporta arquivos HTML (favoritos do Chrome) e JSON",
+      "modal_title": "Visualização de Importação",
+      "bookmarks_label": "Favoritos",
+      "folders_label": "Pastas",
+      "import_mode": "Modo de Importação",
+      "replace_all": "Substituir Tudo",
+      "replace_warning": "Isso excluirá todos os seus favoritos atuais e os substituirá pelo arquivo importado. Esta ação não pode ser desfeita.",
+      "toast_export_failed": "Falha ao exportar favoritos",
+      "toast_import_failed": "Falha ao importar favoritos",
+      "toast_import_success_merge": "Favoritos mesclados com sucesso",
+      "toast_import_success_replace": "Favoritos substituídos com sucesso",
+      "toast_parse_failed": "Falha ao analisar arquivo"
+    }
+  },
+  "main_screen": {
+    "expand_all": "Expandir tudo",
+    "collapse_all": "Recolher tudo",
+    "refresh": "Atualizar favoritos (R)",
+    "settings_button": "Configurações",
+    "footer_version": "KeepOrganizedAI v{{version}}"
+  },
+  "header": {
+    "auto_organize": "Auto-Organizar"
+  },
+  "folder_list": {
+    "loading_title": "Carregando favoritos...",
+    "error_title": "Erro ao carregar favoritos",
+    "try_again": "Tentar novamente",
+    "delete_bookmark_title": "Excluir Favorito",
+    "delete_bookmark_message": "Tem certeza de que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita.",
+    "delete_folder_title": "Excluir Pasta",
+    "delete_folder_message": "Tem certeza de que deseja excluir \"{{title}}\" e todo o seu conteúdo? Esta ação não pode ser desfeita.",
+    "toast_bookmark_deleted": "Favorito excluído",
+    "toast_bookmark_restored": "Favorito restaurado",
+    "toast_failed_delete": "Falha ao excluir favorito",
+    "toast_failed_restore": "Falha ao restaurar favorito",
+    "toast_folder_deleted": "Pasta \"{{title}}\" excluída",
+    "toast_failed_delete_folder": "Falha ao excluir",
+    "toast_failed_move": "Falha ao mover item: {{message}}",
+    "toast_folder_exported": "\"{{title}}\" exportado como HTML",
+    "toast_failed_export": "Falha ao exportar pasta",
+    "toast_failed_pin": "Falha ao fixar na Barra de Favoritos",
+    "undo": "Desfazer",
+    "delete_this_bookmark": "este favorito",
+    "delete_this_item": "este item"
+  },
+  "lock_toggle": {
+    "none": "Nenhum",
+    "none_description": "Permitir que a IA reorganize esta pasta",
+    "hard_lock": "Bloqueio Fixo",
+    "hard_lock_description": "Permanente — não pode ser desfeito pela IA",
+    "smart_lock_applied": "Bloqueio Inteligente aplicado",
+    "failed_to_update": "Falha ao atualizar estado de bloqueio",
+    "active": "Ativo",
+    "confirm_title": "Confirmar Bloqueio Fixo",
+    "confirm_message": "O Bloqueio Fixo é permanente e não pode ser desfeito pela IA. A pasta será protegida contra todas as alterações automatizadas.",
+    "confirm_button": "Confirmar Bloqueio Fixo"
+  },
+  "folder_context_menu": {
+    "share_with_friend": "Compartilhar com amigo",
+    "share_description": "Exportar pasta como arquivo HTML"
+  },
+  "trash_zone": {
+    "delete_title": "Excluir \"{{title}}\"?",
+    "drop_hint": "Solte aqui para excluir",
+    "type_folder": "Pasta",
+    "type_bookmark": "Favorito"
+  },
+  "bookmark_bar_zone": {
+    "pin_title": "Fixar \"{{title}}\" na Barra de Favoritos",
+    "drop_hint": "Solte aqui para fixar na Barra de Favoritos",
+    "type_folder": "Pasta",
+    "type_bookmark": "Favorito"
+  },
+  "bookmark_item": {
+    "untitled": "Sem título",
+    "copied": "Copiado!",
+    "copy_url": "Copiar URL",
+    "delete": "Excluir favorito"
+  },
+  "folder_tree": {
+    "no_folders": "Nenhuma pasta encontrada"
+  },
+  "dnd_provider": {
+    "cannot_move_folder": "Não é possível mover uma pasta para dentro de outra pasta",
+    "failed_reorder": "Falha ao reordenar",
+    "failed_move": "Falha ao mover item"
+  }
+}

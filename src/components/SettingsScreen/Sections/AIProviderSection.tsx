@@ -2,6 +2,7 @@
 /* eslint-disable object-curly-newline */
 import { Eye, EyeOff, Check, AlertCircle, Key, Server, RefreshCw } from 'lucide-react';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSettings } from '@/hooks/useSettings';
 import { cn } from '@/lib/utils';
 import { Spinner, Select, ThemedIcon } from '@/components/ui';
@@ -13,33 +14,6 @@ import { GEMINI_MODELS, CLAUDE_MODELS, OPENAI_MODELS } from '@/types/ai';
 interface AIProviderSectionProps {
   isLoading: boolean;
 }
-
-const AI_PROVIDERS = [
-  {
-    value: 'gemini' as AIProvider,
-    label: 'Google Gemini',
-    icon: <img src="/gemini.svg" alt="Gemini" className="w-4 h-4" />,
-    placeholder: 'Enter your Gemini API key',
-  },
-  {
-    value: 'openai' as AIProvider,
-    label: 'OpenAI',
-    icon: <ThemedIcon light="/openai-black.svg" dark="/openai-white.svg" alt="OpenAI" />,
-    placeholder: 'Enter your OpenAI API key',
-  },
-  {
-    value: 'claude' as AIProvider,
-    label: 'Anthropic Claude',
-    icon: <img src="/claude.svg" alt="Claude" className="w-4 h-4" />,
-    placeholder: 'Enter your Anthropic API key',
-  },
-  {
-    value: 'ollama' as AIProvider,
-    label: 'Ollama (Local)',
-    icon: <Server className="w-4 h-4" />,
-    placeholder: 'No API key needed',
-  },
-];
 
 function getModelsForProvider(provider: AIProvider) {
   switch (provider) {
@@ -57,8 +31,50 @@ function getModelsForProvider(provider: AIProvider) {
 }
 
 export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
+  const { t } = useTranslation('common');
   const { aiProvider, setAIProvider, apiKeys, modelSelections, setApiKey, setModel, clearApiKey } =
     useSettings();
+
+  const AI_PROVIDERS = [
+    {
+      value: 'gemini' as AIProvider,
+      label: t('settings.ai_provider.providers.gemini'),
+      icon: (
+        <img
+          src="/gemini.svg"
+          alt={t('settings.ai_provider.providers.gemini')}
+          className="w-4 h-4"
+        />
+      ),
+    },
+    {
+      value: 'openai' as AIProvider,
+      label: t('settings.ai_provider.providers.openai'),
+      icon: (
+        <ThemedIcon
+          light="/openai-black.svg"
+          dark="/openai-white.svg"
+          alt={t('settings.ai_provider.providers.openai')}
+        />
+      ),
+    },
+    {
+      value: 'claude' as AIProvider,
+      label: t('settings.ai_provider.providers.claude'),
+      icon: (
+        <img
+          src="/claude.svg"
+          alt={t('settings.ai_provider.providers.claude')}
+          className="w-4 h-4"
+        />
+      ),
+    },
+    {
+      value: 'ollama' as AIProvider,
+      label: t('settings.ai_provider.providers.ollama'),
+      icon: <Server className="w-4 h-4" />,
+    },
+  ];
 
   const [showKey, setShowKey] = useState(false);
   const [keyInput, setKeyInput] = useState('');
@@ -67,7 +83,6 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
   const [isLoadingOllamaModels, setIsLoadingOllamaModels] = useState(false);
   const [ollamaError, setOllamaError] = useState<string | null>(null);
 
-  const selectedProvider = AI_PROVIDERS.find((p) => p.value === aiProvider) ?? AI_PROVIDERS[0];
   const models = getModelsForProvider(aiProvider);
   const currentModel = modelSelections[aiProvider] || '';
 
@@ -148,9 +163,18 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
   const isOllama = aiProvider === 'ollama';
   const hasApiKey = isOllama || !!(apiKeys as Record<string, string | undefined>)[aiProvider];
 
+  const getApiKeyPlaceholder = () => {
+    if (isOllama) return t('settings.ai_provider.no_key_needed');
+    return t('settings.ai_provider.api_key_placeholder', {
+      provider: AI_PROVIDERS.find((p) => p.value === aiProvider)?.label ?? aiProvider,
+    });
+  };
+
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-foreground uppercase tracking-wider">AI Provider</h2>
+      <h2 className="text-sm font-medium text-foreground uppercase tracking-wider">
+        {t('settings.ai_provider.heading')}
+      </h2>
       <div className="rounded-lg border border-muted/20 bg-card p-4">
         {isLoading ? (
           <div className="flex items-center justify-center py-4">
@@ -159,7 +183,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
         ) : (
           <div className="space-y-4">
             <div>
-              <span className="block text-xs text-muted-foreground mb-2">Provider</span>
+              <span className="block text-xs text-muted-foreground mb-2">
+                {t('settings.ai_provider.provider_label')}
+              </span>
               <Select
                 fullWidth
                 value={aiProvider}
@@ -170,7 +196,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
             {models.length > 0 && (
               <div>
-                <span className="block text-xs text-muted-foreground mb-2">Model</span>
+                <span className="block text-xs text-muted-foreground mb-2">
+                  {t('settings.ai_provider.model_label')}
+                </span>
                 <Select
                   fullWidth
                   value={currentModel}
@@ -185,7 +213,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Server className="w-3 h-3" />
-                    <span className="text-xs">Ollama Endpoint</span>
+                    <span className="text-xs">{t('settings.ai_provider.ollama_endpoint')}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -193,9 +221,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       value={endpointInput}
                       onChange={(e) => setEndpointInput(e.target.value)}
                       onBlur={handleEndpointSave}
-                      placeholder="http://localhost:11434"
+                      placeholder={t('settings.ai_provider.ollama_endpoint_placeholder')}
                       className={cn(
-                        'flex-1 px-3 py-1.5 text-sm rounded-md',
+                        'flex-1 min-w-0 px-3 py-1.5 text-sm rounded-md',
                         'bg-background border border-muted/30',
                         'placeholder:text-muted-foreground/50',
                         'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
@@ -206,7 +234,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Model</span>
+                    <span className="text-xs text-muted-foreground">
+                      {t('settings.ai_provider.model_label')}
+                    </span>
                     <button
                       type="button"
                       onClick={() => fetchOllamaModels(false)}
@@ -216,7 +246,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       <RefreshCw
                         className={cn('w-3 h-3', isLoadingOllamaModels && 'animate-spin')}
                       />
-                      Refresh
+                      {t('settings.ai_provider.refresh')}
                     </button>
                   </div>
                   {isLoadingOllamaModels ? (
@@ -238,7 +268,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                   ) : (
                     <div className="flex items-center gap-1 text-xs text-[var(--color-warning)]">
                       <AlertCircle className="w-3 h-3" />
-                      <span>No models found. Make sure Ollama is running.</span>
+                      <span>{t('settings.ai_provider.no_models_found')}</span>
                     </div>
                   )}
                 </div>
@@ -247,7 +277,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Key className="w-3 h-3 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground">API Key</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t('settings.ai_provider.api_key_label')}
+                  </span>
                   {apiKeys[aiProvider] && <Check className="w-3 h-3 text-[var(--color-success)]" />}
                 </div>
                 <div className="flex items-center gap-2">
@@ -256,9 +288,9 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                     value={keyInput}
                     onChange={(e) => setKeyInput(e.target.value)}
                     onBlur={handleKeySave}
-                    placeholder={selectedProvider.placeholder}
+                    placeholder={getApiKeyPlaceholder()}
                     className={cn(
-                      'flex-1 px-3 py-1.5 text-sm rounded-md',
+                      'flex-1 min-w-0 px-3 py-1.5 text-sm rounded-md',
                       'bg-background border border-muted/30',
                       'placeholder:text-muted-foreground/50',
                       'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
@@ -279,7 +311,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                 {!hasApiKey && (
                   <div className="flex items-center gap-1 text-xs text-[var(--color-warning)]">
                     <AlertCircle className="w-3 h-3" />
-                    <span>API key required for AI features</span>
+                    <span>{t('settings.ai_provider.api_key_required')}</span>
                   </div>
                 )}
               </div>

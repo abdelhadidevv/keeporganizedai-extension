@@ -1,0 +1,208 @@
+{
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
+  "loading": "Cargando...",
+  "merge": "Combinar",
+  "replace": "Reemplazar",
+  "restore": "Restaurar",
+  "modal": {
+    "close_aria_label": "Cerrar"
+  },
+  "spinner": {
+    "aria_label": "Cargando"
+  },
+  "loader": {
+    "default_label": "Cargando..."
+  },
+  "select": {
+    "placeholder": "Selecciona una opción"
+  },
+  "search": {
+    "placeholder": "Buscar marcadores... (/)",
+    "aria_label": "Buscar",
+    "clear_aria_label": "Limpiar búsqueda",
+    "clear_title": "Limpiar búsqueda"
+  },
+  "empty_state": {
+    "no_bookmarks": {
+      "title": "Aún no hay marcadores",
+      "description": "Empieza a añadir marcadores para organizarlos"
+    },
+    "no_results": {
+      "title": "No se encontraron resultados",
+      "description": "Intenta ajustar tu búsqueda o filtros"
+    },
+    "empty_folder": {
+      "title": "Esta carpeta está vacía",
+      "description": "Arrastra marcadores aquí o añade nuevos"
+    },
+    "no_categories": {
+      "title": "No hay categorías definidas",
+      "description": "Crea tu primera categoría para comenzar"
+    }
+  },
+  "error_state": {
+    "default_title": "Algo salió mal",
+    "retry_button": "Intentar de nuevo",
+    "load_bookmarks": {
+      "title": "Error al cargar los marcadores",
+      "message": "No se pudieron recuperar tus marcadores. Inténtalo de nuevo."
+    },
+    "save_failed": {
+      "title": "Error al guardar los cambios",
+      "message": "No se pudieron guardar tus cambios. Inténtalo de nuevo."
+    },
+    "network_error": {
+      "title": "Error de red",
+      "message": "Verifica tu conexión a internet e inténtalo de nuevo."
+    },
+    "ai_error": {
+      "title": "Error en el procesamiento de IA",
+      "message": "El servicio de IA encontró un error. Inténtalo de nuevo."
+    },
+    "missing_api_key": {
+      "title": "Clave API requerida",
+      "message": "No hay una clave API configurada para {{provider}}. Añade tu clave API en Configuración."
+    }
+  },
+  "loading_state": {
+    "aria_label": "Cargando",
+    "analyzing": "Analizando tus marcadores...",
+    "categorizing": "Categorizando marcadores...",
+    "organizing": "Organizando carpetas...",
+    "finalizing": "Finalizando...",
+    "loading_bookmarks": "Cargando marcadores...",
+    "processing": "Procesando..."
+  },
+  "settings": {
+    "title": "Configuración",
+    "back_aria_label": "Volver a la pantalla principal",
+    "footer_version": "KeepOrganizedAI v{{version}}",
+    "ai_provider": {
+      "heading": "Proveedor de IA",
+      "provider_label": "Proveedor",
+      "model_label": "Modelo",
+      "api_key_label": "Clave API",
+      "api_key_required": "Se requiere una clave API para las funciones de IA",
+      "refresh": "Actualizar",
+      "no_models_found": "No se encontraron modelos. Asegúrate de que Ollama esté ejecutándose.",
+      "ollama_endpoint": "Endpoint de Ollama",
+      "ollama_endpoint_placeholder": "http://localhost:11434",
+      "providers": {
+        "gemini": "Google Gemini",
+        "openai": "OpenAI",
+        "claude": "Anthropic Claude",
+        "ollama": "Ollama (Local)"
+      },
+      "api_key_placeholder": "Introduce tu clave API de {{provider}}",
+      "no_key_needed": "No se necesita clave API"
+    },
+    "language": {
+      "heading": "Idioma",
+      "label": "Idioma"
+    },
+    "theme": {
+      "heading": "Apariencia",
+      "label": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema",
+      "aria_label": "Tema actual: {{theme}}. Haz clic para cambiar.",
+      "current": "Actual: {{theme}}"
+    },
+    "import_export": {
+      "heading": "Importar y Exportar",
+      "export_bookmarks": "Exportar marcadores",
+      "export_html": "Exportar como HTML",
+      "export_json": "Exportar como JSON",
+      "import_bookmarks": "Importar marcadores",
+      "choose_file": "Elegir archivo",
+      "supported_formats": "Compatible con archivos HTML (marcadores de Chrome) y JSON",
+      "modal_title": "Vista previa de importación de marcadores",
+      "bookmarks_label": "Marcadores",
+      "folders_label": "Carpetas",
+      "import_mode": "Modo de importación",
+      "replace_all": "Reemplazar todo",
+      "replace_warning": "Esto eliminará todos tus marcadores actuales y los reemplazará con el archivo importado. Esta acción no se puede deshacer.",
+      "toast_export_failed": "Error al exportar marcadores",
+      "toast_import_failed": "Error al importar marcadores",
+      "toast_import_success_merge": "Marcadores combinados correctamente",
+      "toast_import_success_replace": "Marcadores reemplazados correctamente",
+      "toast_parse_failed": "Error al analizar el archivo"
+    }
+  },
+  "main_screen": {
+    "expand_all": "Expandir todo",
+    "collapse_all": "Colapsar todo",
+    "refresh": "Actualizar marcadores (R)",
+    "settings_button": "Configuración",
+    "footer_version": "KeepOrganizedAI v{{version}}"
+  },
+  "header": {
+    "auto_organize": "Organización automática"
+  },
+  "folder_list": {
+    "loading_title": "Cargando marcadores...",
+    "error_title": "Error al cargar los marcadores",
+    "try_again": "Intentar de nuevo",
+    "delete_bookmark_title": "Eliminar marcador",
+    "delete_bookmark_message": "¿Seguro que quieres eliminar \"{{title}}\"? Esta acción no se puede deshacer.",
+    "delete_folder_title": "Eliminar carpeta",
+    "delete_folder_message": "¿Seguro que quieres eliminar \"{{title}}\" y todo su contenido? Esta acción no se puede deshacer.",
+    "toast_bookmark_deleted": "Marcador eliminado",
+    "toast_bookmark_restored": "Marcador restaurado",
+    "toast_failed_delete": "Error al eliminar el marcador",
+    "toast_failed_restore": "Error al restaurar el marcador",
+    "toast_folder_deleted": "Carpeta \"{{title}}\" eliminada",
+    "toast_failed_delete_folder": "Error al eliminar",
+    "toast_failed_move": "Error al mover el elemento: {{message}}",
+    "toast_folder_exported": "\"{{title}}\" exportado como HTML",
+    "toast_failed_export": "Error al exportar la carpeta",
+    "toast_failed_pin": "Error al fijar en la barra de marcadores",
+    "undo": "Deshacer",
+    "delete_this_bookmark": "este marcador",
+    "delete_this_item": "este elemento"
+  },
+  "lock_toggle": {
+    "none": "Ninguno",
+    "none_description": "Permitir que la IA reorganice esta carpeta",
+    "hard_lock": "Bloqueo permanente",
+    "hard_lock_description": "Permanente — no puede ser deshecho por la IA",
+    "smart_lock_applied": "Bloqueo inteligente aplicado",
+    "failed_to_update": "Error al actualizar el estado del bloqueo",
+    "active": "Activo",
+    "confirm_title": "Confirmar bloqueo permanente",
+    "confirm_message": "El bloqueo permanente es irreversible y no puede ser deshecho por la IA. La carpeta estará protegida contra todos los cambios automáticos.",
+    "confirm_button": "Confirmar bloqueo permanente"
+  },
+  "folder_context_menu": {
+    "share_with_friend": "Compartir con un amigo",
+    "share_description": "Exportar carpeta como archivo HTML"
+  },
+  "trash_zone": {
+    "delete_title": "¿Eliminar \"{{title}}\"?",
+    "drop_hint": "Suelta aquí para eliminar",
+    "type_folder": "Carpeta",
+    "type_bookmark": "Marcador"
+  },
+  "bookmark_bar_zone": {
+    "pin_title": "Fijar \"{{title}}\" en la barra de marcadores",
+    "drop_hint": "Suelta aquí para fijar en la barra de marcadores",
+    "type_folder": "Carpeta",
+    "type_bookmark": "Marcador"
+  },
+  "bookmark_item": {
+    "untitled": "Sin título",
+    "copied": "¡Copiado!",
+    "copy_url": "Copiar URL",
+    "delete": "Eliminar marcador"
+  },
+  "folder_tree": {
+    "no_folders": "No se encontraron carpetas"
+  },
+  "dnd_provider": {
+    "cannot_move_folder": "No se puede mover una carpeta dentro de otra carpeta",
+    "failed_reorder": "Error al reordenar",
+    "failed_move": "Error al mover el elemento"
+  }
+}

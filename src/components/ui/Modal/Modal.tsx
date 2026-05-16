@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -46,6 +47,7 @@ const ModalContent = React.forwardRef<
     },
     ref
   ) => {
+    const { t } = useTranslation('common');
     React.useEffect(() => {
       document.body.style.overflow = 'hidden';
       return () => {
@@ -59,7 +61,7 @@ const ModalContent = React.forwardRef<
         <DialogPrimitive.Content
           ref={ref}
           className={cn(
-            'fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2',
+            'fixed start-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2',
             'rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg',
             'text-foreground dark:text-gray-100',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
@@ -67,6 +69,8 @@ const ModalContent = React.forwardRef<
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
             'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',
             'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
+            'rtl:data-[state=closed]:slide-out-to-right-1/2 rtl:data-[state=closed]:slide-out-to-top-[48%]',
+            'rtl:data-[state=open]:slide-in-from-right-1/2 rtl:data-[state=open]:slide-in-from-top-[48%]',
             className
           )}
           onEscapeKeyDown={(e) => {
@@ -86,13 +90,13 @@ const ModalContent = React.forwardRef<
           {showClose && (
             <DialogPrimitive.Close
               className={cn(
-                'absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity',
+                'absolute end-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity',
                 'text-muted-foreground hover:text-foreground dark:text-gray-400 dark:hover:text-gray-100',
                 'hover:opacity-100',
                 'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2',
                 'disabled:pointer-events-none'
               )}
-              aria-label="Close"
+              aria-label={t('modal.close_aria_label')}
             >
               <X className="h-4 w-4" />
             </DialogPrimitive.Close>
@@ -107,7 +111,7 @@ ModalContent.displayName = DialogPrimitive.Content.displayName;
 function ModalHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)}
+      className={cn('flex flex-col space-y-1.5 text-center sm:text-start', className)}
       {...props}
     />
   );
