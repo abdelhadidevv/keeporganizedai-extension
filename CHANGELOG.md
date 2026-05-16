@@ -2,9 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - May 10, 2026
+
+### Added
+
+- Export bookmarks as HTML and JSON files
+- Import bookmarks with merge/replace modes and preview modal
+- Backup/restore with automatic safety backups before organization
+
+### Fixed
+
+- Drag-and-drop reordering for folders and bookmarks
+
+---
+
 ## [1.0.1] - April 21, 2026
 
 ### Added
+
 - Initial release of KeepOrganizedAI
 - AI-powered bookmark categorization using Gemini, Claude, or OpenAI
 - 3-step wizard workflow for organizing bookmarks
@@ -24,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Contributing guidelines and issue templates
 
 ### Tech Stack
+
 - React 19
 - TypeScript
 - Vite
