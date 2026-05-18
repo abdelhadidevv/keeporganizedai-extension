@@ -88,6 +88,19 @@ export const DEFAULT_AI_CONFIG: AIConfig = {
 
 export const DEFAULT_MAX_CATEGORIES = 10;
 
+export const DEFAULT_BATCH_SIZE = 50;
+
+export interface BatchConfig {
+  batchSize: number;
+}
+
+export const DEFAULT_BATCH_CONFIG: BatchConfig = {
+  batchSize: DEFAULT_BATCH_SIZE,
+};
+
+export const BATCH_SIZE_MIN = 10;
+export const BATCH_SIZE_MAX = 200;
+
 export const DEFAULT_MODEL: Record<Exclude<AIProvider, 'ollama'>, string> = {
   gemini: 'gemini-2.5-flash',
   claude: 'claude-sonnet-4-6',
