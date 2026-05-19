@@ -2,7 +2,7 @@
 /* eslint-disable operator-linebreak */
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Lock, Tag, FileCheck, Download, ArrowRight, Check } from 'lucide-react';
+import { Lock, Tag, FileCheck, Download, ArrowRight, Check, AlertCircle } from 'lucide-react';
 import { LoadingState } from '@/components/LoadingState/LoadingState';
 import { ErrorState } from '@/components/ErrorState/ErrorState';
 import { useWizardStore } from '@/store';
@@ -103,16 +103,23 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
       setProgress(20);
       setStatusMessage(t('step3.found_bookmarks', { count: bookmarks.length }));
       setApplyPhase('assign');
-
-      setProgress(30);
+      setProgress(15);
       setStatusMessage(t('step3.assigning'));
-      const assignments = await aiService.assignBookmarks(bookmarks, categories, provider);
-
-      setProgress(40);
+      const result = await aiService.assignBookmarks(
+        bookmarks,
+        categories,
+        (_, current, total) => {
+          setProgress(15 + Math.round((current / total) * 55));
+          setStatusMessage(t('step3.assigning_batch', { current, total }));
+        },
+        provider
+      );
+      const { assignments } = result;
+      setProgress(72);
       setStatusMessage(t('step3.creating_backup'));
       await backupService.createBackup();
 
-      setProgress(50);
+      setProgress(75);
       setStatusMessage(t('step3.creating_folders'));
       setApplyPhase('apply');
 
@@ -123,7 +130,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
         categoryFolderIds[category.id] = folder.id;
       }
 
-      setProgress(60);
+      setProgress(77);
       setStatusMessage(t('step3.moving'));
       let processed = 0;
       // eslint-disable-next-line no-restricted-syntax,no-await-in-loop
@@ -133,13 +140,13 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
           await moveBookmark(bookmark.id, categoryFolderIds[assignment.categoryId]);
         }
         processed += 1;
-        setProgress(60 + Math.round((processed / bookmarks.length) * 25));
+        setProgress(77 + Math.round((processed / bookmarks.length) * 15));
         setStatusMessage(
           t('step3.moving_progress', { current: processed, total: bookmarks.length })
         );
       }
 
-      setProgress(85);
+      setProgress(92);
       setStatusMessage(t('step3.cleaning'));
       const tree = await getBookmarkTree();
       const hardLockedFolderIds = new Set(
@@ -179,7 +186,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
         }
       }
 
-      setProgress(90);
+      setProgress(95);
       setStatusMessage(t('step3.generating_summary'));
       const summary: Record<string, { categoryName: string; count: number }> = {};
       assignments.forEach((a) => {
@@ -222,7 +229,7 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
 
   const handleDownloadBackup = useCallback(async () => {
     try {
-      await backupService.exportAsDownload();
+      await backupService.downloadLatestBackup();
     } catch {
       setError(t('step3.failed_to_download'));
     }
@@ -299,21 +306,36 @@ export function Step3ApplyOrganization({ onComplete }: Step3Props) {
         <div className="flex-1 overflow-y-auto pb-4">
           <div className="w-full max-w-sm mx-auto flex flex-col gap-2">
             {Object.entries(assignmentSummary)
-              .sort((a, b) => b[1].count - a[1].count)
+              .sort(([aId, a], [bId, b]) => {
+                if (aId === 'skipped') return 1;
+                if (bId === 'skipped') return -1;
+                return b.count - a.count;
+              })
               .map(([categoryId, summary]) => {
-                const cat = categories.find((c) => c.id === categoryId);
+                const isSkipped = categoryId === 'skipped';
+                const cat = isSkipped ? null : categories.find((c) => c.id === categoryId);
                 const isLocked = cat?.isLocked || false;
                 return (
                   <div
                     key={categoryId}
-                    className="flex items-center gap-3 px-4 py-3 bg-muted/5 border border-muted/30 rounded-xl"
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
+                      isSkipped
+                        ? 'bg-error/5 border border-error/20'
+                        : 'bg-muted/5 border border-muted/30'
+                    }`}
                   >
-                    {isLocked ? (
+                    {isSkipped ? (
+                      <AlertCircle className="w-3.5 h-3.5 text-error shrink-0" />
+                    ) : isLocked ? (
                       <Lock className="w-3.5 h-3.5 text-warning shrink-0" />
                     ) : (
                       <Tag className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                     )}
-                    <span className="flex-1 text-sm font-medium text-foreground">
+                    <span
+                      className={`flex-1 text-sm font-medium ${
+                        isSkipped ? 'text-error' : 'text-foreground'
+                      }`}
+                    >
                       {summary.categoryName}
                     </span>
                     <span className="text-[12px] text-muted-foreground">

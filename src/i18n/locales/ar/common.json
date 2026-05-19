@@ -88,6 +88,9 @@
       "no_models_found": "لم يتم العثور على نماذج. تأكد من تشغيل Ollama.",
       "ollama_endpoint": "نقطة اتصال Ollama",
       "ollama_endpoint_placeholder": "http://localhost:11434",
+      "batch_heading": "معالجة",
+      "batch_size_label": "حجم الدفعة",
+      "batch_size_description": "الإشارات لكل طلب ذكاء اصطناعي (50–80)",
       "providers": {
         "gemini": "Google Gemini",
         "openai": "OpenAI",

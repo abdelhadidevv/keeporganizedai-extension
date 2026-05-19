@@ -426,6 +426,30 @@ async function exportAsDownload(): Promise<void> {
   URL.revokeObjectURL(url);
 }
 
+async function downloadLatestBackup(): Promise<void> {
+  const backup = await getLatestBackup();
+  if (!backup) {
+    throw new Error('No backup found');
+  }
+
+  const htmlContent = generateChromeHtmlBackup(backup);
+  const blob = new Blob([htmlContent], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const date = new Date(backup.createdAt);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const year = date.getFullYear() % 100;
+  const filename = `backup_before_organization_${month}_${day}_${year}.html`;
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
 async function exportToJson(): Promise<void> {
   const tree = await getAllBookmarks();
 
@@ -794,6 +818,7 @@ export const backupService = {
   createChromeBackupFolder,
   restoreToChromeFolder,
   exportAsDownload,
+  downloadLatestBackup,
   exportToJson,
   parseHtmlImport,
   parseJsonImport,

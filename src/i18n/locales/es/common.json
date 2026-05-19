@@ -88,6 +88,9 @@
       "no_models_found": "No se encontraron modelos. Asegúrate de que Ollama esté ejecutándose.",
       "ollama_endpoint": "Endpoint de Ollama",
       "ollama_endpoint_placeholder": "http://localhost:11434",
+      "batch_heading": "Procesamiento",
+      "batch_size_label": "Tamaño de lote",
+      "batch_size_description": "Marcadores por solicitud de IA (50–80)",
       "providers": {
         "gemini": "Google Gemini",
         "openai": "OpenAI",

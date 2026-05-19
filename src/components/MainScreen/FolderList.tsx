@@ -44,8 +44,6 @@ export function FolderList({
   onRefresh,
 }: FolderListProps) {
   const { t } = useTranslation('common');
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedBookmark, setSelectedBookmark] = useState<BookmarkNode | null>(null);
   const [trashTarget, setTrashTarget] = useState<{
     id: string;
     type: 'folder' | 'bookmark';
@@ -84,24 +82,37 @@ export function FolderList({
         return null;
       };
       const bookmark = findBookmark(folders, bookmarkId);
-      setSelectedBookmark(bookmark);
-      setDeleteModalOpen(true);
-    },
-    [folders]
-  );
+      if (!bookmark?.url) return;
 
-  const handleConfirmDelete = useCallback(async () => {
-    if (!selectedBookmark) return;
-    try {
-      await deleteBookmark(selectedBookmark.id);
-      toast.success(t('folder_list.toast_bookmark_deleted'));
-      setDeleteModalOpen(false);
-      setSelectedBookmark(null);
-      onRefresh();
-    } catch {
-      toast.error(t('folder_list.toast_failed_delete'));
-    }
-  }, [selectedBookmark, onRefresh, t]);
+      const undoData = { id: bookmark.id, title: bookmark.title, url: bookmark.url, parentId: bookmark.parentId || '0' };
+
+      deleteBookmark(bookmarkId)
+        .then(() => {
+          toast.success(t('folder_list.toast_bookmark_deleted'), {
+            action: {
+              label: t('folder_list.undo'),
+              onClick: () => {
+                const { title, url, parentId } = undoData;
+                chrome.bookmarks.create({ title, url, parentId }, () => {
+                  if (chrome.runtime.lastError) {
+                    toast.error(t('folder_list.toast_failed_restore'));
+                    return;
+                  }
+                  toast.success(t('folder_list.toast_bookmark_restored'));
+                  onRefresh();
+                });
+              },
+            },
+            duration: 5000,
+          });
+          onRefresh();
+        })
+        .catch(() => {
+          toast.error(t('folder_list.toast_failed_delete'));
+        });
+    },
+    [folders, onRefresh, t]
+  );
 
   const handleDragMove = useCallback(
     async (
@@ -297,7 +308,6 @@ export function FolderList({
     );
   }
 
-  const bookmarkTitle = selectedBookmark?.title || t('folder_list.delete_this_bookmark');
   const trashTitle = trashTarget?.title || t('folder_list.delete_this_item');
 
   return (
@@ -336,25 +346,6 @@ export function FolderList({
           onClose={handleContextMenuClose}
         />
       )}
-
-      <Modal open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <ModalContent className="max-w-[420px]">
-          <ModalHeader className="pb-2">
-            <ModalTitle>{t('folder_list.delete_bookmark_title')}</ModalTitle>
-            <ModalDescription>
-              {t('folder_list.delete_bookmark_message', { title: bookmarkTitle })}
-            </ModalDescription>
-          </ModalHeader>
-          <ModalFooter>
-            <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              {t('cancel')}
-            </Button>
-            <Button variant="destructive" onClick={handleConfirmDelete}>
-              {t('delete')}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
 
       <Modal
         open={trashTarget !== null}

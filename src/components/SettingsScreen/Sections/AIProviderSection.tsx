@@ -9,7 +9,13 @@ import { Spinner, Select, ThemedIcon } from '@/components/ui';
 import type { AIProvider } from '@/types';
 import { set } from '@/services/storage';
 import { STORAGE_KEYS } from '@/services/storage-keys';
-import { GEMINI_MODELS, CLAUDE_MODELS, OPENAI_MODELS } from '@/types/ai';
+import {
+  GEMINI_MODELS,
+  CLAUDE_MODELS,
+  OPENAI_MODELS,
+  BATCH_SIZE_MIN,
+  BATCH_SIZE_MAX,
+} from '@/types/ai';
 
 interface AIProviderSectionProps {
   isLoading: boolean;
@@ -32,8 +38,17 @@ function getModelsForProvider(provider: AIProvider) {
 
 export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
   const { t } = useTranslation('common');
-  const { aiProvider, setAIProvider, apiKeys, modelSelections, setApiKey, setModel, clearApiKey } =
-    useSettings();
+  const {
+    aiProvider,
+    setAIProvider,
+    apiKeys,
+    modelSelections,
+    batchConfig,
+    setBatchConfig,
+    setApiKey,
+    setModel,
+    clearApiKey,
+  } = useSettings();
 
   const AI_PROVIDERS = [
     {
@@ -241,7 +256,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       type="button"
                       onClick={() => fetchOllamaModels(false)}
                       disabled={isLoadingOllamaModels}
-                      className="flex items-center gap-1 text-xs text-[var(--color-primary)] hover:underline disabled:opacity-50"
+                      className="flex items-center gap-1 text-xs text-primary hover:underline disabled:opacity-50"
                     >
                       <RefreshCw
                         className={cn('w-3 h-3', isLoadingOllamaModels && 'animate-spin')}
@@ -254,7 +269,7 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                       <Spinner />
                     </div>
                   ) : ollamaError ? (
-                    <div className="flex items-center gap-1 text-xs text-[var(--color-error)]">
+                    <div className="flex items-center gap-1 text-xs text-error">
                       <AlertCircle className="w-3 h-3" />
                       <span>{ollamaError}</span>
                     </div>
@@ -316,6 +331,43 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
                 )}
               </div>
             )}
+            <div className="border-t border-muted/20 pt-4 space-y-3">
+              <span className="block text-xs text-muted-foreground uppercase tracking-wider">
+                {t('settings.ai_provider.batch_heading')}
+              </span>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <label
+                    htmlFor="batch-size"
+                    className="block text-xs text-muted-foreground mb-1.5"
+                  >
+                    {t('settings.ai_provider.batch_size_label')}
+                  </label>
+                  <input
+                    id="batch-size"
+                    type="number"
+                    min={BATCH_SIZE_MIN}
+                    max={BATCH_SIZE_MAX}
+                    value={batchConfig.batchSize}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      if (val >= BATCH_SIZE_MIN && val <= BATCH_SIZE_MAX) {
+                        setBatchConfig({ ...batchConfig, batchSize: val });
+                      }
+                    }}
+                    className={cn(
+                      'w-full px-3 py-1.5 text-sm rounded-md',
+                      'bg-background border border-muted/30',
+                      'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
+                    )}
+                  />
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    {t('settings.ai_provider.batch_size_description')}
+                  </p>
+                </div>
+
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -8,6 +8,7 @@ import { Info, Lock, Sparkles, Tag } from 'lucide-react';
 import { aiService } from '@/services/ai';
 import { LoadingState } from '@/components/LoadingState/LoadingState';
 import { ErrorState } from '@/components/ErrorState/ErrorState';
+import { Progress } from '@/components/ui/Progress/Progress';
 import { createErrorState } from '@/states/presets';
 
 export function Step2CategoryGeneration() {
@@ -20,6 +21,8 @@ export function Step2CategoryGeneration() {
   const [error, setError] = useState<{ title?: string; message: string } | null>(null);
   const [generatedCategories, setGeneratedCategories] = useState<Category[]>([]);
   const [bookmarkCount, setBookmarkCount] = useState(0);
+  const [batchCurrent, setBatchCurrent] = useState(0);
+  const [batchTotal, setBatchTotal] = useState(0);
   const hasGeneratedRef = useRef(false);
 
   const generateCategories = useCallback(async () => {
@@ -86,21 +89,27 @@ export function Step2CategoryGeneration() {
       collectUnlocked(tree);
       setBookmarkCount(unlockedBookmarks.length);
 
-      const generated = await aiService.generateCategories(
+      const result = await aiService.generateCategories(
         unlockedBookmarks,
         smartLockedFolders,
+        (_, current, total) => {
+          setBatchCurrent(current);
+          setBatchTotal(total);
+        },
         provider
       );
 
-      setGeneratedCategories(generated);
-      if (generated.length > 0) {
-        setCategories(generated);
+      setGeneratedCategories(result.categories);
+      if (result.categories.length > 0) {
+        setCategories(result.categories);
       }
     } catch (err: any) {
       hasGeneratedRef.current = false;
       if (err?.code === 'MISSING_API_KEY') {
         const state = createErrorState(t, 'missingApiKey', undefined, { provider });
         setError(state);
+      } else if (err?.code === 'OLLAMA_403_FORBIDDEN') {
+        setError({ title: t('step2.ollama_403_title'), message: t('step2.ollama_403') });
       } else {
         setError({ message: err?.message || t('step2.failed_to_generate') });
       }
@@ -121,16 +130,21 @@ export function Step2CategoryGeneration() {
   }, [generateCategories]);
 
   if (isLoading) {
+    const batchMessage =
+      batchTotal > 0
+        ? t('step2.batch_progress', { current: batchCurrent, total: batchTotal })
+        : bookmarkCount > 0
+          ? t('step2.analyzing', { count: bookmarkCount })
+          : t('step2.analyzing_your');
+
     return (
       <div className="flex flex-col items-center justify-center gap-4 p-12">
-        <LoadingState
-          variant="dots"
-          message={
-            bookmarkCount > 0
-              ? t('step2.analyzing', { count: bookmarkCount })
-              : t('step2.analyzing_your')
-          }
-        />
+        <LoadingState variant="dots" message={batchMessage} />
+        {batchTotal > 0 && (
+          <div className="w-full max-w-60">
+            <Progress value={(batchCurrent / batchTotal) * 100} />
+          </div>
+        )}
       </div>
     );
   }

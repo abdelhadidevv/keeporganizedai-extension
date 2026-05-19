@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Select } from '@/components/ui';
 
 const LANGUAGES = [
   { value: 'en', label: 'English' },
@@ -26,12 +26,9 @@ export function LanguageSection() {
     };
   }, [i18n]);
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      i18n.changeLanguage(e.target.value);
-    },
-    [i18n]
-  );
+  const handleChange = (value: string) => {
+    i18n.changeLanguage(value);
+  };
 
   return (
     <section className="space-y-3">
@@ -44,26 +41,11 @@ export function LanguageSection() {
             <Globe className="w-4 h-4 text-muted-foreground" />
             <span className="text-sm font-medium">{t('settings.language.label')}</span>
           </div>
-          <select
+          <Select
             value={current}
-            onChange={handleChange}
-            className={cn(
-              'rounded-lg border border-muted/30 bg-background px-3 py-2 pe-8 text-sm',
-              'transition-colors hover:border-muted/50',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]',
-              'appearance-none bg-no-repeat',
-              'bg-[length:16px]',
-              '[background-position:right_8px_center]',
-              'rtl:[background-position:left_8px_center]',
-              'bg-[url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwb2x5bGluZSBwb2ludHM9IjYgOSAxMiAxNSAxOCA5Ij48L3BvbHlsaW5lPjwvc3ZnPg==)]'
-            )}
-          >
-            {LANGUAGES.map((l) => (
-              <option key={l.value} value={l.value}>
-                {l.label}
-              </option>
-            ))}
-          </select>
+            onValueChange={handleChange}
+            options={[...LANGUAGES]}
+          />
         </div>
       </div>
     </section>

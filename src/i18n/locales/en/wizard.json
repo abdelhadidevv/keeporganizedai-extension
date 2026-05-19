@@ -29,6 +29,7 @@
   "step2": {
     "analyzing": "Analyzing {{count}} bookmarks…",
     "analyzing_your": "Analyzing your bookmarks…",
+    "batch_progress": "Processing batch {{current}} of {{total}}…",
     "no_api_key": "No API key configured for {{provider}}. Please add your API key in Settings.",
     "failed_to_generate": "Failed to generate categories",
     "heading": "Categories Generated",
@@ -38,7 +39,9 @@
     "no_categories": "No categories to display",
     "protected_label": "Protected ({{count}})",
     "ai_generated_label": "AI-Generated ({{count}})",
-    "footer_hint": "Click Next to apply this organization to your bookmarks."
+    "footer_hint": "Click Next to apply this organization to your bookmarks.",
+    "ollama_403_title": "Ollama Origin Not Allowed",
+    "ollama_403": "Ollama blocked this extension because the extension origin is not whitelisted.\n\n1. Stop Ollama if running:\n  ollama stop\n2. Restart with:\n  OLLAMA_ORIGINS=chrome-extension://* ollama serve\n\nThen retry."
   },
   "step3": {
     "starting": "Starting organization…",
@@ -46,6 +49,8 @@
     "no_bookmarks": "No bookmarks found to organize",
     "found_bookmarks": "Found {{count}} bookmarks",
     "assigning": "Assigning bookmarks to categories…",
+    "assigning_batch": "Assigning batch {{current}} of {{total}}…",
+    "skipped_label": "Skipped (errors)",
     "creating_backup": "Creating backup…",
     "creating_folders": "Creating category folders…",
     "moving": "Moving bookmarks to categories…",
