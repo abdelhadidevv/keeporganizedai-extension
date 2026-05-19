@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { AIProvider } from '@/types';
-import { AIApiKeys, DEFAULT_MODEL } from '@/types/ai';
+import { AIApiKeys, BatchConfig, DEFAULT_BATCH_CONFIG, DEFAULT_MODEL } from '@/types/ai';
 import { get, getSync, set, setSync } from '@/services/storage';
 import { STORAGE_KEYS } from '@/services/storage-keys';
 
@@ -13,11 +13,13 @@ interface UseSettingsReturn {
   isLoading: boolean;
   apiKeys: AIApiKeys;
   modelSelections: ModelSelection;
+  batchConfig: BatchConfig;
   setApiKey: (provider: AIProvider, key: string) => Promise<void>;
   clearApiKey: (provider: AIProvider) => Promise<void>;
   setAIProvider: (provider: AIProvider) => Promise<void>;
   setModel: (provider: AIProvider, model: string) => Promise<void>;
   setTheme: (theme: string) => Promise<void>;
+  setBatchConfig: (config: BatchConfig) => Promise<void>;
 }
 
 export function useSettings(): UseSettingsReturn {
@@ -31,17 +33,20 @@ export function useSettings(): UseSettingsReturn {
     ollama: '',
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [batchConfig, setBatchConfigState] = useState<BatchConfig>(DEFAULT_BATCH_CONFIG);
   const { setTheme: setNextTheme } = useTheme();
 
   const loadSettings = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [provider, themePref, apiKeysData, modelSelectionsData] = await Promise.all([
+      const data = await Promise.all([
         getSync<AIProvider>(STORAGE_KEYS.AI_PROVIDER),
         getSync<string>(STORAGE_KEYS.THEME),
         get<AIApiKeys>(STORAGE_KEYS.API_KEYS),
         getSync<ModelSelection>(STORAGE_KEYS.MODEL_SELECTIONS),
-      ]);
+        getSync<BatchConfig>(STORAGE_KEYS.BATCH_CONFIG),
+      ] as const);
+      const [provider, themePref, apiKeysData, modelSelectionsData, batchConfigData] = data;
 
       if (provider) {
         setAIProviderState(provider);
@@ -62,6 +67,9 @@ export function useSettings(): UseSettingsReturn {
           },
           ...modelSelectionsData,
         });
+      }
+      if (batchConfigData) {
+        setBatchConfigState(batchConfigData);
       }
     } catch (error) {
       console.error('Failed to load settings:', error);
@@ -141,16 +149,28 @@ export function useSettings(): UseSettingsReturn {
     [apiKeys]
   );
 
+  const setBatchConfig = useCallback(async (config: BatchConfig) => {
+    try {
+      await setSync(STORAGE_KEYS.BATCH_CONFIG, config);
+      setBatchConfigState(config);
+    } catch (error) {
+      console.error('Failed to save batch config:', error);
+      throw error;
+    }
+  }, []);
+
   return {
     aiProvider,
     theme,
     isLoading,
     apiKeys,
     modelSelections,
+    batchConfig,
     setApiKey,
     clearApiKey,
     setAIProvider,
     setModel,
     setTheme,
+    setBatchConfig,
   };
 }

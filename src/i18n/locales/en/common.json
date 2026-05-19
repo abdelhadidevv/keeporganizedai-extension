@@ -88,6 +88,9 @@
       "no_models_found": "No models found. Make sure Ollama is running.",
       "ollama_endpoint": "Ollama Endpoint",
       "ollama_endpoint_placeholder": "http://localhost:11434",
+      "batch_heading": "Processing",
+      "batch_size_label": "Batch Size",
+      "batch_size_description": "Bookmarks per AI request (50\u201380)",
       "providers": {
         "gemini": "Google Gemini",
         "openai": "OpenAI",

@@ -89,17 +89,22 @@ export const DEFAULT_AI_CONFIG: AIConfig = {
 export const DEFAULT_MAX_CATEGORIES = 10;
 
 export const DEFAULT_BATCH_SIZE = 50;
+export const DEFAULT_CONCURRENCY = 3;
 
 export interface BatchConfig {
   batchSize: number;
+  concurrency: number;
 }
 
 export const DEFAULT_BATCH_CONFIG: BatchConfig = {
   batchSize: DEFAULT_BATCH_SIZE,
+  concurrency: DEFAULT_CONCURRENCY,
 };
 
-export const BATCH_SIZE_MIN = 10;
-export const BATCH_SIZE_MAX = 200;
+export const BATCH_SIZE_MIN = 50;
+export const BATCH_SIZE_MAX = 80;
+export const CONCURRENCY_MIN = 1;
+export const CONCURRENCY_MAX = 10;
 
 export const DEFAULT_MODEL: Record<Exclude<AIProvider, 'ollama'>, string> = {
   gemini: 'gemini-2.5-flash',

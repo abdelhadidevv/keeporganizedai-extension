@@ -335,34 +335,37 @@ export function AIProviderSection({ isLoading }: AIProviderSectionProps) {
               <span className="block text-xs text-muted-foreground uppercase tracking-wider">
                 {t('settings.ai_provider.batch_heading')}
               </span>
-              <div className="flex-1">
-                <label
-                  htmlFor="batch-size"
-                  className="block text-xs text-muted-foreground mb-1.5"
-                >
-                  {t('settings.ai_provider.batch_size_label')}
-                </label>
-                <input
-                  id="batch-size"
-                  type="number"
-                  min={BATCH_SIZE_MIN}
-                  max={BATCH_SIZE_MAX}
-                  value={batchConfig.batchSize}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    if (val >= BATCH_SIZE_MIN && val <= BATCH_SIZE_MAX) {
-                      setBatchConfig({ ...batchConfig, batchSize: val });
-                    }
-                  }}
-                  className={cn(
-                    'w-full px-3 py-1.5 text-sm rounded-md',
-                    'bg-background border border-muted/30',
-                    'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
-                  )}
-                />
-                <p className="text-[11px] text-muted-foreground mt-1">
-                  {t('settings.ai_provider.batch_size_description')}
-                </p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <label
+                    htmlFor="batch-size"
+                    className="block text-xs text-muted-foreground mb-1.5"
+                  >
+                    {t('settings.ai_provider.batch_size_label')}
+                  </label>
+                  <input
+                    id="batch-size"
+                    type="number"
+                    min={BATCH_SIZE_MIN}
+                    max={BATCH_SIZE_MAX}
+                    value={batchConfig.batchSize}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      if (val >= BATCH_SIZE_MIN && val <= BATCH_SIZE_MAX) {
+                        setBatchConfig({ ...batchConfig, batchSize: val });
+                      }
+                    }}
+                    className={cn(
+                      'w-full px-3 py-1.5 text-sm rounded-md',
+                      'bg-background border border-muted/30',
+                      'focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]'
+                    )}
+                  />
+                  <p className="text-[11px] text-muted-foreground mt-1">
+                    {t('settings.ai_provider.batch_size_description')}
+                  </p>
+                </div>
+
               </div>
             </div>
           </div>

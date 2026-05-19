@@ -10,7 +10,7 @@ EXISTING CATEGORIES (DO NOT duplicate or create similar names):
 {existingCategories}
 
 GUIDELINES:
-1. Create 6-15 categories based on the actual content
+1. {batchInstruction}
 2. Use SPECIFIC category names, not generic ones
    - GOOD: "React & Frontend Frameworks", "Machine Learning & AI", "Cloud Infrastructure", "Design Tools & Resources"
    - BAD: "Development", "Technology", "Tools", "Resources"
